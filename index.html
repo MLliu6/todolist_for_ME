@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的待办 · TodoList</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Icons: Lucide -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <!-- GSAP for quadrant animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/calendar.css" />
+  <link rel="stylesheet" href="assets/css/task.css" />
+  <link rel="stylesheet" href="assets/css/quadrant.css" />
+  <link rel="stylesheet" href="assets/css/daysmatter.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════
+       TOP TAB NAVIGATION
+  ═══════════════════════════════════════════ -->
+  <nav class="tab-nav" role="navigation" aria-label="主导航">
+    <!-- Logo -->
+    <div class="tab-nav__logo">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="22" height="22" rx="6" fill="var(--color-primary)" opacity="0.15"/>
+        <rect x="2" y="2" width="22" height="22" rx="6" stroke="var(--color-primary)" stroke-width="1.5"/>
+        <path d="M8 13l3 3 7-7" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>我的待办</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-nav__tabs" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-calendar" data-tab="calendar">
+        <i data-lucide="calendar-days"></i>
+        <span>日历</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tasks" data-tab="tasks">
+        <i data-lucide="layout-grid"></i>
+        <span>任务</span>
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-daysmatter" data-tab="daysmatter">
+        <i data-lucide="star"></i>
+        <span>重要日子</span>
+      </button>
+    </div>
+
+    <!-- Right actions -->
+    <div class="tab-nav__actions">
+      <button class="btn btn-primary" id="btn-new-task" aria-label="新建任务">
+        <i data-lucide="plus"></i>
+        <span>新建任务</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
+  <main class="main-content" id="main-content">
+
+    <!-- ── Panel: Calendar ── -->
+    <section class="tab-panel active" id="panel-calendar" role="tabpanel" aria-labelledby="tab-calendar">
+      <div class="calendar-shell">
+
+        <!-- Calendar toolbar -->
+        <div class="calendar-toolbar">
+          <div class="calendar-toolbar__left">
+            <button class="btn btn-ghost btn-icon" id="cal-prev" aria-label="上一期">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <h2 class="calendar-title" id="cal-title">2026年5月</h2>
+            <button class="btn btn-ghost btn-icon" id="cal-next" aria-label="下一期">
+              <i data-lucide="chevron-right"></i>
+            </button>
+            <button class="btn btn-ghost" id="cal-today" style="margin-left:var(--space-2);font-size:var(--text-sm);">今天</button>
+          </div>
+
+          <div class="calendar-toolbar__right">
+            <!-- View mode switcher -->
+            <div class="view-switcher" role="group" aria-label="视图切换">
+              <button class="view-btn active" data-view="month" aria-pressed="true">月</button>
+              <button class="view-btn" data-view="week" aria-pressed="false">周</button>
+              <button class="view-btn" data-view="day" aria-pressed="false">日</button>
+              <button class="view-btn" data-view="hour" aria-pressed="false">时</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar grid container — JS renders into here -->
+        <div class="calendar-body" id="calendar-body" aria-live="polite">
+          <!-- Rendered by calendar.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Panel: Tasks (Quadrant overview) ── -->
+    <section class="tab-panel" id="panel-tasks" role="tabpanel" aria-labelledby="tab-tasks">
+      <div class="tasks-shell">
+
+        <!-- Filter bar -->
+        <div class="tasks-filterbar">
+          <div class="tasks-filterbar__left">
+            <span class="filterbar-label">所有任务</span>
+          </div>
+          <div class="tasks-filterbar__right">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="todo">待办</button>
+            <button class="filter-btn" data-filter="doing">进行中</button>
+            <button class="filter-btn" data-filter="done">已完成</button>
+          </div>
+        </div>
+
+        <!-- Task list area -->
+        <div class="tasks-list" id="tasks-list" aria-live="polite">
+          <!-- Rendered by tasks.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Panel: Days Matter ── -->
+    <section class="tab-panel" id="panel-daysmatter" role="tabpanel" aria-labelledby="tab-daysmatter">
+      <div class="daysmatter-shell">
+
+        <div class="daysmatter-header">
+          <div>
+            <h2 class="daysmatter-heading">重要日子</h2>
+            <p class="daysmatter-subtext">记录那些值得铭记的时刻</p>
+          </div>
+          <button class="btn btn-primary" id="btn-new-daysmatter">
+            <i data-lucide="plus"></i>
+            <span>添加日子</span>
+          </button>
+        </div>
+
+        <div class="daysmatter-list" id="daysmatter-list" aria-live="polite">
+          <!-- Rendered by daysmatter.js -->
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- /main-content -->
+
+</div><!-- /#app -->
+
+
+<!-- ═══════════════════════════════════════════
+     OVERLAY BACKDROP (shared)
+═══════════════════════════════════════════ -->
+<div class="overlay-backdrop" id="overlay-backdrop" aria-hidden="true"></div>
+
+
+<!-- ═══════════════════════════════════════════
+     DRAWER: Day tasks (opens when clicking a calendar date)
+═══════════════════════════════════════════ -->
+<aside class="drawer" id="drawer-day" role="dialog" aria-modal="true" aria-labelledby="drawer-day-title" aria-hidden="true">
+  <div class="drawer__header">
+    <button class="drawer__back btn btn-ghost" id="drawer-day-close" aria-label="关闭">
+      <i data-lucide="arrow-left"></i>
+      <span>返回</span>
+    </button>
+    <h3 class="drawer__title" id="drawer-day-title">5月22日</h3>
+    <button class="btn btn-primary btn-sm" id="drawer-day-add" aria-label="新建当日任务">
+      <i data-lucide="plus"></i>
+    </button>
+  </div>
+  <div class="drawer__body" id="drawer-day-body">
+    <!-- Rendered by tasks.js / calendar.js -->
+  </div>
+</aside>
+
+
+<!-- ═══════════════════════════════════════════
+     MODAL: Task form (create / edit)
+═══════════════════════════════════════════ -->
+<div class="modal" id="modal-task" role="dialog" aria-modal="true" aria-labelledby="modal-task-title" aria-hidden="true">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title" id="modal-task-title">新建任务</h3>
+      <button class="modal__close" id="modal-task-close" aria-label="关闭">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal__body">
+      <form id="task-form" novalidate>
+        <!-- Hidden id field for edit mode -->
+        <input type="hidden" id="task-id" />
+
+        <!-- Task name -->
+        <div class="form-group">
+          <label class="form-label" for="task-name">任务名称 <span aria-hidden="true" style="color:var(--color-error)">*</span></label>
+          <input class="form-input" id="task-name" type="text" placeholder="一句话概括这件事" required autocomplete="off" />
+        </div>
+
+        <!-- Task description -->
+        <div class="form-group">
+          <label class="form-label" for="task-desc">具体内容</label>
+          <textarea class="form-textarea" id="task-desc" placeholder="补充细节、步骤或备注…" rows="3"></textarea>
+        </div>
+
+        <!-- DDL -->
+        <div class="form-group">
+          <label class="form-label" for="task-ddl">截止日期 (DDL)</label>
+          <input class="form-input" id="task-ddl" type="date" />
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label class="form-label">完成状态</label>
+          <div class="status-selector" id="status-selector" role="group" aria-label="完成状态">
+            <button type="button" class="status-btn active" data-status="todo">
+              <i data-lucide="circle"></i> 待办
+            </button>
+            <button type="button" class="status-btn" data-status="doing">
+              <i data-lucide="loader-circle"></i> 进行中
+            </button>
+            <button type="button" class="status-btn" data-status="done">
+              <i data-lucide="circle-check"></i> 已完成
+            </button>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+          <label class="form-label">标签</label>
+          <div class="tag-selector" id="tag-selector" aria-label="选择或新增标签">
+            <!-- Rendered by tasks.js -->
+          </div>
+          <div class="tag-input-row">
+            <input class="form-input" id="tag-new-input" type="text" placeholder="输入新标签后按 Enter" style="font-size:var(--text-sm)" autocomplete="off" />
+          </div>
+        </div>
+
+        <!-- Quadrant picker (the star-gravity interactive selector) -->
+        <div class="form-group">
+          <label class="form-label">优先级象限</label>
+          <p class="form-hint">拖动任务到对应象限，或点击选择</p>
+          <div class="quadrant-picker" id="quadrant-picker" role="group" aria-label="四象限优先级选择">
+            <!-- Rendered by quadrant.js -->
+          </div>
+          <input type="hidden" id="task-quadrant" value="q2" />
+        </div>
+
+        <!-- Form actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="modal-task-cancel">取消</button>
+          <button type="submit" class="btn btn-primary" id="modal-task-submit">保存任务</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     MODAL: Days Matter form (create / edit)
+═══════════════════════════════════════════ -->
+<div class="modal" id="modal-daysmatter" role="dialog" aria-modal="true" aria-labelledby="modal-dm-title" aria-hidden="true">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title" id="modal-dm-title">添加重要日子</h3>
+      <button class="modal__close" id="modal-dm-close" aria-label="关闭">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal__body">
+      <form id="daysmatter-form" novalidate>
+        <input type="hidden" id="dm-id" />
+
+        <div class="form-group">
+          <label class="form-label" for="dm-name">日子名称 <span aria-hidden="true" style="color:var(--color-error)">*</span></label>
+          <input class="form-input" id="dm-name" type="text" placeholder="例：我的生日、毕业纪念日" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="dm-date">日期 <span aria-hidden="true" style="color:var(--color-error)">*</span></label>
+          <input class="form-input" id="dm-date" type="date" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="dm-note">备注</label>
+          <input class="form-input" id="dm-note" type="text" placeholder="可选的简短说明" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">图标 / 颜色</label>
+          <div class="dm-emoji-picker" id="dm-emoji-picker">
+            <span class="dm-emoji-opt selected" data-emoji="⭐">⭐</span>
+            <span class="dm-emoji-opt" data-emoji="🎂">🎂</span>
+            <span class="dm-emoji-opt" data-emoji="💍">💍</span>
+            <span class="dm-emoji-opt" data-emoji="🎓">🎓</span>
+            <span class="dm-emoji-opt" data-emoji="✈️">✈️</span>
+            <span class="dm-emoji-opt" data-emoji="🏠">🏠</span>
+            <span class="dm-emoji-opt" data-emoji="💪">💪</span>
+            <span class="dm-emoji-opt" data-emoji="❤️">❤️</span>
+            <span class="dm-emoji-opt" data-emoji="🌱">🌱</span>
+            <span class="dm-emoji-opt" data-emoji="🎯">🎯</span>
+          </div>
+          <input type="hidden" id="dm-emoji" value="⭐" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="modal-dm-cancel">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     TOAST CONTAINER
+═══════════════════════════════════════════ -->
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS (deferred, order matters)
+═══════════════════════════════════════════ -->
+<script src="assets/js/data.js"></script>
+<script src="assets/js/calendar.js"></script>
+<script src="assets/js/tasks.js"></script>
+<script src="assets/js/quadrant.js"></script>
+<script src="assets/js/daysmatter.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>
