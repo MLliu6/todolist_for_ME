@@ -32,7 +32,7 @@
   --nav-h:58px;
 }
 [data-theme="dark"]{
-  --color-bg:transparent;--color-surface:#1c1b22;--color-surface-2:#232130;
+  --color-bg:#131218;--color-surface:#1c1b22;--color-surface-2:#232130;
   --color-surface-offset:#2a2835;--color-border:#323832;--color-divider:#2a2e2a;
   --color-text:#d4d2e0;--color-text-muted:#9490a8;--color-text-faint:#5a5670;
   --color-primary:#a78bfa;--color-primary-hover:#8f72f6;--color-primary-light:#2b2142;
@@ -185,14 +185,14 @@ img{display:block;max-width:100%}
 .dm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-5)}
 .dm-header h2{font-size:var(--text-xl);font-weight:700}
 .dm-header p{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px}
-.dm-split{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);align-items:start;padding:0 var(--space-2)}
+.dm-split{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:start}
 @media(max-width:700px){.dm-split{grid-template-columns:1fr;gap:var(--space-6)}}
 .dm-col{display:flex;flex-direction:column}
 .dm-section-title{font-family:'Georgia','Times New Roman',serif;font-size:clamp(.95rem,1.6vw,1.15rem);font-weight:400;letter-spacing:.15em;color:var(--color-text-faint);text-transform:uppercase;font-style:italic;text-align:center;margin-bottom:var(--space-5);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-divider);position:relative}
 .dm-section-title::before,.dm-section-title::after{content:"";display:inline-block;width:20px;height:1px;background:var(--color-primary);opacity:.4;vertical-align:middle;margin:0 8px}
 .dm-section{margin-bottom:var(--space-8)}
 
-.dm-grid{display:grid;grid-template-columns:1fr;gap:var(--space-3)}
+.dm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--space-4)}
 .dm-card{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-5) var(--space-5);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:all .2s var(--ease-out);cursor:pointer;position:relative}
 .dm-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--color-primary)}
 .dm-card__emoji{font-size:32px;margin-bottom:var(--space-3);line-height:1}
@@ -300,39 +300,6 @@ img{display:block;max-width:100%}
   .cal-cell{min-height:44px;padding:var(--space-1)}
   .cal-num{font-size:11px;width:20px;height:20px}
   .cal-lbl{display:none}
-}
-
-/* Dark mode: landing-style gradient background */
-[data-theme="dark"] body {
-  background: linear-gradient(135deg, #0d0b1a 0%, #1a1035 45%, #0f1e2e 100%) fixed;
-  background-attachment: fixed;
-}
-[data-theme="dark"] body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(124,92,255,.14) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(56,189,248,.09) 0%, transparent 70%);
-}
-
-/* Dark mode: semi-transparent surfaces so gradient peeks through */
-[data-theme="dark"] .cal-shell,
-[data-theme="dark"] .q-panel,
-[data-theme="dark"] .dm-card,
-[data-theme="dark"] .task-card,
-[data-theme="dark"] .modal-box,
-[data-theme="dark"] .drawer {
-  background: rgba(28, 24, 40, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-[data-theme="dark"] .top-nav {
-  background: rgba(20, 17, 30, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 </style>
 </head>
