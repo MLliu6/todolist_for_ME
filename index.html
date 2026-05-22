@@ -185,6 +185,8 @@ img{display:block;max-width:100%}
 .dm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-5)}
 .dm-header h2{font-size:var(--text-xl);font-weight:700}
 .dm-header p{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px}
+.dm-section-title{font-family:'Georgia','Times New Roman',serif;font-size:clamp(1.1rem,2vw,1.35rem);font-weight:700;letter-spacing:.04em;color:var(--color-text-muted);text-transform:uppercase;margin-bottom:var(--space-4);padding-bottom:var(--space-2);border-bottom:1.5px solid var(--color-divider);font-style:italic}
+.dm-section{margin-bottom:var(--space-8)}
 .dm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--space-4)}
 .dm-card{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-5) var(--space-5);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:all .2s var(--ease-out);cursor:pointer;position:relative}
 .dm-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--color-primary)}
@@ -297,6 +299,33 @@ img{display:block;max-width:100%}
 </style>
 </head>
 <body>
+
+<!-- LANDING PAGE -->
+<div id="landing-page" style="position:fixed;inset:0;z-index:9000;background:var(--color-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;">
+  <canvas id="landing-particles" style="position:absolute;inset:0;pointer-events:none;opacity:0.45"></canvas>
+  <div style="position:relative;z-index:1;text-align:center;padding:var(--space-8) var(--space-6);max-width:600px">
+    <!-- Logo mark -->
+    <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:20px;background:var(--color-primary);margin-bottom:var(--space-6);box-shadow:0 8px 32px rgba(124,92,255,.35)">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <path d="M10 18l5.5 5.5L26 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="4" y="8" width="6" height="6" rx="2" fill="rgba(255,255,255,.35)"/>
+        <rect x="4" y="22" width="6" height="6" rx="2" fill="rgba(255,255,255,.2)"/>
+      </svg>
+    </div>
+    <!-- Title -->
+    <h1 id="landing-title" style="font-family:'Inter',system-ui,sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-0.03em;color:var(--color-text);line-height:1.1;margin-bottom:var(--space-3)">我的待办</h1>
+    <p style="font-size:clamp(1rem,2vw,1.15rem);color:var(--color-text-muted);margin-bottom:var(--space-10);line-height:1.6;max-width:38ch;margin-inline:auto">把每一件重要的事<br>安排在它该在的地方</p>
+    <!-- CTA button -->
+    <button id="landing-enter-btn" style="position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:var(--radius-full);background:var(--color-primary);color:#fff;font-size:1.05rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(124,92,255,.4);overflow:hidden;transition:transform .18s,box-shadow .18s" aria-label="开始记录">
+      <span style="position:relative;z-index:1">开始记录</span>
+      <svg style="position:relative;z-index:1;width:20px;height:20px;transition:transform .2s" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="landing-arrow"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
+      <!-- Ripple / shimmer layer -->
+      <span id="landing-shine" style="position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);transform:translateX(-100%);transition:none;pointer-events:none"></span>
+    </button>
+    <!-- Footer hint -->
+    <p style="margin-top:var(--space-6);font-size:0.78rem;color:var(--color-text-faint);letter-spacing:.05em">PRESS <kbd style="background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:4px;padding:1px 6px;font-size:.75rem">ENTER</kbd> TO CONTINUE</p>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav class="top-nav">
@@ -948,11 +977,25 @@ var Tasks = (function(){
     var h='';
     all.forEach(function(tag){
       var isA=selected.indexOf(tag)>=0;
+      h+='<div class="tag-opt-wrap" style="display:inline-flex;align-items:center;gap:2px">';
       h+='<div class="tag-opt'+(isA?' active':'')+'" data-tag="'+esc(tag)+'">'+esc(tag)+'</div>';
+      h+='<button type="button" class="tag-del-btn" data-tag="'+esc(tag)+'" aria-label="删除标签 '+esc(tag)+'" style="width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:var(--color-text-faint);border:1px solid var(--color-border);background:var(--color-surface-offset);transition:all .15s;flex-shrink:0;padding:0;line-height:1">×</button>';
+      h+='</div>';
     });
     sel.innerHTML=h;
     sel.querySelectorAll('.tag-opt').forEach(function(el){
       el.addEventListener('click',function(){ el.classList.toggle('active'); });
+    });
+    sel.querySelectorAll('.tag-del-btn').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var tag=btn.dataset.tag;
+        if(!confirm('删除标签「'+tag+'」？（不会影响已有任务）')) return;
+        var tags=Store.getTags().filter(function(t){ return t!==tag; });
+        Store.saveTags(tags);
+        var currentActive=Array.from(sel.querySelectorAll('.tag-opt.active')).map(function(el){ return el.dataset.tag; }).filter(function(t){ return t!==tag; });
+        renderTagSel(currentActive);
+      });
     });
   }
 
@@ -1067,6 +1110,19 @@ var DM = (function(){
     return { n:'已过 '+Math.abs(d)+' 天', past:true };
   }
 
+  function renderCard(item){
+    var dl=diffLabel(item.date);
+    var h='<div class="dm-card'+(dl.past?' dm-past':'')+'" data-id="'+item.id+'">';
+    h+='<button class="dm-card__del btn btn-ghost btn-icon" data-id="'+item.id+'" aria-label="删除"><i data-lucide="x"></i></button>';
+    h+='<div class="dm-card__emoji">'+item.emoji+'</div>';
+    h+='<div class="dm-card__name">'+esc(item.name)+'</div>';
+    h+='<div class="dm-card__date">'+item.date+'</div>';
+    h+='<div class="dm-card__days">'+dl.n+'</div>';
+    if(item.note) h+='<div class="dm-card__note">'+esc(item.note)+'</div>';
+    h+='</div>';
+    return h;
+  }
+
   function render(){
     var list=document.getElementById('dm-list');
     if(!list) return;
@@ -1075,20 +1131,23 @@ var DM = (function(){
       list.innerHTML=renderEmpty('star','还没有重要日子','点击"添加日子"记录你的第一个');
       reinitIcons(list); return;
     }
-    // sort by abs days
-    items=items.slice().sort(function(a,b){ return Math.abs(diffDays(a.date))-Math.abs(diffDays(b.date)); });
+    var upcoming=items.filter(function(i){ return diffDays(i.date)>=0; }).sort(function(a,b){ return diffDays(a.date)-diffDays(b.date); });
+    var past=items.filter(function(i){ return diffDays(i.date)<0; }).sort(function(a,b){ return diffDays(b.date)-diffDays(a.date); });
     var h='';
-    items.forEach(function(item){
-      var dl=diffLabel(item.date);
-      h+='<div class="dm-card'+(dl.past?' dm-past':'')+'" data-id="'+item.id+'">';
-      h+='<button class="dm-card__del btn btn-ghost btn-icon" data-id="'+item.id+'" aria-label="删除"><i data-lucide="x"></i></button>';
-      h+='<div class="dm-card__emoji">'+item.emoji+'</div>';
-      h+='<div class="dm-card__name">'+esc(item.name)+'</div>';
-      h+='<div class="dm-card__date">'+item.date+'</div>';
-      h+='<div class="dm-card__days">'+dl.n+'</div>';
-      if(item.note) h+='<div class="dm-card__note">'+esc(item.note)+'</div>';
-      h+='</div>';
-    });
+    if(upcoming.length){
+      h+='<div class="dm-section">';
+      h+='<div class="dm-section-title">Upcoming</div>';
+      h+='<div class="dm-grid">';
+      upcoming.forEach(function(item){ h+=renderCard(item); });
+      h+='</div></div>';
+    }
+    if(past.length){
+      h+='<div class="dm-section">';
+      h+='<div class="dm-section-title">Memories</div>';
+      h+='<div class="dm-grid">';
+      past.forEach(function(item){ h+=renderCard(item); });
+      h+='</div></div>';
+    }
     list.innerHTML=h;
     list.querySelectorAll('.dm-card').forEach(function(el){
       el.addEventListener('click',function(e){ if(!e.target.closest('.dm-card__del')) openEdit(el.dataset.id); });
@@ -1272,6 +1331,87 @@ function initTheme(){
 document.addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&e.key==='n'){ e.preventDefault(); Tasks.openNew(); }
 });
+
+/* ============================================================
+   LANDING PAGE
+============================================================ */
+(function(){
+  var lp=document.getElementById('landing-page');
+  if(!lp) return;
+
+  // Particles canvas
+  var canvas=document.getElementById('landing-particles');
+  var ctx=canvas.getContext('2d');
+  var W,H,pts=[];
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  var primary=getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()||'#7c5cff';
+  function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35, r:Math.random()*2+1, a:Math.random() }; }
+  for(var i=0;i<55;i++) pts.push(mkPt());
+
+  var raf;
+  function drawPts(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+      if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+      ctx.fillStyle=isDark?'rgba(167,139,250,0.5)':'rgba(124,92,255,0.35)';
+      ctx.fill();
+    });
+    // draw lines between nearby pts
+    for(var i=0;i<pts.length;i++) for(var j=i+1;j<pts.length;j++){
+      var dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<120){
+        var alpha=(1-dist/120)*(document.documentElement.getAttribute('data-theme')==='dark'?0.25:0.12);
+        ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle='rgba(124,92,255,'+alpha+')'; ctx.lineWidth=1; ctx.stroke();
+      }
+    }
+    raf=requestAnimationFrame(drawPts);
+  }
+  drawPts();
+
+  // Shimmer loop on button
+  var shine=document.getElementById('landing-shine');
+  var btn=document.getElementById('landing-enter-btn');
+  function shimmerLoop(){
+    if(!lp.parentNode) return;
+    shine.style.transition='none'; shine.style.transform='translateX(-100%)';
+    setTimeout(function(){
+      shine.style.transition='transform 0.6s ease'; shine.style.transform='translateX(200%)';
+    },50);
+    setTimeout(shimmerLoop,2400);
+  }
+  shimmerLoop();
+
+  // Button hover
+  btn.addEventListener('mouseenter',function(){
+    btn.style.transform='translateY(-2px) scale(1.03)';
+    btn.style.boxShadow='0 8px 32px rgba(124,92,255,.55)';
+    document.getElementById('landing-arrow').style.transform='translateX(4px)';
+  });
+  btn.addEventListener('mouseleave',function(){
+    btn.style.transform=''; btn.style.boxShadow='0 4px 20px rgba(124,92,255,.4)';
+    document.getElementById('landing-arrow').style.transform='';
+  });
+  btn.addEventListener('mousedown',function(){ btn.style.transform='scale(.97)'; });
+  btn.addEventListener('mouseup',function(){ btn.style.transform='translateY(-2px) scale(1.03)'; });
+
+  function enterApp(){
+    cancelAnimationFrame(raf);
+    lp.style.transition='opacity .5s ease, transform .5s ease';
+    lp.style.opacity='0'; lp.style.transform='scale(1.04)';
+    setTimeout(function(){ lp.style.display='none'; }, 500);
+  }
+  btn.addEventListener('click',enterApp);
+  document.addEventListener('keydown',function onKey(e){
+    if(e.key==='Enter'){ enterApp(); document.removeEventListener('keydown',onKey); }
+  });
+})();
 
 /* ============================================================
    BOOT
