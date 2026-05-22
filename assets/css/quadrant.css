@@ -37,10 +37,10 @@
   background-opacity: 0.4;
 }
 
-.qs-quadrant--q1.active { background: #c0392b30; }
-.qs-quadrant--q2.active { background: #2a7d6f30; }
-.qs-quadrant--q3.active { background: #e67e2230; }
-.qs-quadrant--q4.active { background: #7f8c8d30; }
+.qs-quadrant--q1.active { background: #ff6b9a30; }
+.qs-quadrant--q2.active { background: #8b5cf630; }
+.qs-quadrant--q3.active { background: #ffb34730; }
+.qs-quadrant--q4.active { background: #94a3b830; }
 
 /* Labels */
 .qs-label {

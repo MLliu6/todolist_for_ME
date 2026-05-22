@@ -11,14 +11,14 @@
 <style>
 /* ── TOKENS ── */
 :root,[data-theme="light"]{
-  --color-bg:#f4f6f4;--color-surface:#ffffff;--color-surface-2:#f9faf9;
-  --color-surface-offset:#eef0ee;--color-border:#dde0dd;--color-divider:#e8eae8;
-  --color-text:#1a1f1a;--color-text-muted:#5a6b5a;--color-text-faint:#9aaa9a;
-  --color-primary:#2a7d6f;--color-primary-hover:#1f6359;--color-primary-light:#e6f2f0;
-  --color-q1:#c0392b;--color-q1-bg:#fdf2f0;
-  --color-q2:#2a7d6f;--color-q2-bg:#e6f2f0;
-  --color-q3:#d97706;--color-q3-bg:#fef9ec;
-  --color-q4:#64748b;--color-q4-bg:#f4f6f8;
+  --color-bg:#f7f6f2;--color-surface:#ffffff;--color-surface-2:#f9f8f5;
+  --color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+  --color-text:#28251d;--color-text-muted:#7a7672;--color-text-faint:#b8b5af;
+  --color-primary:#7c5cff;--color-primary-hover:#6948ee;--color-primary-light:#efe9ff;
+  --color-q1:#d946ef;--color-q1-bg:#f9edff;
+  --color-q2:#8b5cf6;--color-q2-bg:#f3edff;
+  --color-q3:#a855f7;--color-q3-bg:#f6edff;
+  --color-q4:#7c3aed;--color-q4-bg:#f1ebff;
   --color-success:#437a22;--color-error:#c0392b;--color-warning:#d97706;
   --color-holiday:#c0392b;--color-term:#2a7d6f;--color-festival:#7c3aed;
   --shadow-sm:0 1px 3px rgba(0,0,0,.07);--shadow-md:0 4px 12px rgba(0,0,0,.09);
@@ -32,14 +32,14 @@
   --nav-h:58px;
 }
 [data-theme="dark"]{
-  --color-bg:#141814;--color-surface:#1c201c;--color-surface-2:#212521;
-  --color-surface-offset:#252925;--color-border:#323832;--color-divider:#2a2e2a;
-  --color-text:#d8ded8;--color-text-muted:#7a8a7a;--color-text-faint:#4a5a4a;
-  --color-primary:#4fa897;--color-primary-hover:#3d8c7c;--color-primary-light:#1a3530;
-  --color-q1:#e05c4e;--color-q1-bg:#2a1a18;
-  --color-q2:#4fa897;--color-q2-bg:#1a2e2b;
-  --color-q3:#f0a030;--color-q3-bg:#2a2010;
-  --color-q4:#94a3b8;--color-q4-bg:#1e2228;
+  --color-bg:#131218;--color-surface:#1c1b22;--color-surface-2:#232130;
+  --color-surface-offset:#2a2835;--color-border:#323832;--color-divider:#2a2e2a;
+  --color-text:#d4d2e0;--color-text-muted:#9490a8;--color-text-faint:#5a5670;
+  --color-primary:#a78bfa;--color-primary-hover:#8f72f6;--color-primary-light:#2b2142;
+  --color-q1:#f472b6;--color-q1-bg:#34182c;
+  --color-q2:#a78bfa;--color-q2-bg:#261d3a;
+  --color-q3:#c084fc;--color-q3-bg:#2c1a3a;
+  --color-q4:#8b5cf6;--color-q4-bg:#221a33;
   --shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4);--shadow-lg:0 8px 24px rgba(0,0,0,.5);
 }
 /* ── RESET ── */
@@ -347,7 +347,7 @@ img{display:block;max-width:100%}
             <button class="view-btn active" data-view="month">月</button>
             <button class="view-btn" data-view="week">周</button>
             <button class="view-btn" data-view="day">日</button>
-            <button class="view-btn" data-view="hour">时</button>
+            
           </div>
         </div>
       </div>
@@ -587,6 +587,35 @@ var _stCache={};
 function getSolarTerms(year){
   if(_stCache[year]) return _stCache[year];
   var r={};
+
+  if(year===2026){
+    r['2026-01-05']='小寒';
+    r['2026-01-20']='大寒';
+    r['2026-02-04']='立春';
+    r['2026-02-19']='雨水';
+    r['2026-03-05']='惊蛰';
+    r['2026-03-20']='春分';
+    r['2026-04-04']='清明';
+    r['2026-04-20']='谷雨';
+    r['2026-05-05']='立夏';
+    r['2026-05-21']='小满';
+    r['2026-06-05']='芒种';
+    r['2026-06-21']='夏至';
+    r['2026-07-07']='小暑';
+    r['2026-07-23']='大暑';
+    r['2026-08-07']='立秋';
+    r['2026-08-23']='处暑';
+    r['2026-09-07']='白露';
+    r['2026-09-23']='秋分';
+    r['2026-10-08']='寒露';
+    r['2026-10-23']='霜降';
+    r['2026-11-07']='立冬';
+    r['2026-11-22']='小雪';
+    r['2026-12-07']='大雪';
+    r['2026-12-22']='冬至';
+    _stCache[year]=r; return r;
+  }
+
   for(var i=0;i<24;i++){
     var m=Math.floor(i/2)+1;
     var day=Math.floor((year%100)*0.2422+JIEQI_C[i])-Math.floor((year%100-1)/4);
@@ -639,7 +668,7 @@ var Cal = (function(){
     if(state.view==='month') renderMonth(body);
     else if(state.view==='week') renderWeek(body);
     else if(state.view==='day') renderDay(body);
-    else renderHour(body);
+    else renderDay(body);
     reinitIcons(body);
   }
 

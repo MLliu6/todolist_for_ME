@@ -47,7 +47,7 @@
   --color-primary:          #2a7d6f;
   --color-primary-hover:    #1f6359;
   --color-primary-active:   #164a43;
-  --color-primary-highlight:#d4e8e4;
+  --color-primary-highlight:#efe9ff;
   --color-primary-subtle:   #eaf3f1;
 
   /* --- Semantic --- */
@@ -59,13 +59,13 @@
   --color-error-bg:         #fdeaea;
 
   /* --- Quadrant Colors (soft, not garish) --- */
-  --color-q1: #c0392b22;  /* urgent+important: soft red */
+  --color-q1: #ff6b9a22;  /* urgent+important: soft red / right-top */
   --color-q1-border: #c0392b;
-  --color-q2: #2a7d6f22;  /* not urgent+important: teal */
+  --color-q2: #8b5cf622;  /* not urgent+important: purple / left-top */
   --color-q2-border: #2a7d6f;
-  --color-q3: #e67e2222;  /* urgent+not important: amber */
+  --color-q3: #ffb34722;  /* urgent+not important: amber / right-bottom */
   --color-q3-border: #e67e22;
-  --color-q4: #7f8c8d22;  /* not urgent+not important: gray */
+  --color-q4: #94a3b822;  /* not urgent+not important: muted / left-bottom */
   --color-q4-border: #7f8c8d;
 
   /* --- Status Colors --- */
