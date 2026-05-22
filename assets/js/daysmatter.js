@@ -86,20 +86,39 @@
      RENDERING
   ------------------------------------------------------- */
   function renderList() {
-    const container = document.getElementById('daysmatter-list');
+    const container = document.getElementById('daysmatter-list') || document.getElementById('dm-list');
     if (!container) return;
-
-    if (entries.length === 0) {
+    const items = Store.getDM ? Store.getDM() : entries;
+    if (!items.length) {
       container.innerHTML = `
         <div class="empty-state">
           <div class="empty-state__icon"><i data-lucide="star"></i></div>
           <h3>还没有重要日子</h3>
           <p>添加一个值得铭记的日子，比如生日、纪念日或即将到来的大事</p>
         </div>`;
-    } else {
-      container.innerHTML = `<div class="dm-grid">${entries.map(renderCard).join('')}</div>`;
+      if (window.lucide) lucide.createIcons({ nodes: [container] });
+      return;
     }
+    const today = new Date(); today.setHours(0,0,0,0);
+    const future = items.filter(e => new Date(e.date + 'T00:00:00') >= today)
+      .sort((a,b) => new Date(a.date) - new Date(b.date));
+    const past = items.filter(e => new Date(e.date + 'T00:00:00') < today)
+      .sort((a,b) => new Date(b.date) - new Date(a.date));
 
+    let html = '';
+    if (future.length) {
+      html += `<div class="dm-section">
+        <div class="dm-section-title dm-section-title--future">Upcoming</div>
+        <div class="dm-grid">${future.map(renderCard).join('')}</div>
+      </div>`;
+    }
+    if (past.length) {
+      html += `<div class="dm-section">
+        <div class="dm-section-title dm-section-title--past">Memory</div>
+        <div class="dm-grid">${past.map(renderCard).join('')}</div>
+      </div>`;
+    }
+    container.innerHTML = html;
     if (window.lucide) lucide.createIcons({ nodes: [container] });
     attachHandlers(container);
   }

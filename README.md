@@ -29,6 +29,7 @@ start index.html
 > **数据说明**：所有个人数据保存在浏览器 `localStorage` 中，不会上传至 GitHub。如需迁移，请在浏览器开发者工具 Console 中执行 `copy(localStorage.getItem('tasks'))` 手动导出。
 
 ## 🗂️ 项目结构
+```
 todolist_for_ME/
 ├── index.html # 主入口（含内联主题变量）
 ├── assets/
@@ -51,6 +52,7 @@ todolist_for_ME/
 ├── README.md
 ├── CHANGELOG.md
 └── DEV_RULES.md
+```
 
 ## 🛠️ 技术栈
 
