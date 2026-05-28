@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 Format based on Keep a Changelog.
 
 ## [Unreleased]
+### Added
+- Add application icon assets (`mytodo-logo.ico`, `mytodo-logo.png`, `mytodo-logo.svg`) for browser/app branding.
+
+### Security
+- Ignore local backup data and Windows Zone.Identifier metadata to avoid accidentally uploading private task data or OS download markers.
 
 ## [0.1.1] - 2026-05-22
 ### Changed

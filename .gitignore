@@ -1,4 +1,5 @@
 # User data - never upload personal task data
+data/
 assets/data/tasks.json
 assets/data/daysmatter.json
 assets/data/tags.json
@@ -7,6 +8,7 @@ assets/data/settings.json
 # OS
 .DS_Store
 Thumbs.db
+*:Zone.Identifier
 
 # Editor
 .vscode/
