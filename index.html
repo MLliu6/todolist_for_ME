@@ -231,6 +231,14 @@ img{display:block;max-width:100%}
 .modal-hd{display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--color-divider);position:sticky;top:0;background:var(--color-surface);z-index:2}
 .modal-title{font-size:var(--text-xl);font-weight:700}
 .modal-body{padding:var(--space-5) var(--space-6) var(--space-6)}
+.vault-actions{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-4)}
+.vault-actions .btn{justify-content:center}
+.vault-status{min-height:20px;margin-top:var(--space-3);font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.5}
+.vault-status.error{color:var(--color-error)}
+.vault-status.success{color:var(--color-success)}
+.vault-meta{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-3);font-size:var(--text-xs);color:var(--color-text-muted)}
+.vault-meta span{padding:3px 8px;border:1px solid var(--color-border);border-radius:var(--radius-full);background:var(--color-surface-2)}
+@media(max-width:560px){.vault-actions{grid-template-columns:1fr}}
 
 /* ── FORMS ── */
 .form-group{margin-bottom:var(--space-4)}
@@ -400,6 +408,9 @@ img{display:block;max-width:100%}
   <div class="nav-actions">
     <button class="btn btn-primary" id="btn-new-task">
       <i data-lucide="plus"></i><span class="btn-label">新建任务</span>
+    </button>
+    <button class="theme-btn" id="vault-toggle" aria-label="数据保险箱" title="数据保险箱">
+      <i data-lucide="shield-check"></i>
     </button>
     <button class="theme-btn" id="theme-toggle" aria-label="切换深色模式">
       <i data-lucide="moon"></i>
@@ -586,6 +597,32 @@ img{display:block;max-width:100%}
   </div>
 </div>
 
+<!-- MODAL: Data Vault -->
+<div class="modal-wrap" id="modal-vault" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <h3 class="modal-title">数据保险箱</h3>
+      <button class="btn btn-ghost btn-icon" id="modal-vault-close" aria-label="关闭"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="vault-passphrase">保险箱口令</label>
+        <input class="form-input" id="vault-passphrase" type="password" autocomplete="current-password" placeholder="用于加密或解密本页数据"/>
+        <p class="form-hint">任务、标签和重要日子会使用 AES-GCM 加密；导出的 HTML 只包含密文。</p>
+      </div>
+      <div class="vault-actions">
+        <button type="button" class="btn btn-primary" id="vault-export-html"><i data-lucide="file-down"></i>导出加密 HTML</button>
+        <button type="button" class="btn btn-secondary" id="vault-import-file"><i data-lucide="file-up"></i>导入加密文件</button>
+        <button type="button" class="btn btn-secondary" id="vault-restore-embedded"><i data-lucide="unlock-keyhole"></i>恢复内嵌数据</button>
+        <button type="button" class="btn btn-ghost" id="vault-export-json"><i data-lucide="download"></i>仅导出密文</button>
+      </div>
+      <input id="vault-file-input" type="file" accept=".html,.htm,.json,application/json,text/html" hidden/>
+      <div class="vault-meta" id="vault-meta"></div>
+      <div class="vault-status" id="vault-status"></div>
+    </div>
+  </div>
+</div>
+
 <!-- HOME FAB -->
 <button id="home-fab" aria-label="Back to home" style="position:fixed;right:24px;bottom:24px;z-index:8500;width:48px;height:48px;border-radius:50%;background:var(--color-primary);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(124,92,255,.45);transition:transform .2s,box-shadow .2s,opacity .3s;opacity:0;">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -615,6 +652,24 @@ var Store = (function(){
     saveTags:   function(a){ wr(KEYS.tags,a); },
     getDM:      function(){ return rd(KEYS.dm,[]); },
     saveDM:     function(a){ wr(KEYS.dm,a); },
+    exportSnapshot:function(){
+      return {
+        schema: 1,
+        exportedAt: new Date().toISOString(),
+        tasks: rd(KEYS.tasks,[]),
+        dm: rd(KEYS.dm,[]),
+        tags: rd(KEYS.tags,DEFAULT_TAGS.slice())
+      };
+    },
+    importSnapshot:function(data){
+      if(!data || typeof data!=='object') throw new Error('Invalid data');
+      wr(KEYS.tasks, Array.isArray(data.tasks)?data.tasks:[]);
+      wr(KEYS.dm, Array.isArray(data.dm)?data.dm:[]);
+      wr(KEYS.tags, Array.isArray(data.tags)?data.tags:DEFAULT_TAGS.slice());
+    },
+    isEmpty:function(){
+      return !rd(KEYS.tasks,[]).length && !rd(KEYS.dm,[]).length;
+    },
   };
 })();
 
@@ -639,6 +694,187 @@ function showToast(msg,type,dur){
 function reinitIcons(node){
   if(window.lucide) lucide.createIcons({nodes:node?[node]:[document.body]});
 }
+
+/* ============================================================
+   ENCRYPTED DATA VAULT
+============================================================ */
+var Vault = (function(){
+  var VAULT_ID='tdm-encrypted-vault';
+  var ITERATIONS=250000;
+  var lastImportedVault=null;
+
+  function bytesToB64(bytes){
+    var bin='', chunk=0x8000;
+    for(var i=0;i<bytes.length;i+=chunk){
+      bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+chunk));
+    }
+    return btoa(bin);
+  }
+  function b64ToBytes(b64){
+    var bin=atob(b64), bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    return bytes;
+  }
+  function randomBytes(len){
+    var bytes=new Uint8Array(len);
+    crypto.getRandomValues(bytes);
+    return bytes;
+  }
+  async function deriveKey(passphrase,salt,iterations){
+    var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(passphrase),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey(
+      {name:'PBKDF2',salt:salt,iterations:iterations,hash:'SHA-256'},
+      base,
+      {name:'AES-GCM',length:256},
+      false,
+      ['encrypt','decrypt']
+    );
+  }
+  async function encryptPayload(payload,passphrase){
+    var salt=randomBytes(16), iv=randomBytes(12);
+    var key=await deriveKey(passphrase,salt,ITERATIONS);
+    var plain=new TextEncoder().encode(JSON.stringify(payload));
+    var cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,plain);
+    return {
+      app:'mytodo',
+      version:1,
+      cipher:'AES-GCM',
+      kdf:'PBKDF2-SHA256',
+      iterations:ITERATIONS,
+      createdAt:new Date().toISOString(),
+      salt:bytesToB64(salt),
+      iv:bytesToB64(iv),
+      data:bytesToB64(new Uint8Array(cipher))
+    };
+  }
+  async function decryptVault(vault,passphrase){
+    if(!vault || vault.app!=='mytodo' || !vault.data) throw new Error('Invalid vault');
+    var key=await deriveKey(passphrase,b64ToBytes(vault.salt),vault.iterations||ITERATIONS);
+    var plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ToBytes(vault.iv)},key,b64ToBytes(vault.data));
+    return JSON.parse(new TextDecoder().decode(plain));
+  }
+  function getPassphrase(){
+    var pass=document.getElementById('vault-passphrase').value;
+    if(!pass || pass.length<8) throw new Error('口令至少需要 8 个字符');
+    return pass;
+  }
+  function setStatus(msg,type){
+    var el=document.getElementById('vault-status'); if(!el) return;
+    el.className='vault-status'+(type?' '+type:'');
+    el.textContent=msg||'';
+  }
+  function embeddedVault(){
+    var el=document.getElementById(VAULT_ID);
+    if(!el || !el.textContent.trim()) return null;
+    try{ return JSON.parse(el.textContent); }catch(e){ return null; }
+  }
+  function parseVaultFromText(text){
+    var trimmed=text.trim();
+    if(trimmed.charAt(0)==='{') return JSON.parse(trimmed);
+    var doc=new DOMParser().parseFromString(text,'text/html');
+    var el=doc.getElementById(VAULT_ID);
+    if(!el) throw new Error('未找到加密数据块');
+    return JSON.parse(el.textContent);
+  }
+  function escapeScriptJson(json){
+    return json.replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+  }
+  function injectVault(html,vault){
+    var block='<script id="'+VAULT_ID+'" type="application/json">'+escapeScriptJson(JSON.stringify(vault))+'<\\/script>';
+    var old=new RegExp("<script[^>]+id=[\"']"+VAULT_ID+"[\"'][\\s\\S]*?<\\/script>","i");
+    html=html.replace(old,'');
+    if(/<\/body>/i.test(html)) return html.replace(/<\/body>/i,block+'\n</body>');
+    return html+'\n'+block+'\n';
+  }
+  async function readSourceHtml(){
+    try{
+      var res=await fetch(location.href,{cache:'no-store'});
+      if(res.ok) return await res.text();
+    }catch(e){}
+    return '<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  }
+  function downloadText(filename,text,type){
+    var blob=new Blob([text],{type:type||'text/plain;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); },1000);
+  }
+  function filename(ext){
+    var d=new Date();
+    var stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');
+    return 'mytodo-encrypted-'+stamp+ext;
+  }
+  async function buildVault(){
+    if(!window.crypto || !crypto.subtle) throw new Error('当前浏览器不支持 Web Crypto');
+    return encryptPayload(Store.exportSnapshot(),getPassphrase());
+  }
+  async function exportHtml(){
+    try{
+      setStatus('正在加密并生成 HTML...');
+      var vault=await buildVault();
+      var html=injectVault(await readSourceHtml(),vault);
+      downloadText(filename('.html'),html,'text/html;charset=utf-8');
+      setStatus('已导出加密 HTML。换浏览器打开后输入同一口令即可恢复。','success');
+    }catch(e){ setStatus(e.message||'导出失败','error'); }
+  }
+  async function exportJson(){
+    try{
+      setStatus('正在加密...');
+      var vault=await buildVault();
+      downloadText(filename('.json'),JSON.stringify(vault,null,2),'application/json;charset=utf-8');
+      setStatus('已导出密文 JSON。','success');
+    }catch(e){ setStatus(e.message||'导出失败','error'); }
+  }
+  async function restoreVault(vault){
+    try{
+      setStatus('正在解密...');
+      var snap=await decryptVault(vault,getPassphrase());
+      Store.importSnapshot(snap);
+      Cal.render(); Tasks.render(); DM.render();
+      if(Drawer.isOpen()) Drawer.refresh(Drawer.getDate());
+      setStatus('数据已恢复到当前浏览器。','success');
+      showToast('数据已恢复','success');
+    }catch(e){ setStatus('解密失败：请检查口令或文件。','error'); }
+  }
+  function updateMeta(){
+    var meta=document.getElementById('vault-meta'); if(!meta) return;
+    var snap=Store.exportSnapshot();
+    var vault=embeddedVault();
+    meta.innerHTML='<span>任务 '+snap.tasks.length+'</span><span>重要日子 '+snap.dm.length+'</span><span>标签 '+snap.tags.length+'</span>'+(vault?'<span>含内嵌密文</span>':'');
+    var btn=document.getElementById('vault-restore-embedded');
+    if(btn) btn.disabled=!vault;
+  }
+  function open(){
+    updateMeta(); setStatus('');
+    Modal.open('modal-vault');
+    setTimeout(function(){ document.getElementById('vault-passphrase').focus(); },80);
+  }
+  function init(){
+    var toggle=document.getElementById('vault-toggle');
+    if(toggle) toggle.addEventListener('click',open);
+    document.getElementById('modal-vault-close').addEventListener('click',function(){ Modal.close('modal-vault'); });
+    document.getElementById('vault-export-html').addEventListener('click',exportHtml);
+    document.getElementById('vault-export-json').addEventListener('click',exportJson);
+    document.getElementById('vault-restore-embedded').addEventListener('click',function(){ restoreVault(embeddedVault()); });
+    document.getElementById('vault-import-file').addEventListener('click',function(){ document.getElementById('vault-file-input').click(); });
+    document.getElementById('vault-file-input').addEventListener('change',function(e){
+      var file=e.target.files&&e.target.files[0]; if(!file) return;
+      var reader=new FileReader();
+      reader.onload=function(){
+        try{ lastImportedVault=parseVaultFromText(String(reader.result||'')); restoreVault(lastImportedVault); }
+        catch(err){ setStatus(err.message||'无法读取文件','error'); }
+      };
+      reader.readAsText(file);
+      e.target.value='';
+    });
+    var vault=embeddedVault();
+    if(vault && Store.isEmpty()){
+      setTimeout(function(){ open(); setStatus('这个 HTML 含有加密数据，可输入口令恢复。'); },700);
+    }
+  }
+  return { init:init, open:open };
+})();
 
 /* ============================================================
    CALENDAR DATA
@@ -1340,7 +1576,7 @@ var Modal = (function(){
   }
   function init(){
     // Click outside modal box closes it
-    ['modal-task','modal-dm'].forEach(function(id){
+    ['modal-task','modal-dm','modal-vault'].forEach(function(id){
       var wrap=document.getElementById(id); if(!wrap) return;
       wrap.addEventListener('click',function(e){ if(e.target===wrap) close(id); });
     });
@@ -1348,6 +1584,7 @@ var Modal = (function(){
       if(e.key!=='Escape') return;
       if(document.getElementById('modal-task').classList.contains('open')) close('modal-task');
       else if(document.getElementById('modal-dm').classList.contains('open')) close('modal-dm');
+      else if(document.getElementById('modal-vault').classList.contains('open')) close('modal-vault');
       else if(Drawer.isOpen()) Drawer.close();
     });
   }
@@ -1487,6 +1724,7 @@ document.addEventListener('DOMContentLoaded', function(){
   Cal.init();
   Tasks.init();
   DM.init();
+  Vault.init();
   // Second pass icons after all modules render
   setTimeout(function(){ if(window.lucide) lucide.createIcons(); }, 200);
 
