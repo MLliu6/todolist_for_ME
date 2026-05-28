@@ -5,9 +5,12 @@ Format based on Keep a Changelog.
 
 ## [Unreleased]
 ### Added
+- Add encrypted Data Vault for exporting current tasks, tags, and DaysMatter data into a password-protected HTML copy or JSON vault.
+- Support restoring encrypted data from another exported HTML/JSON file, including auto-detecting an embedded vault when the current browser has no local data.
 - Add application icon assets (`mytodo-logo.ico`, `mytodo-logo.png`, `mytodo-logo.svg`) for browser/app branding.
 
 ### Security
+- Encrypt portable backups with Web Crypto AES-GCM and PBKDF2-SHA256 so task data is not stored as plaintext inside exported HTML files.
 - Ignore local backup data and Windows Zone.Identifier metadata to avoid accidentally uploading private task data or OS download markers.
 
 ## [0.1.1] - 2026-05-22
