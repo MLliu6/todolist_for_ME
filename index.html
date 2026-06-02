@@ -18,12 +18,12 @@
   --color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
   --color-text:#28251d;--color-text-muted:#7a7672;--color-text-faint:#b8b5af;
   --color-primary:#7c5cff;--color-primary-hover:#6948ee;--color-primary-light:#efe9ff;
-  --color-q1:#d946ef;--color-q1-bg:#f9edff;
-  --color-q2:#8b5cf6;--color-q2-bg:#f3edff;
-  --color-q3:#a855f7;--color-q3-bg:#f6edff;
-  --color-q4:#7c3aed;--color-q4-bg:#f1ebff;
+  --color-q1:#5b21b6;--color-q1-bg:#ede9fe;--color-q1-soft:rgba(91,33,182,.18);
+  --color-q2:#7c3aed;--color-q2-bg:#f1ebff;--color-q2-soft:rgba(124,58,237,.16);
+  --color-q3:#a855f7;--color-q3-bg:#f6edff;--color-q3-soft:rgba(168,85,247,.15);
+  --color-q4:#d946ef;--color-q4-bg:#f9edff;--color-q4-soft:rgba(217,70,239,.14);
   --color-success:#437a22;--color-error:#c0392b;--color-warning:#d97706;
-  --color-holiday:#c0392b;--color-term:#2a7d6f;--color-festival:#7c3aed;
+  --color-holiday:#c0392b;--color-term:#4f46e5;--color-term-bg:#eef2ff;--color-festival:#7c3aed;
   --shadow-sm:0 1px 3px rgba(0,0,0,.07);--shadow-md:0 4px 12px rgba(0,0,0,.09);
   --shadow-lg:0 8px 24px rgba(0,0,0,.12);
   --radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:20px;--radius-full:9999px;
@@ -39,10 +39,11 @@
   --color-surface-offset:#2a2835;--color-border:#323832;--color-divider:#2a2e2a;
   --color-text:#d4d2e0;--color-text-muted:#9490a8;--color-text-faint:#5a5670;
   --color-primary:#a78bfa;--color-primary-hover:#8f72f6;--color-primary-light:#2b2142;
-  --color-q1:#f472b6;--color-q1-bg:#34182c;
-  --color-q2:#a78bfa;--color-q2-bg:#261d3a;
-  --color-q3:#c084fc;--color-q3-bg:#2c1a3a;
-  --color-q4:#8b5cf6;--color-q4-bg:#221a33;
+  --color-q1:#c4b5fd;--color-q1-bg:#2f2452;--color-q1-soft:rgba(196,181,253,.2);
+  --color-q2:#a78bfa;--color-q2-bg:#261d3a;--color-q2-soft:rgba(167,139,250,.18);
+  --color-q3:#d8b4fe;--color-q3-bg:#2c1a3a;--color-q3-soft:rgba(216,180,254,.16);
+  --color-q4:#f0abfc;--color-q4-bg:#34182c;--color-q4-soft:rgba(240,171,252,.14);
+  --color-term:#818cf8;--color-term-bg:#202747;
   --shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4);--shadow-lg:0 8px 24px rgba(0,0,0,.5);
 }
 /* ── RESET ── */
@@ -59,7 +60,8 @@ img{display:block;max-width:100%}
 .top-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;height:var(--nav-h);padding:0 var(--space-4);background:var(--color-surface);border-bottom:1px solid var(--color-divider);box-shadow:var(--shadow-sm);gap:var(--space-4)}
 .nav-logo{display:flex;align-items:center;gap:var(--space-2);font-weight:700;font-size:var(--text-lg);color:var(--color-primary);flex-shrink:0}
 .nav-logo svg{flex-shrink:0}
-.nav-tabs{display:flex;gap:var(--space-1);flex:1;justify-content:center}
+.nav-tabs{display:flex;gap:var(--space-1);flex:1;justify-content:center;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
 .tab-btn{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-4);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);transition:all .18s var(--ease-out);white-space:nowrap}
 .tab-btn svg{width:16px;height:16px;flex-shrink:0}
 .tab-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
@@ -109,7 +111,7 @@ img{display:block;max-width:100%}
 .cal-lbl{font-size:10px;margin-top:2px;border-radius:3px;padding:1px 4px;font-weight:500;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cal-lbl.holiday{background:rgba(192,57,43,.12);color:var(--color-holiday)}
 .cal-lbl.workday{background:rgba(100,116,139,.12);color:var(--color-q4)}
-.cal-lbl.term{background:rgba(42,125,111,.12);color:var(--color-term)}
+.cal-lbl.term{background:var(--color-term-bg);color:var(--color-term)}
 .cal-lbl.festival{background:rgba(124,58,237,.1);color:var(--color-festival)}
 .cal-dots{display:flex;gap:2px;flex-wrap:wrap;margin-top:3px}
 .cal-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -147,10 +149,14 @@ img{display:block;max-width:100%}
 .cal-hour-row{display:grid;grid-template-columns:56px 1fr;gap:var(--space-2);min-height:36px;border-top:1px solid var(--color-divider)}
 .cal-hour-row:last-child{border-bottom:1px solid var(--color-divider)}
 .cal-hour-label{font-size:var(--text-xs);color:var(--color-text-faint);padding:4px 0;text-align:right;padding-right:var(--space-2)}
-.term-suggestion{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);margin:var(--space-4);padding:var(--space-4);border:1.5px solid rgba(42,125,111,.22);border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(42,125,111,.1),rgba(124,92,255,.08));box-shadow:var(--shadow-sm)}
+.term-suggestion{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);margin:var(--space-4);padding:var(--space-4);border:1.5px solid color-mix(in srgb,var(--color-term) 24%,var(--color-border));border-radius:var(--radius-lg);background:linear-gradient(135deg,color-mix(in srgb,var(--color-term-bg) 72%,transparent),color-mix(in srgb,var(--color-primary-light) 46%,transparent));box-shadow:inset 0 1px 0 rgba(255,255,255,.26),var(--shadow-sm)}
 .term-suggestion h3{font-size:var(--text-base);margin-bottom:2px}
 .term-suggestion p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.5}
 .term-suggestion .btn{flex-shrink:0}
+.term-copy{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.55;margin-top:2px;padding:6px 8px;border-radius:var(--radius-md);border:1px solid transparent;cursor:text;transition:background .18s,border-color .18s,color .18s}
+.term-copy:hover,.term-copy:focus{background:color-mix(in srgb,var(--color-term-bg) 58%,transparent);border-color:color-mix(in srgb,var(--color-term) 24%,transparent);color:var(--color-text);outline:none}
+.term-edit{display:grid;grid-template-columns:1fr auto auto;gap:var(--space-2);align-items:center;margin-top:4px}
+.term-edit .form-input{margin:0;background:color-mix(in srgb,var(--color-surface) 84%,transparent)}
 
 /* ── TASKS PANEL ── */
 .tasks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3)}
@@ -166,25 +172,34 @@ img{display:block;max-width:100%}
 
 /* Quadrant layout */
 .quadrant-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-4)}
-.q-panel{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:box-shadow .2s;min-width:0}
-.q-panel:hover{box-shadow:var(--shadow-md)}
+.q-panel,.task-card,.stat-card,.stats-panel,.timeline-shell,.field-shell,.energy-shell,.dm-card{position:relative;overflow:hidden;isolation:isolate}
+.q-panel::before,.task-card::before,.stat-card::before,.stats-panel::before,.timeline-shell::before,.field-shell::before,.energy-shell::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.24),transparent 42%);opacity:.42;z-index:-1}
+.q-panel::after,.task-card::after,.stat-card::after,.stats-panel::after,.timeline-shell::after,.field-shell::after,.energy-shell::after{content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at 22% 0%,rgba(255,255,255,.22),transparent 34%),radial-gradient(circle at 85% 100%,color-mix(in srgb,var(--color-primary) 12%,transparent),transparent 38%);opacity:.18;transition:opacity .35s var(--ease-out),transform .35s var(--ease-out);z-index:-1}
+.q-panel:hover::after,.task-card:hover::after,.stat-card:hover::after,.stats-panel:hover::after,.timeline-shell:hover::after,.field-shell:hover::after,.energy-shell:hover::after{opacity:.42;transform:scale(1.015)}
+.q-panel{background:color-mix(in srgb,var(--color-surface) 82%,transparent);backdrop-filter:blur(14px) saturate(1.08);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 30px rgba(0,0,0,.06);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.35));transition:box-shadow .28s var(--ease-out),transform .28s var(--ease-out),border-color .28s var(--ease-out);min-width:0}
+.q-panel:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 14px 34px rgba(0,0,0,.09);transform:translateY(-1px)}
 .q-panel-hd{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-divider)}
 .q-badge{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .q-panel-title{font-weight:700;font-size:var(--text-base)}
 .q-panel-sub{font-size:var(--text-xs);color:var(--color-text-muted);margin-left:auto}
-.q-panel.q1 .q-badge{background:var(--color-q1)}.q-panel.q1{border-color:rgba(192,57,43,.2)}
-.q-panel.q2 .q-badge{background:var(--color-q2)}.q-panel.q2{border-color:rgba(42,125,111,.2)}
-.q-panel.q3 .q-badge{background:var(--color-q3)}.q-panel.q3{border-color:rgba(217,119,6,.2)}
-.q-panel.q4 .q-badge{background:var(--color-q4)}.q-panel.q4{border-color:rgba(100,116,139,.2)}
+.q-panel.q1 .q-badge{background:var(--color-q1)}.q-panel.q1{border-color:var(--color-q1-soft)}
+.q-panel.q2 .q-badge{background:var(--color-q2)}.q-panel.q2{border-color:var(--color-q2-soft)}
+.q-panel.q3 .q-badge{background:var(--color-q3)}.q-panel.q3{border-color:var(--color-q3-soft)}
+.q-panel.q4 .q-badge{background:var(--color-q4)}.q-panel.q4{border-color:var(--color-q4-soft)}
 .q-tasks{display:flex;flex-direction:column;gap:var(--space-2);min-height:60px;min-width:0}
 
 /* Task card */
-.task-card{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1.5px solid var(--color-border);transition:all .18s var(--ease-out);cursor:pointer;min-width:0}
-.task-card:hover{background:var(--color-surface-offset);border-color:var(--color-primary);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.task-card{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3);background:color-mix(in srgb,var(--color-surface-2) 82%,transparent);backdrop-filter:blur(10px) saturate(1.06);border-radius:var(--radius-md);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.28));box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:background .25s var(--ease-out),border-color .25s var(--ease-out),box-shadow .25s var(--ease-out),transform .25s var(--ease-out);cursor:pointer;min-width:0}
+.task-card:hover{background:color-mix(in srgb,var(--color-surface-offset) 84%,transparent);border-color:color-mix(in srgb,var(--task-color,var(--color-primary)) 42%,var(--color-border));box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 26px color-mix(in srgb,var(--task-color,var(--color-primary)) 12%,transparent);transform:translateY(-1px)}
 .task-card.done{opacity:.6}
-.task-check{flex-shrink:0;width:22px;height:22px;border-radius:var(--radius-full);border:2px solid var(--color-border);display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:1px}
-.task-check:hover{border-color:var(--color-primary);background:var(--color-primary-light)}
-.task-check.done{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.task-card.q1{--task-color:var(--color-q1);--task-bg:var(--color-q1-bg)}
+.task-card.q2{--task-color:var(--color-q2);--task-bg:var(--color-q2-bg)}
+.task-card.q3{--task-color:var(--color-q3);--task-bg:var(--color-q3-bg)}
+.task-card.q4{--task-color:var(--color-q4);--task-bg:var(--color-q4-bg)}
+.task-card.locked .task-name{font-style:italic;color:var(--color-text-muted)}
+.task-check{flex-shrink:0;width:22px;height:22px;border-radius:var(--radius-full);border:2px solid var(--task-color,var(--color-border));color:var(--task-color,var(--color-text-muted));display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:1px;background:color-mix(in srgb,var(--task-bg,var(--color-surface)) 72%,transparent)}
+.task-check:hover{border-color:var(--task-color,var(--color-primary));background:var(--task-bg,var(--color-primary-light));box-shadow:0 0 0 4px color-mix(in srgb,var(--task-color,var(--color-primary)) 14%,transparent)}
+.task-check.done{background:var(--task-color,var(--color-primary));border-color:var(--task-color,var(--color-primary));color:#fff}
 .task-check svg{width:12px;height:12px}
 .task-body{flex:1;min-width:0}
 .task-name{font-size:var(--text-sm);font-weight:600;line-height:1.4;word-break:break-word}
@@ -193,26 +208,72 @@ img{display:block;max-width:100%}
 .task-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-1);margin-top:var(--space-2)}
 .tag{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);font-weight:500}
 .task-ddl{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:var(--color-surface-offset);color:var(--color-text-muted);display:flex;align-items:center;gap:3px;border:1px solid var(--color-border)}
-.task-ddl.overdue{background:rgba(192,57,43,.1);color:var(--color-q1);border-color:rgba(192,57,43,.25)}
+.task-ddl.overdue{background:var(--color-q1-bg);color:var(--color-q1);border-color:var(--color-q1-soft)}
 .task-ddl svg{width:10px;height:10px}
 .task-repeat{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:var(--color-primary-light);color:var(--color-primary);display:flex;align-items:center;gap:3px;border:1px solid rgba(124,92,255,.24)}
 .task-repeat svg{width:10px;height:10px}
 .task-template{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:rgba(217,119,6,.1);color:var(--color-warning);display:flex;align-items:center;gap:3px;border:1px solid rgba(217,119,6,.24)}
 .task-template svg{width:10px;height:10px}
+.task-subtasks{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:rgba(67,122,34,.1);color:var(--color-success);display:flex;align-items:center;gap:3px;border:1px solid rgba(67,122,34,.24)}
+.task-subtasks svg{width:10px;height:10px}
 .task-actions{display:flex;gap:2px;flex-shrink:0;opacity:1;transition:opacity .15s}
 .task-card:hover .task-actions{opacity:1}
 .task-actions .btn-icon{width:26px;height:26px;padding:0;border-radius:var(--radius-sm);font-size:var(--text-xs)}
 .task-actions .btn-icon svg{width:13px;height:13px}
+.task-card.dragging{opacity:.45;transform:scale(.98)}
+.q-tasks.drag-over{outline:2px dashed var(--color-primary);outline-offset:4px;border-radius:var(--radius-md)}
+.subtask-box{border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-3);background:var(--color-surface-2)}
+.subtask-list{display:flex;flex-direction:column;gap:var(--space-2);margin-bottom:var(--space-2)}
+.subtask-row{display:grid;grid-template-columns:auto 1fr auto;gap:var(--space-2);align-items:center}
+.subtask-row input[type="text"]{min-width:0}
+.subtask-add-row{display:grid;grid-template-columns:1fr auto;gap:var(--space-2)}
+
+/* ── ADVANCED VIEWS ── */
+.timeline-shell,.field-shell,.energy-shell{background:color-mix(in srgb,var(--color-surface) 82%,transparent);backdrop-filter:blur(14px) saturate(1.08);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.32));border-radius:var(--radius-xl);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 12px 34px rgba(0,0,0,.07);padding:var(--space-5);overflow:visible}
+.timeline-track{display:grid;grid-template-columns:120px 1fr;gap:var(--space-3);align-items:start;margin-bottom:var(--space-3)}
+.timeline-label{font-size:var(--text-sm);font-weight:700;color:var(--color-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.timeline-lane{position:relative;min-height:34px;background:var(--color-surface-offset);border-radius:var(--radius-md);overflow:visible;border:1px solid color-mix(in srgb,var(--color-border) 70%,transparent)}
+.timeline-bar{position:absolute;height:24px;min-width:58px;max-width:128px;border-radius:var(--radius-sm);background:var(--color-primary);color:#fff;font-size:10px;padding:4px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;box-shadow:0 5px 14px rgba(0,0,0,.13);transition:all .18s var(--ease-out);outline:none}
+.timeline-bar:hover,.timeline-bar:focus{z-index:30!important;height:auto;min-height:46px;max-width:min(280px,70%);white-space:normal;overflow:visible;box-shadow:0 14px 36px color-mix(in srgb,var(--bar-color,var(--color-primary)) 34%,transparent);transform:translateY(-8px)}
+.timeline-bar__title{font-weight:800;line-height:1.25}
+.timeline-bar__meta{font-size:9px;line-height:1.45;opacity:.9;margin-top:2px}
+.timeline-empty,.field-empty,.energy-empty{color:var(--color-text-faint);font-size:var(--text-sm);text-align:center;padding:var(--space-8)}
+.field-canvas{position:relative;aspect-ratio:16/9;min-height:360px;border:1.5px solid var(--color-border);border-radius:var(--radius-lg);background:linear-gradient(90deg,transparent calc(50% - 1px),var(--color-divider) calc(50% - 1px),var(--color-divider) calc(50% + 1px),transparent calc(50% + 1px)),linear-gradient(0deg,transparent calc(50% - 1px),var(--color-divider) calc(50% - 1px),var(--color-divider) calc(50% + 1px),transparent calc(50% + 1px)),radial-gradient(circle at 24% 22%,rgba(217,70,239,.1),transparent 32%),var(--color-surface-2);overflow:visible}
+.field-axis{position:absolute;font-size:var(--text-xs);color:var(--color-text-faint);font-weight:600}
+.field-axis.top{top:10px;left:50%;transform:translateX(-50%)}.field-axis.bottom{bottom:10px;left:50%;transform:translateX(-50%)}
+.field-axis.left{left:10px;top:50%;transform:translateY(-50%)}.field-axis.right{right:10px;top:50%;transform:translateY(-50%)}
+.field-bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;padding:7px;color:#fff;font-size:10px;font-weight:700;box-shadow:var(--shadow-md);cursor:pointer;transform:translate(-50%,-50%);animation:fieldPulse 2.6s ease-in-out infinite;transition:transform .18s var(--ease-out),box-shadow .18s var(--ease-out);outline:none}
+.field-bubble:hover,.field-bubble:focus{z-index:40;transform:translate(-50%,-50%) scale(1.12);box-shadow:0 16px 44px color-mix(in srgb,var(--bubble-color,var(--color-primary)) 38%,transparent)}
+.field-bubble__label{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.field-tip{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);display:none;width:max-content;max-width:230px;padding:8px 10px;border-radius:var(--radius-md);background:var(--color-surface);color:var(--color-text);border:1px solid var(--color-border);box-shadow:var(--shadow-lg);font-size:11px;text-align:left;line-height:1.45;z-index:50}
+.field-bubble:hover .field-tip,.field-bubble:focus .field-tip{display:block}
+.field-bubble.done{opacity:.45;animation:none}
+@keyframes fieldPulse{0%,100%{box-shadow:0 0 0 0 rgba(124,92,255,.28)}50%{box-shadow:0 0 0 8px rgba(124,92,255,0)}}
+.energy-control{display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-4)}
+.energy-control input{accent-color:var(--color-primary)}
+.energy-list{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3)}
+.energy-card{background:color-mix(in srgb,var(--color-surface-2) 86%,transparent);border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4);cursor:pointer;transition:all .18s var(--ease-out)}
+.energy-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--color-primary)}
+.energy-card h3{font-size:var(--text-base);margin-bottom:var(--space-2)}
+.energy-card p{font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.5}
 
 /* ── STATS ── */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);margin-bottom:var(--space-4)}
-.stat-card{background:var(--color-surface);border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm)}
+.stat-card{background:color-mix(in srgb,var(--color-surface) 82%,transparent);backdrop-filter:blur(12px) saturate(1.06);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.3));border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),var(--shadow-sm)}
 .stat-label{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-1)}
 .stat-value{font-size:var(--text-2xl);font-weight:800;color:var(--color-primary);line-height:1.1}
 .stat-sub{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-1)}
 .stats-panels{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
-.stats-panel{background:var(--color-surface);border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm)}
+.stats-panel{background:color-mix(in srgb,var(--color-surface) 82%,transparent);backdrop-filter:blur(12px) saturate(1.06);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.3));border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),var(--shadow-sm)}
 .stats-panel h3{font-size:var(--text-base);margin-bottom:var(--space-3)}
+.stats-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-bottom:var(--space-4)}
+.stats-nav{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);background:var(--color-surface);border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-3);box-shadow:var(--shadow-sm)}
+.stats-nav__title{font-size:var(--text-xs);font-weight:800;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.04em}
+.stats-nav__range{font-size:var(--text-sm);font-weight:700;text-align:center}
+.stats-nav__btns{display:flex;gap:var(--space-1);align-items:center}
+.burnout-card{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4);padding:var(--space-4);border-radius:var(--radius-lg);border:1.5px solid var(--color-q1-soft);background:linear-gradient(135deg,color-mix(in srgb,var(--color-q4-bg) 74%,transparent),color-mix(in srgb,var(--color-q1-bg) 58%,transparent));box-shadow:var(--shadow-sm)}
+.burnout-card h3{font-size:var(--text-base);margin-bottom:4px;color:var(--color-q1)}
+.burnout-card p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.5}
 .bar-row{display:grid;grid-template-columns:84px 1fr 34px;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);font-size:var(--text-xs)}
 .bar-track{height:9px;background:var(--color-surface-offset);border-radius:var(--radius-full);overflow:hidden}
 .bar-fill{height:100%;border-radius:var(--radius-full);background:var(--color-primary)}
@@ -230,8 +291,8 @@ img{display:block;max-width:100%}
 .dm-section{margin-bottom:var(--space-8)}
 
 .dm-grid{display:grid;grid-template-columns:1fr;gap:var(--space-3)}
-.dm-card{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-5) var(--space-5);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:all .2s var(--ease-out);cursor:pointer;position:relative}
-.dm-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--color-primary)}
+.dm-card{background:color-mix(in srgb,var(--color-surface) 86%,transparent);backdrop-filter:blur(10px) saturate(1.04);border-radius:var(--radius-lg);padding:var(--space-5) var(--space-5);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),var(--shadow-sm);border:1.5px solid color-mix(in srgb,var(--color-border) 84%,rgba(255,255,255,.28));transition:all .24s var(--ease-out);cursor:pointer;position:relative}
+.dm-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),var(--shadow-md);transform:translateY(-2px);border-color:color-mix(in srgb,var(--color-primary) 38%,var(--color-border))}
 .dm-card__emoji{font-size:32px;margin-bottom:var(--space-3);line-height:1}
 .dm-card__name{font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-2)}
 .dm-card__date{font-size:var(--text-xs);color:var(--color-text-muted)}
@@ -241,6 +302,11 @@ img{display:block;max-width:100%}
 .dm-card__del{position:absolute;top:var(--space-2);right:var(--space-2);opacity:0;transition:opacity .15s}
 .dm-card:hover .dm-card__del{opacity:1}
 .dm-past .dm-card__days{color:var(--color-text-muted)}
+.dm-taskline{margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px solid var(--color-divider);display:flex;flex-direction:column;gap:6px}
+.dm-taskline__title{font-size:10px;font-weight:800;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.08em}
+.dm-taskline__item{display:grid;grid-template-columns:44px 1fr;gap:var(--space-2);align-items:start;font-size:11px;line-height:1.35;color:var(--color-text-muted)}
+.dm-taskline__date{font-weight:700;color:var(--color-primary)}
+.dm-taskline__name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── EMPTY STATE ── */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-12) var(--space-8);text-align:center;color:var(--color-text-muted)}
@@ -279,7 +345,7 @@ img{display:block;max-width:100%}
 .form-label{display:block;font-size:var(--text-sm);font-weight:600;margin-bottom:var(--space-2);color:var(--color-text)}
 .form-hint{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)}
 .form-input,.form-textarea{width:100%;padding:10px var(--space-3);border:1.5px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-sm);background:var(--color-surface-2);transition:border-color .15s,box-shadow .15s;outline:none}
-.form-input:focus,.form-textarea:focus{border-color:var(--color-primary);box-shadow:0 0 0 3px rgba(42,125,111,.12)}
+.form-input:focus,.form-textarea:focus{border-color:var(--color-primary);box-shadow:0 0 0 3px rgba(124,92,255,.14)}
 .form-textarea{resize:vertical;min-height:72px;line-height:1.6}
 .form-actions{display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--color-divider)}
 .btn-secondary{background:var(--color-surface-offset);color:var(--color-text-muted);border-color:var(--color-border)}
@@ -334,7 +400,7 @@ img{display:block;max-width:100%}
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .quadrant-grid{grid-template-columns:1fr}
-  .stats-grid,.stats-panels{grid-template-columns:1fr}
+  .stats-grid,.stats-panels,.stats-toolbar{grid-template-columns:1fr}
   .tasks-tools{width:100%;justify-content:stretch}
   .task-search{flex:1;min-width:180px}
   .top-nav .nav-logo span{display:none}
@@ -346,6 +412,8 @@ img{display:block;max-width:100%}
   .main{padding:var(--space-4) var(--space-3)}
   .term-suggestion{align-items:flex-start;flex-direction:column}
   .template-row,.dm-reminder-row{grid-template-columns:1fr}
+  .timeline-track{grid-template-columns:1fr}
+  .energy-list{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .dm-grid{grid-template-columns:1fr}
@@ -450,6 +518,15 @@ img{display:block;max-width:100%}
     <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false">
       <i data-lucide="bar-chart-3"></i><span>统计</span>
     </button>
+    <button class="tab-btn" data-tab="timeline" role="tab" aria-selected="false">
+      <i data-lucide="gantt-chart"></i><span>时间线</span>
+    </button>
+    <button class="tab-btn" data-tab="field" role="tab" aria-selected="false">
+      <i data-lucide="orbit"></i><span>能量场</span>
+    </button>
+    <button class="tab-btn" data-tab="energy" role="tab" aria-selected="false">
+      <i data-lucide="battery-charging"></i><span>推荐</span>
+    </button>
   </div>
   <div class="nav-actions">
     <button class="btn btn-primary" id="btn-new-task">
@@ -538,6 +615,39 @@ img{display:block;max-width:100%}
     <div id="stats-board"></div>
   </div>
 
+  <!-- TIMELINE PANEL -->
+  <div class="tab-panel" id="panel-timeline">
+    <div class="tasks-header">
+      <div>
+        <h2>平行时间线</h2>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px">按标签查看长期目标的时间分布</p>
+      </div>
+    </div>
+    <div id="timeline-board"></div>
+  </div>
+
+  <!-- TASK FIELD PANEL -->
+  <div class="tab-panel" id="panel-field">
+    <div class="tasks-header">
+      <div>
+        <h2>任务能量场</h2>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px">用位置和气泡大小观察任务压力分布</p>
+      </div>
+    </div>
+    <div id="field-board"></div>
+  </div>
+
+  <!-- ENERGY PANEL -->
+  <div class="tab-panel" id="panel-energy">
+    <div class="tasks-header">
+      <div>
+        <h2>能量匹配推荐</h2>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:2px">根据当前精力推荐今天适合做的任务</p>
+      </div>
+    </div>
+    <div id="energy-board"></div>
+  </div>
+
 </div>
 
 <!-- BACKDROP -->
@@ -576,6 +686,11 @@ img{display:block;max-width:100%}
           <input class="form-input" id="task-ddl" type="date"/>
         </div>
         <div class="form-group">
+          <label class="form-label" for="task-unlock-date">时间胶囊解锁日</label>
+          <input class="form-input" id="task-unlock-date" type="date"/>
+          <p class="form-hint">设置后，解锁日前会隐藏任务标题和内容，只保留日期与状态。</p>
+        </div>
+        <div class="form-group">
           <label class="form-label" for="task-repeat">重复任务</label>
           <select class="form-input" id="task-repeat">
             <option value="">不重复</option>
@@ -584,6 +699,24 @@ img{display:block;max-width:100%}
             <option value="monthly">每月</option>
           </select>
           <p class="form-hint">重复任务在标记完成时，会按当前截止日期生成下一次任务。</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="task-energy">所需精力</label>
+          <select class="form-input" id="task-energy">
+            <option value="medium">中等精力</option>
+            <option value="low">低精力</option>
+            <option value="high">高精力</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">子任务 checklist</label>
+          <div class="subtask-box">
+            <div class="subtask-list" id="subtask-list"></div>
+            <div class="subtask-add-row">
+              <input class="form-input" id="subtask-new" type="text" placeholder="添加一个子任务" autocomplete="off"/>
+              <button type="button" class="btn btn-secondary" id="subtask-add-btn"><i data-lucide="plus"></i>添加</button>
+            </div>
+          </div>
         </div>
         <div class="form-group" id="task-template-group" style="display:none">
           <label class="form-label">任务遗传模板</label>
@@ -627,10 +760,10 @@ img{display:block;max-width:100%}
           <label class="form-label">优先级象限</label>
           <p class="form-hint">点击选择任务所属象限（艾森豪威尔矩阵）</p>
           <div class="q-picker" id="q-picker">
-            <button type="button" class="q-opt q1" data-q="q1">🔴 紧急 + 重要<small>立即处理</small></button>
-            <button type="button" class="q-opt q2 active" data-q="q2">🟢 重要 + 不紧急<small>计划安排</small></button>
-            <button type="button" class="q-opt q3" data-q="q3">🟡 紧急 + 不重要<small>委托他人</small></button>
-            <button type="button" class="q-opt q4" data-q="q4">⚪ 不紧急 + 不重要<small>考虑删除</small></button>
+            <button type="button" class="q-opt q1" data-q="q1">紧急 + 重要<small>立即处理</small></button>
+            <button type="button" class="q-opt q2 active" data-q="q2">重要 + 不紧急<small>计划安排</small></button>
+            <button type="button" class="q-opt q3" data-q="q3">紧急 + 不重要<small>委托他人</small></button>
+            <button type="button" class="q-opt q4" data-q="q4">不紧急 + 不重要<small>考虑删除</small></button>
           </div>
           <input type="hidden" id="task-quadrant" value="q2"/>
         </div>
@@ -753,7 +886,7 @@ img{display:block;max-width:100%}
    DATA STORE
 ============================================================ */
 var Store = (function(){
-  var KEYS = { tasks:'tdm_tasks', dm:'tdm_dm', tags:'tdm_tags' };
+  var KEYS = { tasks:'tdm_tasks', dm:'tdm_dm', tags:'tdm_tags', rituals:'tdm_solar_rituals', prefs:'tdm_ui_prefs' };
   var DEFAULT_TAGS = ['工作','学习','生活','健康','财务','社交','创作'];
   function rd(k,fb){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fb; }catch(e){ return fb; } }
   function wr(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
@@ -766,13 +899,19 @@ var Store = (function(){
     saveTags:   function(a){ wr(KEYS.tags,a); },
     getDM:      function(){ return rd(KEYS.dm,[]); },
     saveDM:     function(a){ wr(KEYS.dm,a); },
+    getRituals: function(){ return rd(KEYS.rituals,{}); },
+    saveRituals:function(o){ wr(KEYS.rituals,o||{}); },
+    getPrefs:   function(){ return rd(KEYS.prefs,{}); },
+    savePrefs:  function(o){ wr(KEYS.prefs,o||{}); },
     exportSnapshot:function(){
       return {
         schema: 1,
         exportedAt: new Date().toISOString(),
         tasks: rd(KEYS.tasks,[]),
         dm: rd(KEYS.dm,[]),
-        tags: rd(KEYS.tags,DEFAULT_TAGS.slice())
+        tags: rd(KEYS.tags,DEFAULT_TAGS.slice()),
+        rituals: rd(KEYS.rituals,{}),
+        prefs: rd(KEYS.prefs,{})
       };
     },
     importSnapshot:function(data){
@@ -780,6 +919,8 @@ var Store = (function(){
       wr(KEYS.tasks, Array.isArray(data.tasks)?data.tasks:[]);
       wr(KEYS.dm, Array.isArray(data.dm)?data.dm:[]);
       wr(KEYS.tags, Array.isArray(data.tags)?data.tags:DEFAULT_TAGS.slice());
+      wr(KEYS.rituals, data.rituals && typeof data.rituals==='object' ? data.rituals : {});
+      wr(KEYS.prefs, data.prefs && typeof data.prefs==='object' ? data.prefs : {});
     },
     isEmpty:function(){
       return !rd(KEYS.tasks,[]).length && !rd(KEYS.dm,[]).length;
@@ -794,6 +935,11 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 function todayISO(){ var d=new Date(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return d.getFullYear()+'-'+m+'-'+day; }
 function fmtDate(d){ var m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return d.getFullYear()+'-'+m+'-'+day; }
 function isOverdue(ddl,status){ if(!ddl||status==='done') return false; var t=new Date(); t.setHours(0,0,0,0); return new Date(ddl+'T00:00:00')<t; }
+function daysOverdue(ddl,status){ if(!isOverdue(ddl,status)) return 0; return Math.abs(diffDays(ddl)); }
+function isLockedTask(t){ return !!(t&&t.unlockDate&&compareISO(t.unlockDate,todayISO())>0); }
+function taskName(t){ return isLockedTask(t)?'一个等待解锁的任务':(t.name||''); }
+function taskDesc(t){ return isLockedTask(t)?'这是一枚时间胶囊，到 '+t.unlockDate+' 后会显示完整内容。':(t.desc||''); }
+function visibleTasks(tasks){ return (tasks||[]).filter(function(t){ return !t.archived; }); }
 function diffDays(isoDate){
   var today=new Date(); today.setHours(0,0,0,0);
   var target=new Date(isoDate+'T00:00:00');
@@ -1150,6 +1296,17 @@ var SOLAR_TERM_TASKS={
   '冬至':'给重要的人发一条问候，或认真吃一顿饭。'
 };
 
+function getSolarRitual(term){
+  var overrides=Store.getRituals();
+  return (overrides&&overrides[term]) || SOLAR_TERM_TASKS[term] || '';
+}
+
+function saveSolarRitual(term,text){
+  var overrides=Store.getRituals();
+  overrides[term]=text||SOLAR_TERM_TASKS[term]||'';
+  Store.saveRituals(overrides);
+}
+
 /* ============================================================
    CALENDAR MODULE
 ============================================================ */
@@ -1180,9 +1337,11 @@ var Cal = (function(){
 
   function renderTermSuggestion(ds){
     var lbl=getDayLabel(ds);
-    if(!lbl||lbl[1]!=='term'||!SOLAR_TERM_TASKS[lbl[0]]) return '';
+    if(!lbl||lbl[1]!=='term'||!getSolarRitual(lbl[0])) return '';
+    var ritual=getSolarRitual(lbl[0]);
     return '<div class="term-suggestion">'
-      +'<div><h3>'+esc(lbl[0])+'任务建议</h3><p>'+esc(SOLAR_TERM_TASKS[lbl[0]])+'</p></div>'
+      +'<div style="min-width:0;flex:1"><h3>'+esc(lbl[0])+'任务建议</h3>'
+      +'<p class="term-copy" tabindex="0" role="button" title="点击编辑节气仪式" data-term="'+esc(lbl[0])+'">'+esc(ritual)+'</p></div>'
       +'<button class="btn btn-primary btn-sm term-add-btn" data-date="'+esc(ds)+'" data-term="'+esc(lbl[0])+'"><i data-lucide="plus"></i>一键添加</button>'
       +'</div>';
   }
@@ -1191,8 +1350,9 @@ var Cal = (function(){
     body.querySelectorAll('.term-add-btn').forEach(function(btn){
       btn.addEventListener('click',function(e){
         e.stopPropagation();
+        var ritual=getSolarRitual(btn.dataset.term);
         if(window.Tasks&&Tasks.createQuickTask) Tasks.createQuickTask({
-          name:btn.dataset.term+'：'+SOLAR_TERM_TASKS[btn.dataset.term],
+          name:btn.dataset.term+'：'+ritual,
           desc:'节气感知任务建议',
           ddl:btn.dataset.date,
           quadrant:'q2',
@@ -1201,10 +1361,36 @@ var Cal = (function(){
         });
       });
     });
+    function enterEdit(copy){
+      var term=copy.dataset.term;
+      var old=getSolarRitual(term);
+      var wrap=document.createElement('div');
+      wrap.className='term-edit';
+      wrap.innerHTML='<input class="form-input term-edit-input" value="'+esc(old)+'" autocomplete="off"/><button class="btn btn-primary btn-sm term-save-inline">保存</button><button class="btn btn-ghost btn-sm term-cancel-inline">取消</button>';
+      copy.replaceWith(wrap);
+      var input=wrap.querySelector('.term-edit-input');
+      input.focus(); input.select();
+      function save(){
+        saveSolarRitual(term,input.value.trim());
+        showToast('节气仪式已保存','success');
+        render();
+      }
+      function cancel(){ render(); }
+      wrap.querySelector('.term-save-inline').addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); save(); });
+      wrap.querySelector('.term-cancel-inline').addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); cancel(); });
+      input.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){ e.preventDefault(); save(); }
+        if(e.key==='Escape'){ e.preventDefault(); cancel(); }
+      });
+    }
+    body.querySelectorAll('.term-copy').forEach(function(copy){
+      copy.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); enterEdit(copy); });
+      copy.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterEdit(copy); } });
+    });
   }
 
   function renderMonth(body){
-    var tasks=Store.getTasks();
+    var tasks=visibleTasks(Store.getTasks());
     var today=todayISO();
     var firstDay=new Date(state.year,state.month,1);
     var offset=(firstDay.getDay()-1+7)%7;
@@ -1229,7 +1415,7 @@ var Cal = (function(){
       if(lbl) h+='<div class="cal-lbl '+lbl[1]+'">'+lbl[0]+'</div>';
       if(dayTasks.length){
         h+='<div class="cal-tasks">';
-        dayTasks.slice(0,2).forEach(function(t){ h+='<div class="cal-task-chip '+(t.quadrant||'none')+'" title="'+esc(t.name)+'">'+esc(t.name)+'</div>'; });
+        dayTasks.slice(0,2).forEach(function(t){ h+='<div class="cal-task-chip '+(t.quadrant||'none')+'" title="'+esc(taskName(t))+'">'+esc(taskName(t))+'</div>'; });
         if(dayTasks.length>2) h+='<div class="cal-task-more">+'+(dayTasks.length-2)+'</div>';
         h+='</div>';
       }
@@ -1245,7 +1431,7 @@ var Cal = (function(){
   }
 
   function renderWeek(body){
-    var tasks=Store.getTasks(); var today=todayISO();
+    var tasks=visibleTasks(Store.getTasks()); var today=todayISO();
     var d=new Date(state.sel+'T00:00:00');
     var off=(d.getDay()-1+7)%7;
     var start=new Date(d); start.setDate(d.getDate()-off);
@@ -1266,7 +1452,7 @@ var Cal = (function(){
     days.forEach(function(ds){
       var dt=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
       h+='<div class="cal-allday-col">';
-      dt.forEach(function(t){ h+='<div class="cal-week-chip '+(t.quadrant||'q2')+'" data-id="'+t.id+'" title="'+esc(t.name)+'">'+esc(t.name)+'</div>'; });
+      dt.forEach(function(t){ h+='<div class="cal-week-chip '+(t.quadrant||'q2')+'" data-id="'+t.id+'" title="'+esc(taskName(t))+'">'+esc(taskName(t))+'</div>'; });
       h+='</div>';
     });
     h+='</div></div>';
@@ -1277,7 +1463,7 @@ var Cal = (function(){
   }
 
   function renderDay(body){
-    var tasks=Store.getTasks(); var ds=state.sel;
+    var tasks=visibleTasks(Store.getTasks()); var ds=state.sel;
     var d=new Date(ds+'T00:00:00'); var lbl=getDayLabel(ds);
     var dayTasks=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
     var h=renderTermSuggestion(ds)+'<div class="cal-day-view"><div style="padding:var(--space-4) var(--space-6) var(--space-2)">';
@@ -1348,18 +1534,23 @@ var Q_LABELS={q1:'紧急重要',q2:'重要不紧急',q3:'紧急不重要',q4:'�
 
 function renderTaskCard(t){
   var isDone=t.status==='done';
+  var locked=isLockedTask(t);
   var statusIcon={todo:'circle',doing:'loader-circle',done:'circle-check'}[t.status]||'circle';
   var tagsH=(t.tags||[]).map(function(tg){ return '<span class="tag">'+esc(tg)+'</span>'; }).join('');
   var ddlH=t.ddl?('<span class="task-ddl'+(isOverdue(t.ddl,t.status)?' overdue':'')+'"><i data-lucide="calendar-clock"></i>'+esc(t.ddl.slice(5))+'</span>'):'';
+  var unlockH=locked?('<span class="task-ddl"><i data-lucide="lock-keyhole"></i>'+esc(t.unlockDate.slice(5))+' 解锁</span>'):'';
   var repeatH=t.repeat&&t.repeat.type?('<span class="task-repeat"><i data-lucide="repeat-2"></i>'+repeatLabel(t.repeat)+'</span>'):'';
   var templateH=t.template&&t.template.type?('<span class="task-template"><i data-lucide="wand-sparkles"></i>模板</span>'):'';
+  var subtasks=t.subtasks||[];
+  var subDone=subtasks.filter(function(s){ return s.done; }).length;
+  var subH=subtasks.length?('<span class="task-subtasks"><i data-lucide="list-checks"></i>'+subDone+'/'+subtasks.length+'</span>'):'';
   var qH=t.quadrant&&Q_LABELS[t.quadrant]?('<span class="tag" style="border-color:var(--color-'+t.quadrant+');color:var(--color-'+t.quadrant+')">'+Q_LABELS[t.quadrant]+'</span>'):'';
-  return '<div class="task-card'+(isDone?' done':'')+'" data-id="'+t.id+'" tabindex="0">'
+  return '<div class="task-card '+(t.quadrant||'')+(isDone?' done':'')+(locked?' locked':'')+'" data-id="'+t.id+'" tabindex="0" draggable="true">'
     +'<button class="task-check'+(isDone?' done':'')+'" data-id="'+t.id+'" aria-label="切换完成状态"><i data-lucide="'+statusIcon+'"></i></button>'
     +'<div class="task-body">'
-    +'<p class="task-name'+(isDone?' done':'')+'">'+esc(t.name)+'</p>'
-    +(t.desc?'<p class="task-desc">'+esc(t.desc)+'</p>':'')
-    +'<div class="task-meta">'+qH+tagsH+ddlH+repeatH+templateH+'</div>'
+    +'<p class="task-name'+(isDone?' done':'')+'">'+(locked?'<i data-lucide="lock-keyhole"></i> ':'')+esc(taskName(t))+'</p>'
+    +(taskDesc(t)?'<p class="task-desc">'+esc(taskDesc(t))+'</p>':'')
+    +'<div class="task-meta">'+qH+tagsH+ddlH+unlockH+repeatH+templateH+subH+'</div>'
     +'</div>'
     +'<div class="task-actions">'
     +'<button class="btn btn-ghost btn-icon task-edit-btn" data-id="'+t.id+'" aria-label="编辑"><i data-lucide="pencil"></i></button>'
@@ -1377,6 +1568,7 @@ function attachCardHandlers(container){
     card.addEventListener('click',function(e){ if(!e.target.closest('button')) Tasks.openEdit(card.dataset.id); });
     card.addEventListener('keydown',function(e){ if(e.key==='Enter') Tasks.openEdit(card.dataset.id); });
   });
+  if(Tasks&&Tasks.attachDragHandlers) Tasks.attachDragHandlers(container);
   if(window.lucide) lucide.createIcons({nodes:[container]});
 }
 
@@ -1419,11 +1611,17 @@ var Tasks = (function(){
 
   function matchQuery(t,q){
     if(!q) return true;
+    if(isLockedTask(t)){
+      var lockedHay=['时间胶囊','等待解锁',t.unlockDate,t.ddl,t.status,Q_LABELS[t.quadrant]||t.quadrant,(t.tags||[]).join(' ')].join(' ').toLowerCase();
+      return lockedHay.indexOf(q)>=0;
+    }
     var hay=[
-      t.name,t.desc,t.ddl,t.status,Q_LABELS[t.quadrant]||t.quadrant,
+      t.name,t.desc,t.ddl,t.unlockDate,t.status,Q_LABELS[t.quadrant]||t.quadrant,
       repeatLabel(t.repeat),
       t.sourceId,
       t.template&&t.template.type?'模板':'',
+      t.energy,
+      (t.subtasks||[]).map(function(s){ return s.title; }).join(' '),
       (t.tags||[]).join(' ')
     ].join(' ').toLowerCase();
     return hay.indexOf(q)>=0;
@@ -1443,6 +1641,11 @@ var Tasks = (function(){
       order:data.order||now,
       repeat:data.repeat||null,
       template:data.template||null,
+      energy:data.energy||'medium',
+      subtasks:Array.isArray(data.subtasks)?data.subtasks:[],
+      unlockDate:data.unlockDate||null,
+      archived:!!data.archived,
+      archivedAt:data.archivedAt||null,
       sourceId:data.sourceId||null
     };
   }
@@ -1486,6 +1689,8 @@ var Tasks = (function(){
       status:'todo',
       quadrant:t.quadrant||'q2',
       tags:(t.tags||[]).slice(),
+      energy:t.energy||'medium',
+      subtasks:(t.subtasks||[]).map(function(s){ return { id:Store.uid(), title:s.title, done:false }; }),
       createdAt:Date.now(),
       order:Date.now(),
       repeat:{
@@ -1557,6 +1762,8 @@ var Tasks = (function(){
           ddl:due,
           quadrant:t.quadrant||'q2',
           tags:(t.tags||[]).slice(),
+          energy:t.energy||'medium',
+          subtasks:(t.subtasks||[]).map(function(s){ return { id:Store.uid(), title:s.title, done:false }; }),
           sourceId:source
         }));
         changed=true;
@@ -1573,7 +1780,7 @@ var Tasks = (function(){
   function render(){
     var board=document.getElementById('tasks-board');
     if(!board) return;
-    var all=orderTasks(Store.getTasks());
+    var all=orderTasks(visibleTasks(Store.getTasks()));
     var q=currentQuery.trim().toLowerCase();
     var filtered=all.filter(function(t){
       return (currentFilter==='all'||t.status===currentFilter) && matchQuery(t,q);
@@ -1585,8 +1792,15 @@ var Tasks = (function(){
     var q4=filtered.filter(function(t){ return t.quadrant==='q4'; });
     var noq=filtered.filter(function(t){ return !t.quadrant; });
 
+    var totals={};
+    ['q1','q2','q3','q4'].forEach(function(qid){
+      var qAll=all.filter(function(t){ return t.quadrant===qid; });
+      totals[qid]={total:qAll.length,done:qAll.filter(function(t){ return t.status==='done'; }).length};
+    });
+
     function panel(q,title,sub,list){
-      var h='<div class="q-panel '+q+'"><div class="q-panel-hd"><div class="q-badge"></div><span class="q-panel-title">'+title+'</span><span class="q-panel-sub">'+sub+'</span></div><div class="q-tasks">';
+      var count=totals[q]||{done:0,total:0};
+      var h='<div class="q-panel '+q+'"><div class="q-panel-hd"><div class="q-badge"></div><span class="q-panel-title">'+title+'（'+count.done+'/'+count.total+'）</span><span class="q-panel-sub">'+sub+'</span></div><div class="q-tasks" data-q="'+q+'">';
       if(!list.length) h+='<div style="color:var(--color-text-faint);font-size:var(--text-xs);text-align:center;padding:var(--space-4)">暂无任务</div>';
       else list.forEach(function(t){ h+=renderTaskCard(t); });
       h+='</div></div>';
@@ -1594,10 +1808,10 @@ var Tasks = (function(){
     }
 
     var h='<div class="quadrant-grid">';
-    h+=panel('q1','🔴 紧急重要','立即处理',q1);
-    h+=panel('q2','🟢 重要不紧急','计划安排',q2);
-    h+=panel('q3','🟡 紧急不重要','委托他人',q3);
-    h+=panel('q4','⚪ 不紧急不重要','考虑删除',q4);
+    h+=panel('q1','紧急重要','立即处理',q1);
+    h+=panel('q2','重要不紧急','计划安排',q2);
+    h+=panel('q3','紧急不重要','委托他人',q3);
+    h+=panel('q4','不紧急不重要','考虑删除',q4);
     h+='</div>';
 
     if(noq.length){
@@ -1614,6 +1828,7 @@ var Tasks = (function(){
     }
     attachCardHandlers(board);
     if(typeof Stats!=='undefined'&&Stats.render) Stats.render();
+    if(typeof AdvancedViews!=='undefined'&&AdvancedViews.renderAll) AdvancedViews.renderAll();
   }
 
   function openNew(prefillDate){
@@ -1624,7 +1839,10 @@ var Tasks = (function(){
     document.getElementById('task-name').value='';
     document.getElementById('task-desc').value='';
     document.getElementById('task-ddl').value=prefillDate||'';
+    document.getElementById('task-unlock-date').value='';
     document.getElementById('task-repeat').value='';
+    document.getElementById('task-energy').value='medium';
+    renderSubtasks([]);
     document.getElementById('task-template-group').style.display='none';
     renderTemplateDMOptions('');
     setTemplateEnabled(false);
@@ -1646,7 +1864,10 @@ var Tasks = (function(){
     document.getElementById('task-name').value=t.name||'';
     document.getElementById('task-desc').value=t.desc||'';
     document.getElementById('task-ddl').value=t.ddl||'';
+    document.getElementById('task-unlock-date').value=t.unlockDate||'';
     document.getElementById('task-repeat').value=(t.repeat&&t.repeat.type)||'';
+    document.getElementById('task-energy').value=t.energy||'medium';
+    renderSubtasks(t.subtasks||[]);
     document.getElementById('task-template-group').style.display='';
     renderTemplateDMOptions(t.template&&t.template.dmId);
     setTemplateEnabled(!!(t.template&&t.template.type));
@@ -1709,6 +1930,34 @@ var Tasks = (function(){
     return Array.from(document.querySelectorAll('#tag-sel .tag-opt.active')).map(function(el){ return el.dataset.tag; });
   }
 
+  function renderSubtasks(subtasks){
+    var list=document.getElementById('subtask-list');
+    if(!list) return;
+    var h='';
+    (subtasks||[]).forEach(function(s){
+      h+='<div class="subtask-row" data-id="'+esc(s.id)+'">'
+        +'<input type="checkbox" class="subtask-done" '+(s.done?'checked':'')+'/>'
+        +'<input type="text" class="form-input subtask-title" value="'+esc(s.title)+'" />'
+        +'<button type="button" class="btn btn-ghost btn-icon subtask-del" aria-label="删除子任务"><i data-lucide="x"></i></button>'
+        +'</div>';
+    });
+    list.innerHTML=h;
+    list.querySelectorAll('.subtask-del').forEach(function(btn){
+      btn.addEventListener('click',function(){ btn.closest('.subtask-row').remove(); });
+    });
+    reinitIcons(list);
+  }
+
+  function getSubtasks(){
+    return Array.from(document.querySelectorAll('#subtask-list .subtask-row')).map(function(row){
+      return {
+        id:row.dataset.id||Store.uid(),
+        title:row.querySelector('.subtask-title').value.trim(),
+        done:row.querySelector('.subtask-done').checked
+      };
+    }).filter(function(s){ return !!s.title; });
+  }
+
   function handleSubmit(e){
     e.preventDefault();
     var name=document.getElementById('task-name').value.trim();
@@ -1734,6 +1983,11 @@ var Tasks = (function(){
       order:oldTask&&(typeof oldTask.order==='number')?oldTask.order:Date.now(),
       repeat:buildRepeat(repeatType,ddl,oldTask,id),
       template:template,
+      energy:document.getElementById('task-energy').value||'medium',
+      subtasks:getSubtasks(),
+      unlockDate:document.getElementById('task-unlock-date').value||null,
+      archived:oldTask?!!oldTask.archived:false,
+      archivedAt:oldTask&&oldTask.archivedAt||null,
       sourceId:oldTask&&oldTask.sourceId||null,
     };
     if(oldTask){
@@ -1823,6 +2077,17 @@ var Tasks = (function(){
       updateTemplateDmRow();
     });
     document.getElementById('task-template-type').addEventListener('change',updateTemplateDmRow);
+    document.getElementById('subtask-add-btn').addEventListener('click',function(){
+      var input=document.getElementById('subtask-new');
+      var title=input.value.trim(); if(!title) return;
+      var current=getSubtasks();
+      current.push({id:Store.uid(),title:title,done:false});
+      renderSubtasks(current);
+      input.value='';
+    });
+    document.getElementById('subtask-new').addEventListener('keydown',function(e){
+      if(e.key==='Enter'){ e.preventDefault(); document.getElementById('subtask-add-btn').click(); }
+    });
     var tagInput=document.getElementById('tag-new');
     var tagAddBtn=document.getElementById('tag-add-btn');
     function addTag(){
@@ -1844,13 +2109,79 @@ var Tasks = (function(){
     initFilter(); initSearch(); initForm(); runTemplateTriggers(); render();
   }
 
-  return { init:init, render:render, openNew:openNew, openEdit:openEdit, toggleDone:toggleDone, createQuickTask:createQuickTask, runTemplateTriggers:runTemplateTriggers };
+  function attachDragHandlers(container){
+    var draggedId=null;
+    container.querySelectorAll('.task-card').forEach(function(card){
+      card.addEventListener('dragstart',function(e){
+        draggedId=card.dataset.id;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData('text/plain',draggedId);
+      });
+      card.addEventListener('dragend',function(){ card.classList.remove('dragging'); draggedId=null; });
+    });
+    container.querySelectorAll('.q-tasks').forEach(function(zone){
+      zone.addEventListener('dragover',function(e){
+        e.preventDefault();
+        zone.classList.add('drag-over');
+        var after=dragAfterElement(zone,e.clientY);
+        var dragging=container.querySelector('.task-card.dragging');
+        if(dragging){ if(after) zone.insertBefore(dragging,after); else zone.appendChild(dragging); }
+      });
+      zone.addEventListener('dragleave',function(){ zone.classList.remove('drag-over'); });
+      zone.addEventListener('drop',function(e){
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        var id=draggedId||e.dataTransfer.getData('text/plain');
+        saveBoardOrder(id,zone.dataset.q);
+      });
+    });
+  }
+
+  function dragAfterElement(container,y){
+    var cards=Array.from(container.querySelectorAll('.task-card:not(.dragging)'));
+    return cards.reduce(function(closest,child){
+      var box=child.getBoundingClientRect();
+      var offset=y-box.top-box.height/2;
+      if(offset<0&&offset>closest.offset) return {offset:offset,element:child};
+      return closest;
+    },{offset:-Infinity,element:null}).element;
+  }
+
+  function saveBoardOrder(id,targetQ){
+    if(!id||!targetQ) return;
+    var tasks=Store.getTasks();
+    var moved=tasks.find(function(t){ return t.id===id; });
+    if(moved) moved.quadrant=targetQ;
+    var stamp=Date.now();
+    document.querySelectorAll('.q-tasks').forEach(function(zone){
+      var cards=Array.from(zone.querySelectorAll('.task-card'));
+      cards.forEach(function(card,idx){
+        var t=tasks.find(function(x){ return x.id===card.dataset.id; });
+        if(t){ t.quadrant=zone.dataset.q; t.order=stamp+cards.length-idx; }
+      });
+    });
+    Store.saveTasks(tasks);
+    render(); Cal.render(); Stats.render(); AdvancedViews.renderAll();
+  }
+
+  return { init:init, render:render, openNew:openNew, openEdit:openEdit, toggleDone:toggleDone, createQuickTask:createQuickTask, runTemplateTriggers:runTemplateTriggers, attachDragHandlers:attachDragHandlers };
 })();
 
 /* ============================================================
    STATS MODULE
 ============================================================ */
 var Stats = (function(){
+  var prefs=Store.getPrefs();
+  var weekCursor=prefs.statsWeek||todayISO();
+  var monthCursor=prefs.statsMonth||todayISO();
+
+  function savePrefs(){
+    var p=Store.getPrefs();
+    p.statsWeek=weekCursor;
+    p.statsMonth=monthCursor;
+    Store.savePrefs(p);
+  }
   function completionTime(t){
     if(t.status!=='done') return null;
     return t.doneAt||t.createdAt||Date.now();
@@ -1859,32 +2190,66 @@ var Stats = (function(){
     if(!ts) return false;
     return ts>=start.getTime()&&ts<end.getTime();
   }
-  function weekBounds(){
-    var now=startOfDay(new Date());
+  function weekBounds(seed){
+    var now=startOfDay(new Date((seed||todayISO())+'T00:00:00'));
     var off=(now.getDay()-1+7)%7;
     var start=new Date(now); start.setDate(start.getDate()-off);
     var end=new Date(start); end.setDate(start.getDate()+7);
     return {start:start,end:end};
   }
-  function monthBounds(){
-    var now=new Date();
+  function monthBounds(seed){
+    var now=new Date((seed||todayISO())+'T00:00:00');
     var start=new Date(now.getFullYear(),now.getMonth(),1);
     var end=new Date(now.getFullYear(),now.getMonth()+1,1);
     return {start:start,end:end};
+  }
+  function rangeLabel(bounds){
+    var end=new Date(bounds.end); end.setDate(end.getDate()-1);
+    return fmtDate(bounds.start).slice(5)+' - '+fmtDate(end).slice(5);
   }
   function bar(label,value,max,cls){
     var pct=max?Math.round(value/max*100):0;
     return '<div class="bar-row"><div>'+esc(label)+'</div><div class="bar-track"><div class="bar-fill '+(cls||'')+'" style="width:'+pct+'%"></div></div><div>'+value+'</div></div>';
   }
+  function qDoneBars(tasks,bounds){
+    var counts={q1:0,q2:0,q3:0,q4:0};
+    tasks.forEach(function(t){
+      if(t.status==='done'&&inRange(completionTime(t),bounds.start,bounds.end)&&counts[t.quadrant]!==undefined) counts[t.quadrant]++;
+    });
+    var max=Math.max(1,counts.q1,counts.q2,counts.q3,counts.q4);
+    return bar('紧急重要',counts.q1,max,'q1')+bar('重要不紧急',counts.q2,max,'q2')+bar('紧急不重要',counts.q3,max,'q3')+bar('不紧急不重要',counts.q4,max,'q4');
+  }
+  function burnoutInfo(tasks){
+    var q1Over=tasks.filter(function(t){ return t.quadrant==='q1'&&isOverdue(t.ddl,t.status); });
+    var archiveable=q1Over.filter(function(t){ return daysOverdue(t.ddl,t.status)>=7; });
+    if(q1Over.length<3 && archiveable.length<2) return null;
+    return {overdue:q1Over.length, archiveable:archiveable.length};
+  }
+  function archiveOldOverdue(){
+    var tasks=Store.getTasks();
+    var changed=false, now=Date.now(), count=0;
+    tasks.forEach(function(t){
+      if(!t.archived&&t.quadrant==='q1'&&daysOverdue(t.ddl,t.status)>=7){
+        t.archived=true; t.archivedAt=now; changed=true; count++;
+      }
+    });
+    if(changed){
+      Store.saveTasks(tasks);
+      Tasks.render(); Cal.render(); AdvancedViews.renderAll(); render();
+      showToast('已归档 '+count+' 个长期逾期任务','success');
+    }
+  }
   function render(){
     var board=document.getElementById('stats-board');
     if(!board) return;
-    var tasks=Store.getTasks();
-    var wb=weekBounds(), mb=monthBounds();
+    var tasks=visibleTasks(Store.getTasks());
+    var wb=weekBounds(weekCursor), mb=monthBounds(monthCursor);
     var done=tasks.filter(function(t){ return t.status==='done'; });
     var weekDone=done.filter(function(t){ return inRange(completionTime(t),wb.start,wb.end); }).length;
     var monthDone=done.filter(function(t){ return inRange(completionTime(t),mb.start,mb.end); }).length;
     var overdue=tasks.filter(function(t){ return isOverdue(t.ddl,t.status); }).length;
+    var weekOverdue=tasks.filter(function(t){ return t.ddl&&inRange(new Date(t.ddl+'T00:00:00').getTime(),wb.start,wb.end)&&isOverdue(t.ddl,t.status); }).length;
+    var monthOverdue=tasks.filter(function(t){ return t.ddl&&inRange(new Date(t.ddl+'T00:00:00').getTime(),mb.start,mb.end)&&isOverdue(t.ddl,t.status); }).length;
     var repeating=tasks.filter(function(t){ return t.repeat&&t.repeat.type; }).length;
     var qCounts={q1:0,q2:0,q3:0,q4:0,none:0};
     var tagCounts={};
@@ -1897,9 +2262,18 @@ var Stats = (function(){
     var tagMax=Math.max(1);
     tagEntries.forEach(function(tag){ tagMax=Math.max(tagMax,tagCounts[tag]); });
 
-    var h='<div class="stats-grid">';
-    h+='<div class="stat-card"><div class="stat-label">本周完成</div><div class="stat-value">'+weekDone+'</div><div class="stat-sub">周一到今天</div></div>';
-    h+='<div class="stat-card"><div class="stat-label">本月完成</div><div class="stat-value">'+monthDone+'</div><div class="stat-sub">当前自然月</div></div>';
+    var burnout=burnoutInfo(tasks);
+    var h='';
+    if(burnout){
+      h+='<div class="burnout-card"><div><h3>慢下来提醒</h3><p>紧急重要里有 '+burnout.overdue+' 个逾期任务。它们还在，但可以先把长期逾期的压力归档起来。</p></div>';
+      h+='<button class="btn btn-secondary" id="burnout-archive-btn"><i data-lucide="archive"></i>归档 7 天以上逾期</button></div>';
+    }
+    h+='<div class="stats-toolbar">';
+    h+='<div class="stats-nav"><div><div class="stats-nav__title">周统计</div><div class="stats-nav__range">'+rangeLabel(wb)+'</div></div><div class="stats-nav__btns"><button class="btn btn-ghost btn-icon stats-shift" data-kind="week" data-dir="-1"><i data-lucide="chevron-left"></i></button><button class="btn btn-secondary btn-sm stats-today" data-kind="week">本周</button><button class="btn btn-ghost btn-icon stats-shift" data-kind="week" data-dir="1"><i data-lucide="chevron-right"></i></button></div></div>';
+    h+='<div class="stats-nav"><div><div class="stats-nav__title">月统计</div><div class="stats-nav__range">'+fmtDate(mb.start).slice(0,7)+'</div></div><div class="stats-nav__btns"><button class="btn btn-ghost btn-icon stats-shift" data-kind="month" data-dir="-1"><i data-lucide="chevron-left"></i></button><button class="btn btn-secondary btn-sm stats-today" data-kind="month">本月</button><button class="btn btn-ghost btn-icon stats-shift" data-kind="month" data-dir="1"><i data-lucide="chevron-right"></i></button></div></div>';
+    h+='</div><div class="stats-grid">';
+    h+='<div class="stat-card"><div class="stat-label">所选周完成</div><div class="stat-value">'+weekDone+'</div><div class="stat-sub">逾期 '+weekOverdue+'</div></div>';
+    h+='<div class="stat-card"><div class="stat-label">所选月完成</div><div class="stat-value">'+monthDone+'</div><div class="stat-sub">逾期 '+monthOverdue+'</div></div>';
     h+='<div class="stat-card"><div class="stat-label">当前逾期</div><div class="stat-value">'+overdue+'</div><div class="stat-sub">未完成且已过 DDL</div></div>';
     h+='<div class="stat-card"><div class="stat-label">重复任务</div><div class="stat-value">'+repeating+'</div><div class="stat-sub">已配置周期</div></div>';
     h+='</div><div class="stats-panels">';
@@ -1909,13 +2283,147 @@ var Stats = (function(){
     h+=bar('紧急不重要',qCounts.q3,qMax,'q3');
     h+=bar('不紧急不重要',qCounts.q4,qMax,'q4');
     if(qCounts.none) h+=bar('未分类',qCounts.none,qMax,'');
+    h+='</div><div class="stats-panel"><h3>所选周完成象限</h3>';
+    h+=qDoneBars(tasks,wb);
+    h+='</div><div class="stats-panel"><h3>所选月完成象限</h3>';
+    h+=qDoneBars(tasks,mb);
     h+='</div><div class="stats-panel"><h3>标签分布</h3>';
     if(tagEntries.length) tagEntries.forEach(function(tag){ h+=bar(tag,tagCounts[tag],tagMax,''); });
     else h+='<div style="color:var(--color-text-faint);font-size:var(--text-xs);padding:var(--space-4);text-align:center">暂无标签数据</div>';
     h+='</div></div>';
     board.innerHTML=h;
+    board.querySelectorAll('.stats-shift').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var dir=parseInt(btn.dataset.dir,10)||0;
+        if(btn.dataset.kind==='week'){
+          var d=new Date(weekCursor+'T00:00:00'); d.setDate(d.getDate()+dir*7); weekCursor=fmtDate(d);
+        } else {
+          var m=new Date(monthCursor+'T00:00:00'); m.setMonth(m.getMonth()+dir); monthCursor=fmtDate(m);
+        }
+        savePrefs(); render();
+      });
+    });
+    board.querySelectorAll('.stats-today').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(btn.dataset.kind==='week') weekCursor=todayISO();
+        else monthCursor=todayISO();
+        savePrefs(); render();
+      });
+    });
+    var archiveBtn=document.getElementById('burnout-archive-btn');
+    if(archiveBtn) archiveBtn.addEventListener('click',archiveOldOverdue);
+    reinitIcons(board);
   }
   return { render:render, init:render };
+})();
+
+/* ============================================================
+   ADVANCED VIEWS
+============================================================ */
+var AdvancedViews = (function(){
+  var energyLevel=2;
+  var ENERGY_LABELS={low:'低精力',medium:'中等精力',high:'高精力'};
+  var ENERGY_VALUE={low:1,medium:2,high:3};
+
+  function renderTimeline(){
+    var board=document.getElementById('timeline-board');
+    if(!board) return;
+    var tasks=visibleTasks(Store.getTasks()).filter(function(t){ return t.ddl; });
+    if(!tasks.length){ board.innerHTML='<div class="timeline-shell">'+renderEmpty('gantt-chart','还没有可排期任务','给任务设置 DDL 后会出现在时间线上')+'</div>'; reinitIcons(board); return; }
+    var dates=tasks.map(function(t){ return t.ddl; }).sort();
+    var min=new Date(dates[0]+'T00:00:00').getTime();
+    var max=new Date(dates[dates.length-1]+'T00:00:00').getTime();
+    if(min===max) max=min+86400000;
+    var tracks={};
+    tasks.forEach(function(t){
+      var tags=(t.tags&&t.tags.length)?t.tags:['未标签'];
+      tags.forEach(function(tag){ (tracks[tag]||(tracks[tag]=[])).push(t); });
+    });
+    var h='<div class="timeline-shell">';
+    Object.keys(tracks).sort().forEach(function(tag){
+      var arranged=[];
+      orderTasks(tracks[tag]).slice().sort(function(a,b){ return compareISO(a.ddl,b.ddl); }).forEach(function(t){
+        var pos=(new Date(t.ddl+'T00:00:00').getTime()-min)/(max-min);
+        var left=Math.max(0,Math.min(92,Math.round(pos*92)));
+        var layer=0;
+        while(arranged.some(function(a){ return a.layer===layer&&Math.abs(a.left-left)<9; })) layer++;
+        arranged.push({task:t,left:left,layer:layer});
+      });
+      var laneH=Math.max(34,12+(Math.max.apply(null,arranged.map(function(a){ return a.layer; }))+1)*30);
+      h+='<div class="timeline-track"><div class="timeline-label">'+esc(tag)+'</div><div class="timeline-lane" style="min-height:'+laneH+'px">';
+      arranged.forEach(function(a,idx){
+        var t=a.task;
+        var meta=[t.ddl,Q_LABELS[t.quadrant]||'未分类',{todo:'待办',doing:'进行中',done:'已完成'}[t.status]||t.status].join(' · ');
+        h+='<div class="timeline-bar" tabindex="0" data-id="'+esc(t.id)+'" style="left:'+a.left+'%;top:'+(6+a.layer*30)+'px;z-index:'+(10+a.layer)+';--bar-color:var(--color-'+(t.quadrant||'primary')+');background:var(--color-'+(t.quadrant||'primary')+')"><div class="timeline-bar__title">'+esc(taskName(t))+'</div><div class="timeline-bar__meta">'+esc(meta)+'</div></div>';
+      });
+      h+='</div></div>';
+    });
+    h+='</div>';
+    board.innerHTML=h;
+    board.querySelectorAll('.timeline-bar').forEach(function(el){ el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); }); });
+  }
+
+  function renderField(){
+    var board=document.getElementById('field-board');
+    if(!board) return;
+    var tasks=visibleTasks(Store.getTasks()).filter(function(t){ return t.status!=='done'; });
+    if(!tasks.length){ board.innerHTML='<div class="field-shell">'+renderEmpty('orbit','没有待处理任务','任务能量场会显示所有未完成任务，不限制本周')+'</div>'; reinitIcons(board); return; }
+    var pos={q1:[75,25],q2:[25,25],q3:[75,75],q4:[25,75]};
+    var h='<div class="field-shell"><div style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-3)">显示所有未完成任务。气泡越大，代表精力消耗、子任务数量或逾期压力越高。</div><div class="field-canvas">';
+    h+='<div class="field-axis top">重要</div><div class="field-axis bottom">不重要</div><div class="field-axis left">不紧急</div><div class="field-axis right">紧急</div>';
+    tasks.forEach(function(t,idx){
+      var p=pos[t.quadrant]||[50,50];
+      var energy=ENERGY_VALUE[t.energy||'medium']||2;
+      var subCount=(t.subtasks||[]).length;
+      var overdueBoost=isOverdue(t.ddl,t.status)?18:0;
+      var size=Math.max(42,Math.min(112,34+energy*18+Math.min(subCount,6)*5+overdueBoost));
+      var dx=((idx%5)-2)*3, dy=((Math.floor(idx/5)%5)-2)*3;
+      var subDone=(t.subtasks||[]).filter(function(s){ return s.done; }).length;
+      var tip='<strong>'+esc(taskName(t))+'</strong><br>'+esc(Q_LABELS[t.quadrant]||'未分类')+' · '+esc({todo:'待办',doing:'进行中'}[t.status]||t.status)+'<br>'+esc(ENERGY_LABELS[t.energy||'medium'])+(t.ddl?' · DDL '+esc(t.ddl):'')+(subCount?' · 子任务 '+subDone+'/'+subCount:'')+(isOverdue(t.ddl,t.status)?'<br>已逾期 '+daysOverdue(t.ddl,t.status)+' 天':'');
+      h+='<div class="field-bubble" tabindex="0" data-id="'+esc(t.id)+'" style="left:'+(p[0]+dx)+'%;top:'+(p[1]+dy)+'%;width:'+size+'px;height:'+size+'px;--bubble-color:var(--color-'+(t.quadrant||'q2')+');background:var(--color-'+(t.quadrant||'q2')+')" title="'+esc(taskName(t))+'"><span class="field-bubble__label">'+esc(taskName(t))+'</span><span class="field-tip">'+tip+'</span></div>';
+    });
+    h+='</div></div>';
+    board.innerHTML=h;
+    board.querySelectorAll('.field-bubble').forEach(function(el){ el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); }); });
+  }
+
+  function scoreEnergyTask(t){
+    var need=ENERGY_VALUE[t.energy||'medium']||2;
+    var score=10-Math.abs(need-energyLevel)*3;
+    if(t.quadrant==='q1') score+=energyLevel>=2?4:1;
+    if(t.quadrant==='q2') score+=energyLevel>=2?3:2;
+    if(t.quadrant==='q3') score+=energyLevel<=2?2:0;
+    if(t.quadrant==='q4') score+=energyLevel===1?3:0;
+    if(isOverdue(t.ddl,t.status)) score+=4;
+    if(t.ddl===todayISO()) score+=3;
+    return score;
+  }
+
+  function renderEnergy(){
+    var board=document.getElementById('energy-board');
+    if(!board) return;
+    var tasks=visibleTasks(Store.getTasks()).filter(function(t){ return t.status!=='done'; }).sort(function(a,b){ return scoreEnergyTask(b)-scoreEnergyTask(a); }).slice(0,9);
+    var h='<div class="energy-shell">';
+    h+='<div class="energy-control"><label class="form-label" style="margin:0">当前精力</label><input id="energy-range" type="range" min="1" max="3" step="1" value="'+energyLevel+'"/><span>'+(['','低','中','高'][energyLevel])+'</span><span style="font-size:var(--text-xs);color:var(--color-text-muted)">推荐列表会按当前精力、象限、DDL 和逾期压力排序</span></div>';
+    if(!tasks.length){
+      h+='<div class="energy-empty">没有待推荐任务</div>';
+    } else {
+      h+='<div class="energy-list">';
+      tasks.forEach(function(t){
+        h+='<div class="energy-card" data-id="'+esc(t.id)+'"><h3>'+esc(taskName(t))+'</h3><p>'+esc(Q_LABELS[t.quadrant]||'未分类')+' · '+esc(ENERGY_LABELS[t.energy||'medium'])+(t.ddl?' · DDL '+esc(t.ddl):'')+(isOverdue(t.ddl,t.status)?' · 已逾期':'')+'</p></div>';
+      });
+      h+='</div>';
+    }
+    h+='</div>';
+    board.innerHTML=h;
+    var range=document.getElementById('energy-range');
+    if(range) range.addEventListener('input',function(){ energyLevel=parseInt(range.value,10)||2; renderEnergy(); });
+    board.querySelectorAll('.energy-card').forEach(function(el){ el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); }); });
+  }
+
+  function renderAll(){ renderTimeline(); renderField(); renderEnergy(); }
+  function init(){ renderAll(); }
+  return { init:init, renderAll:renderAll, renderTimeline:renderTimeline, renderField:renderField, renderEnergy:renderEnergy };
 })();
 
 /* ============================================================
@@ -1931,6 +2439,46 @@ var DM = (function(){
     return { n:'已过 '+Math.abs(d)+' 天', past:true };
   }
 
+  function getRelatedTasksForDayMatter(item){
+    var name=String(item.name||'').trim().toLowerCase();
+    var sourcePrefix='dm:'+item.id+':';
+    var center=new Date(item.date+'T00:00:00').getTime();
+    function taskText(t){
+      return [t.name,t.desc,(t.tags||[]).join(' ')].join(' ').toLowerCase();
+    }
+    function eventDate(t){
+      if(t.ddl) return t.ddl;
+      if(t.doneAt) return fmtDate(new Date(t.doneAt));
+      if(t.createdAt) return fmtDate(new Date(t.createdAt));
+      return item.date;
+    }
+    return visibleTasks(Store.getTasks()).filter(function(t){
+      if(t.sourceId&&String(t.sourceId).indexOf(sourcePrefix)===0) return true;
+      var text=taskText(t);
+      if(name&&text.indexOf(name)>=0) return true;
+      return (t.tags||[]).indexOf('重要日子')>=0 && name && text.indexOf(name)>=0;
+    }).map(function(t){
+      var ds=eventDate(t);
+      var diff=Math.round((new Date(ds+'T00:00:00').getTime()-center)/86400000);
+      return {date:ds,status:t.status,name:taskName(t),diff:diff,quadrant:t.quadrant};
+    }).sort(function(a,b){
+      return Math.abs(a.diff)-Math.abs(b.diff)||compareISO(a.date,b.date);
+    }).slice(0,3);
+  }
+
+  function renderTaskLine(item){
+    var related=getRelatedTasksForDayMatter(item);
+    if(!related.length) return '';
+    var h='<div class="dm-taskline"><div class="dm-taskline__title">关联任务</div>';
+    related.forEach(function(ev){
+      var rel=ev.diff===0?'当天':(ev.diff>0?'后 '+ev.diff+' 天':'前 '+Math.abs(ev.diff)+' 天');
+      var status={todo:'待办',doing:'进行中',done:'已完成'}[ev.status]||ev.status;
+      h+='<div class="dm-taskline__item"><span class="dm-taskline__date">'+esc(rel)+'</span><span><strong>'+esc(status)+'</strong> · <span class="dm-taskline__name">'+esc(ev.name)+'</span></span></div>';
+    });
+    h+='</div>';
+    return h;
+  }
+
   function renderCard(item){
     var dl=diffLabel(item.date);
     var reminder=(item.reminders||[])[0];
@@ -1942,6 +2490,7 @@ var DM = (function(){
     h+='<div class="dm-card__days">'+dl.n+'</div>';
     if(item.note) h+='<div class="dm-card__note">'+esc(item.note)+'</div>';
     if(reminder&&reminder.taskName) h+='<div class="dm-card__note">提前 '+esc(reminder.daysBefore)+' 天：'+esc(reminder.taskName)+'</div>';
+    h+=renderTaskLine(item);
     h+='</div>';
     return h;
   }
@@ -2136,7 +2685,7 @@ var Drawer = (function(){
     document.getElementById('backdrop').classList.remove('show');
   }
   function refresh(ds){
-    var tasks=orderTasks(Store.getTasks().filter(function(t){ return t.ddl===ds; }));
+    var tasks=orderTasks(visibleTasks(Store.getTasks()).filter(function(t){ return t.ddl===ds; }));
     var body=document.getElementById('drawer-body');
     if(!tasks.length){ body.innerHTML=renderEmpty('calendar-x','这天没有任务','点击右上角 + 新建'); reinitIcons(body); return; }
     var h='<div style="display:flex;flex-direction:column;gap:var(--space-2)">';
@@ -2195,6 +2744,9 @@ function initTabs(){
       btn.classList.add('active'); btn.setAttribute('aria-selected','true');
       document.getElementById('panel-'+tab).classList.add('active');
       if(tab==='stats') Stats.render();
+      if(tab==='timeline') AdvancedViews.renderTimeline();
+      if(tab==='field') AdvancedViews.renderField();
+      if(tab==='energy') AdvancedViews.renderEnergy();
     });
   });
 }
@@ -2328,6 +2880,7 @@ document.addEventListener('DOMContentLoaded', function(){
   Tasks.init();
   DM.init();
   Stats.init();
+  AdvancedViews.init();
   Vault.init();
   // Second pass icons after all modules render
   setTimeout(function(){ if(window.lucide) lucide.createIcons(); }, 200);

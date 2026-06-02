@@ -15,16 +15,43 @@ Format based on Keep a Changelog.
 - Add solar-term task suggestion cards that can create a task on demand without automatic writes.
 - Add DaysMatter reminder rules that create linked tasks ahead of important dates with source-based duplicate protection.
 - Add task inheritance templates for generating follow-up tasks by date cycle or relative to a DaysMatter entry.
+- Add lightweight subtasks/checklists with progress badges on task cards.
+- Add drag sorting within the quadrant board and drag-to-change-quadrant behavior.
+- Add parallel timeline, task field visualization, and energy-based recommendation views.
+- Add time capsule tasks with `unlockDate`, hiding task title and description until the unlock date.
+- Add Burnout deceleration reminders for overloaded Q1 overdue tasks, with non-destructive archiving for tasks overdue by 7+ days.
+- Add previous/next week and month navigation in the statistics view.
+- Add editable solar-term ritual text stored in `tdm_solar_rituals`; one-click solar-term task creation now uses the saved ritual text.
+- Add `tdm_ui_prefs` for lightweight UI state such as statistics cursors.
+- Add related-task display on DaysMatter cards, limited to tasks explicitly linked by source, tags, or text.
 
 ### Security
 - Encrypt portable backups with Web Crypto AES-GCM and PBKDF2-SHA256 so task data is not stored as plaintext inside exported HTML files.
 - Validate encrypted vault format and restored snapshot shape before importing browser data.
 - Ignore local backup data and Windows Zone.Identifier metadata to avoid accidentally uploading private task data or OS download markers.
+- Include solar rituals and UI preferences in encrypted export/import snapshots without requiring a destructive migration.
 
 ### Changed
 - Make task edit actions visible without hover so mobile and touch users can edit tasks reliably.
 - Prevent long task content from breaking the two-column quadrant board layout.
 - Restart the landing particle animation when returning to the home screen from the app.
+- Allow the expanded navigation to scroll horizontally on small screens.
+- Update the quadrant color system so Q1 uses the deepest purple and lower-priority quadrants step down toward low-saturation pink-purple.
+- Match task completion circle color to each task's quadrant color.
+- Show quadrant board counts as completed/total instead of remaining/total.
+- Improve the parallel timeline with same-track layering and hover/focus expansion for full task details.
+- Rework task field bubble sizing to reflect energy, subtask count, and overdue pressure while showing all unarchived unfinished tasks.
+- Replace the stiff sweeping mirror highlight with subtler glass surfaces, edge highlights, and localized hover glow.
+- Change solar-term styling from green to blue-purple/indigo to better fit the app theme.
+- Merge solar-term suggestion and ritual editing into a single inline-editable card.
+- Limit DaysMatter related-task display to real relationships instead of showing every nearby task by date.
+
+### Fixed
+- Fix timeline task overlap making titles hard to read.
+- Fix task field bubbles appearing too similar in size.
+- Fix ambiguous task field scope by making it an all-unfinished-task overview rather than a current-week-only view.
+- Fix stale green visual accents in solar-term suggestion UI.
+- Fix noisy DaysMatter "emotional timeline" entries that were unrelated to the recorded day.
 
 ## [0.1.1] - 2026-05-22
 ### Changed
