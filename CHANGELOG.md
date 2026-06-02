@@ -8,10 +8,18 @@ Format based on Keep a Changelog.
 - Add encrypted Data Vault for exporting current tasks, tags, and DaysMatter data into a password-protected HTML copy or JSON vault.
 - Support restoring encrypted data from another exported HTML/JSON file, including auto-detecting an embedded vault when the current browser has no local data.
 - Add application icon assets (`mytodo-logo.ico`, `mytodo-logo.png`, `mytodo-logo.svg`) for browser/app branding.
+- Add task search across names, descriptions, tags, dates, status, quadrant, and repeat labels.
+- Add daily, weekly, and monthly repeating tasks that generate the next occurrence when completed.
+- Add a statistics tab with weekly/monthly completions, current overdue count, repeating task count, quadrant distribution, and tag distribution.
+- Show up to two task titles directly in month calendar cells, with overflow counts for busy dates.
 
 ### Security
 - Encrypt portable backups with Web Crypto AES-GCM and PBKDF2-SHA256 so task data is not stored as plaintext inside exported HTML files.
+- Validate encrypted vault format and restored snapshot shape before importing browser data.
 - Ignore local backup data and Windows Zone.Identifier metadata to avoid accidentally uploading private task data or OS download markers.
+
+### Changed
+- Make task edit actions visible without hover so mobile and touch users can edit tasks reliably.
 
 ## [0.1.1] - 2026-05-22
 ### Changed
