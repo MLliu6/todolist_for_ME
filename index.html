@@ -147,6 +147,10 @@ img{display:block;max-width:100%}
 .cal-hour-row{display:grid;grid-template-columns:56px 1fr;gap:var(--space-2);min-height:36px;border-top:1px solid var(--color-divider)}
 .cal-hour-row:last-child{border-bottom:1px solid var(--color-divider)}
 .cal-hour-label{font-size:var(--text-xs);color:var(--color-text-faint);padding:4px 0;text-align:right;padding-right:var(--space-2)}
+.term-suggestion{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);margin:var(--space-4);padding:var(--space-4);border:1.5px solid rgba(42,125,111,.22);border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(42,125,111,.1),rgba(124,92,255,.08));box-shadow:var(--shadow-sm)}
+.term-suggestion h3{font-size:var(--text-base);margin-bottom:2px}
+.term-suggestion p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.5}
+.term-suggestion .btn{flex-shrink:0}
 
 /* ── TASKS PANEL ── */
 .tasks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3)}
@@ -161,8 +165,8 @@ img{display:block;max-width:100%}
 .filter-btn.active{background:var(--color-surface);color:var(--color-primary);font-weight:600;box-shadow:var(--shadow-sm)}
 
 /* Quadrant layout */
-.quadrant-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
-.q-panel{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:box-shadow .2s}
+.quadrant-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-4)}
+.q-panel{background:var(--color-surface);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm);border:1.5px solid var(--color-border);transition:box-shadow .2s;min-width:0}
 .q-panel:hover{box-shadow:var(--shadow-md)}
 .q-panel-hd{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-divider)}
 .q-badge{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -172,10 +176,10 @@ img{display:block;max-width:100%}
 .q-panel.q2 .q-badge{background:var(--color-q2)}.q-panel.q2{border-color:rgba(42,125,111,.2)}
 .q-panel.q3 .q-badge{background:var(--color-q3)}.q-panel.q3{border-color:rgba(217,119,6,.2)}
 .q-panel.q4 .q-badge{background:var(--color-q4)}.q-panel.q4{border-color:rgba(100,116,139,.2)}
-.q-tasks{display:flex;flex-direction:column;gap:var(--space-2);min-height:60px}
+.q-tasks{display:flex;flex-direction:column;gap:var(--space-2);min-height:60px;min-width:0}
 
 /* Task card */
-.task-card{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1.5px solid var(--color-border);transition:all .18s var(--ease-out);cursor:pointer}
+.task-card{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3);background:var(--color-surface-2);border-radius:var(--radius-md);border:1.5px solid var(--color-border);transition:all .18s var(--ease-out);cursor:pointer;min-width:0}
 .task-card:hover{background:var(--color-surface-offset);border-color:var(--color-primary);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
 .task-card.done{opacity:.6}
 .task-check{flex-shrink:0;width:22px;height:22px;border-radius:var(--radius-full);border:2px solid var(--color-border);display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:1px}
@@ -193,6 +197,8 @@ img{display:block;max-width:100%}
 .task-ddl svg{width:10px;height:10px}
 .task-repeat{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:var(--color-primary-light);color:var(--color-primary);display:flex;align-items:center;gap:3px;border:1px solid rgba(124,92,255,.24)}
 .task-repeat svg{width:10px;height:10px}
+.task-template{font-size:10px;padding:2px 7px;border-radius:var(--radius-full);background:rgba(217,119,6,.1);color:var(--color-warning);display:flex;align-items:center;gap:3px;border:1px solid rgba(217,119,6,.24)}
+.task-template svg{width:10px;height:10px}
 .task-actions{display:flex;gap:2px;flex-shrink:0;opacity:1;transition:opacity .15s}
 .task-card:hover .task-actions{opacity:1}
 .task-actions .btn-icon{width:26px;height:26px;padding:0;border-radius:var(--radius-sm);font-size:var(--text-xs)}
@@ -293,6 +299,9 @@ img{display:block;max-width:100%}
 .tag-opt.active{border-color:var(--color-primary);background:var(--color-primary-light);color:var(--color-primary)}
 .tag-add-row{display:flex;gap:var(--space-2);margin-top:var(--space-2)}
 .tag-add-row .form-input{margin:0}
+.template-box,.dm-reminder-box{border:1.5px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-3);background:var(--color-surface-2)}
+.template-row,.dm-reminder-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-top:var(--space-2)}
+.template-row:first-child,.dm-reminder-row:first-child{margin-top:0}
 
 /* Quadrant picker */
 .q-picker{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);border:1.5px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden}
@@ -335,6 +344,8 @@ img{display:block;max-width:100%}
   .dm-grid{grid-template-columns:1fr 1fr}
   .cal-cell{min-height:56px}
   .main{padding:var(--space-4) var(--space-3)}
+  .term-suggestion{align-items:flex-start;flex-direction:column}
+  .template-row,.dm-reminder-row{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .dm-grid{grid-template-columns:1fr}
@@ -574,6 +585,28 @@ img{display:block;max-width:100%}
           </select>
           <p class="form-hint">重复任务在标记完成时，会按当前截止日期生成下一次任务。</p>
         </div>
+        <div class="form-group" id="task-template-group" style="display:none">
+          <label class="form-label">任务遗传模板</label>
+          <div class="template-box">
+            <button type="button" class="btn btn-secondary btn-sm" id="task-template-enable"><i data-lucide="wand-sparkles"></i>转为模板</button>
+            <div id="task-template-fields" style="display:none;margin-top:var(--space-3)">
+              <div class="template-row">
+                <select class="form-input" id="task-template-type">
+                  <option value="">不作为模板</option>
+                  <option value="daily">每天生成</option>
+                  <option value="weekly">每周生成</option>
+                  <option value="monthly">每月生成</option>
+                  <option value="dm">按重要日子生成</option>
+                </select>
+                <input class="form-input" id="task-template-offset" type="number" min="0" max="365" value="0" placeholder="提前天数"/>
+              </div>
+              <div class="template-row" id="task-template-dm-row">
+                <select class="form-input" id="task-template-dm"></select>
+                <p class="form-hint" style="margin:0;align-self:center">选择重要日子后，可提前 N 天生成同名任务。</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="form-group">
           <label class="form-label">完成状态</label>
           <div class="status-sel" id="status-sel">
@@ -648,6 +681,25 @@ img{display:block;max-width:100%}
             <span class="emoji-opt" data-emoji="🎯">🎯</span>
           </div>
           <input type="hidden" id="dm-emoji" value="⭐"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">提前提醒任务</label>
+          <div class="dm-reminder-box">
+            <div class="dm-reminder-row">
+              <input class="form-input" id="dm-reminder-title" type="text" placeholder="例：准备礼物、订餐、整理照片" autocomplete="off"/>
+              <input class="form-input" id="dm-reminder-days" type="number" min="0" max="365" value="7" placeholder="提前天数"/>
+            </div>
+            <div class="dm-reminder-row">
+              <select class="form-input" id="dm-reminder-q">
+                <option value="q2">重要不紧急</option>
+                <option value="q1">紧急重要</option>
+                <option value="q3">紧急不重要</option>
+                <option value="q4">不紧急不重要</option>
+              </select>
+              <input class="form-input" id="dm-reminder-tag" type="text" placeholder="可选标签" autocomplete="off"/>
+            </div>
+            <p class="form-hint" style="margin:var(--space-2) 0 0">填写任务名称后，系统会在目标日期前自动创建一次任务。</p>
+          </div>
         </div>
         <div class="form-actions">
           <button type="button" class="btn btn-danger" id="dm-delete-btn" style="display:none;margin-right:auto"><i data-lucide="trash-2"></i>删除</button>
@@ -769,6 +821,11 @@ function orderTasks(tasks){
     if(ao!==bo) return bo-ao;
     return (b.createdAt||0)-(a.createdAt||0);
   });
+}
+function compareISO(a,b){ return String(a||'').localeCompare(String(b||'')); }
+function hasTaskSource(tasks,sourceId){
+  if(!sourceId) return false;
+  return tasks.some(function(t){ return t.sourceId===sourceId; });
 }
 function showToast(msg,type,dur){
   var c=document.getElementById('toast-container');
@@ -929,6 +986,8 @@ var Vault = (function(){
       setStatus('正在解密...');
       var snap=validateSnapshot(await decryptVault(vault,getPassphrase()));
       Store.importSnapshot(snap);
+      if(typeof DM!=='undefined'&&DM.runReminders) DM.runReminders();
+      if(typeof Tasks!=='undefined'&&Tasks.runTemplateTriggers) Tasks.runTemplateTriggers();
       Cal.render(); Tasks.render(); DM.render();
       if(Drawer.isOpen()) Drawer.refresh(Drawer.getDate());
       setStatus('数据已恢复：任务 '+snap.tasks.length+'，重要日子 '+snap.dm.length+'，标签 '+snap.tags.length+'。','success');
@@ -1064,6 +1123,33 @@ function getDayLabel(ds){
   return null;
 }
 
+var SOLAR_TERM_TASKS={
+  '小寒':'整理一件保暖物品，照顾好这段时间的身体。',
+  '大寒':'为接下来的一周安排一个低压力恢复日。',
+  '立春':'整理一件不再需要的物品，给新周期留出空间。',
+  '雨水':'检查一项被搁置的计划，给它补一次水。',
+  '惊蛰':'启动一个拖延已久的小任务，只做 15 分钟。',
+  '春分':'平衡工作与生活，安排一次短暂散步。',
+  '清明':'整理一段回忆，或联系一位很久没联系的人。',
+  '谷雨':'照看一盆植物，或给自己安排一次安静休息。',
+  '立夏':'清理桌面，为夏天建立一个轻量计划。',
+  '小满':'复盘一个正在变好的习惯，记录一点进展。',
+  '芒种':'把一个大目标拆成今天能播下的一步。',
+  '夏至':'检查精力分配，减少一个不必要的消耗。',
+  '小暑':'安排一件降温小事，让今天更轻一点。',
+  '大暑':'给高压事项降级，保留最重要的一件事。',
+  '立秋':'整理秋季目标，选出一个本月重点。',
+  '处暑':'收尾一个夏天遗留的小任务。',
+  '白露':'准备一项换季提醒，照顾身体和作息。',
+  '秋分':'做一次中期复盘，调整接下来的节奏。',
+  '寒露':'检查保暖、睡眠或健康相关的小事。',
+  '霜降':'归档一个不再继续的计划，减少心理占用。',
+  '立冬':'规划一个冬季长期目标的第一步。',
+  '小雪':'备份一份重要资料，整理一处数字空间。',
+  '大雪':'安排一次居家整理，让环境更安稳。',
+  '冬至':'给重要的人发一条问候，或认真吃一顿饭。'
+};
+
 /* ============================================================
    CALENDAR MODULE
 ============================================================ */
@@ -1092,6 +1178,31 @@ var Cal = (function(){
     reinitIcons(body);
   }
 
+  function renderTermSuggestion(ds){
+    var lbl=getDayLabel(ds);
+    if(!lbl||lbl[1]!=='term'||!SOLAR_TERM_TASKS[lbl[0]]) return '';
+    return '<div class="term-suggestion">'
+      +'<div><h3>'+esc(lbl[0])+'任务建议</h3><p>'+esc(SOLAR_TERM_TASKS[lbl[0]])+'</p></div>'
+      +'<button class="btn btn-primary btn-sm term-add-btn" data-date="'+esc(ds)+'" data-term="'+esc(lbl[0])+'"><i data-lucide="plus"></i>一键添加</button>'
+      +'</div>';
+  }
+
+  function attachTermHandlers(body){
+    body.querySelectorAll('.term-add-btn').forEach(function(btn){
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        if(window.Tasks&&Tasks.createQuickTask) Tasks.createQuickTask({
+          name:btn.dataset.term+'：'+SOLAR_TERM_TASKS[btn.dataset.term],
+          desc:'节气感知任务建议',
+          ddl:btn.dataset.date,
+          quadrant:'q2',
+          tags:['节气'],
+          sourceId:'term:'+btn.dataset.term+':'+btn.dataset.date
+        });
+      });
+    });
+  }
+
   function renderMonth(body){
     var tasks=Store.getTasks();
     var today=todayISO();
@@ -1099,7 +1210,7 @@ var Cal = (function(){
     var offset=(firstDay.getDay()-1+7)%7;
     var start=new Date(firstDay); start.setDate(start.getDate()-offset);
 
-    var h='<div class="cal-grid-wrap">';
+    var h=renderTermSuggestion(state.sel)+'<div class="cal-grid-wrap">';
     h+='<div class="cal-dow-row">';
     DOW.forEach(function(d){ h+='<div class="cal-dow">'+d+'</div>'; });
     h+='</div><div class="cal-month-grid">';
@@ -1130,6 +1241,7 @@ var Cal = (function(){
       el.addEventListener('click',function(){ onDateClick(el.dataset.date); });
       el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); onDateClick(el.dataset.date); } });
     });
+    attachTermHandlers(body);
   }
 
   function renderWeek(body){
@@ -1139,7 +1251,7 @@ var Cal = (function(){
     var start=new Date(d); start.setDate(d.getDate()-off);
     var days=[]; for(var i=0;i<7;i++){ var x=new Date(start); x.setDate(start.getDate()+i); days.push(fmtDate(x)); }
 
-    var h='<div class="cal-week-wrap">';
+    var h=renderTermSuggestion(state.sel)+'<div class="cal-week-wrap">';
     h+='<div class="cal-week-header"><div style="min-width:56px"></div>';
     days.forEach(function(ds){
       var dd=new Date(ds+'T00:00:00'); var lbl=getDayLabel(ds); var isT=ds===today;
@@ -1161,13 +1273,14 @@ var Cal = (function(){
     body.innerHTML=h;
     body.querySelectorAll('.cal-week-col-hd').forEach(function(el){ el.addEventListener('click',function(){ onDateClick(el.dataset.date); }); });
     body.querySelectorAll('.cal-week-chip').forEach(function(el){ el.addEventListener('click',function(e){ e.stopPropagation(); Tasks.openEdit(el.dataset.id); }); });
+    attachTermHandlers(body);
   }
 
   function renderDay(body){
     var tasks=Store.getTasks(); var ds=state.sel;
     var d=new Date(ds+'T00:00:00'); var lbl=getDayLabel(ds);
     var dayTasks=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
-    var h='<div class="cal-day-view"><div style="padding:var(--space-4) var(--space-6) var(--space-2)">';
+    var h=renderTermSuggestion(ds)+'<div class="cal-day-view"><div style="padding:var(--space-4) var(--space-6) var(--space-2)">';
     h+='<div style="display:flex;align-items:center;gap:var(--space-3)">';
     h+='<span class="cal-day-hero">'+(d.getMonth()+1)+'月'+d.getDate()+'日</span>';
     if(lbl) h+='<span class="cal-lbl '+lbl[1]+'">'+lbl[0]+'</span>';
@@ -1181,6 +1294,7 @@ var Cal = (function(){
     h+='</div>';
     body.innerHTML=h;
     attachCardHandlers(body);
+    attachTermHandlers(body);
   }
 
   function renderHour(body){
@@ -1238,13 +1352,14 @@ function renderTaskCard(t){
   var tagsH=(t.tags||[]).map(function(tg){ return '<span class="tag">'+esc(tg)+'</span>'; }).join('');
   var ddlH=t.ddl?('<span class="task-ddl'+(isOverdue(t.ddl,t.status)?' overdue':'')+'"><i data-lucide="calendar-clock"></i>'+esc(t.ddl.slice(5))+'</span>'):'';
   var repeatH=t.repeat&&t.repeat.type?('<span class="task-repeat"><i data-lucide="repeat-2"></i>'+repeatLabel(t.repeat)+'</span>'):'';
+  var templateH=t.template&&t.template.type?('<span class="task-template"><i data-lucide="wand-sparkles"></i>模板</span>'):'';
   var qH=t.quadrant&&Q_LABELS[t.quadrant]?('<span class="tag" style="border-color:var(--color-'+t.quadrant+');color:var(--color-'+t.quadrant+')">'+Q_LABELS[t.quadrant]+'</span>'):'';
   return '<div class="task-card'+(isDone?' done':'')+'" data-id="'+t.id+'" tabindex="0">'
     +'<button class="task-check'+(isDone?' done':'')+'" data-id="'+t.id+'" aria-label="切换完成状态"><i data-lucide="'+statusIcon+'"></i></button>'
     +'<div class="task-body">'
     +'<p class="task-name'+(isDone?' done':'')+'">'+esc(t.name)+'</p>'
     +(t.desc?'<p class="task-desc">'+esc(t.desc)+'</p>':'')
-    +'<div class="task-meta">'+qH+tagsH+ddlH+repeatH+'</div>'
+    +'<div class="task-meta">'+qH+tagsH+ddlH+repeatH+templateH+'</div>'
     +'</div>'
     +'<div class="task-actions">'
     +'<button class="btn btn-ghost btn-icon task-edit-btn" data-id="'+t.id+'" aria-label="编辑"><i data-lucide="pencil"></i></button>'
@@ -1295,14 +1410,61 @@ var Tasks = (function(){
     };
   }
 
+  function nextTemplateDate(type,seed){
+    var next=nextRepeatDate(type,seed||todayISO());
+    var today=todayISO();
+    while(next&&compareISO(next,today)<0) next=nextRepeatDate(type,next);
+    return next;
+  }
+
   function matchQuery(t,q){
     if(!q) return true;
     var hay=[
       t.name,t.desc,t.ddl,t.status,Q_LABELS[t.quadrant]||t.quadrant,
       repeatLabel(t.repeat),
+      t.sourceId,
+      t.template&&t.template.type?'模板':'',
       (t.tags||[]).join(' ')
     ].join(' ').toLowerCase();
     return hay.indexOf(q)>=0;
+  }
+
+  function createTaskObject(data){
+    var now=Date.now();
+    return {
+      id:data.id||Store.uid(),
+      name:data.name,
+      desc:data.desc||'',
+      ddl:data.ddl||null,
+      status:data.status||'todo',
+      quadrant:data.quadrant||'q2',
+      tags:(data.tags||[]).slice(),
+      createdAt:data.createdAt||now,
+      order:data.order||now,
+      repeat:data.repeat||null,
+      template:data.template||null,
+      sourceId:data.sourceId||null
+    };
+  }
+
+  function saveAndRefresh(tasks,msg){
+    Store.saveTasks(tasks);
+    render(); Cal.render(); Stats.render();
+    if(Drawer.isOpen()) Drawer.refresh(Drawer.getDate());
+    if(msg) showToast(msg,'success');
+  }
+
+  function createQuickTask(data){
+    if(!data||!data.name) return null;
+    var tasks=Store.getTasks();
+    if(data.sourceId&&hasTaskSource(tasks,data.sourceId)){
+      showToast('这个任务已经创建过了');
+      return null;
+    }
+    var task=createTaskObject(data);
+    tasks.unshift(task);
+    saveAndRefresh(tasks,'任务已创建 ✓');
+    return task;
   }
 
   function completeRepeatTask(tasks,t){
@@ -1335,6 +1497,77 @@ var Tasks = (function(){
     };
     tasks.unshift(nextTask);
     return true;
+  }
+
+  function buildTemplate(oldTask){
+    var type=document.getElementById('task-template-type').value;
+    if(!type) return null;
+    var dmId=document.getElementById('task-template-dm').value||null;
+    var offset=Math.max(0,parseInt(document.getElementById('task-template-offset').value||'0',10)||0);
+    var nextDate=null;
+    if(type==='dm'){
+      if(!dmId){ showToast('请选择一个重要日子','error'); return false; }
+      var dm=Store.getDM().find(function(i){ return i.id===dmId; });
+      if(dm) nextDate=addDaysISO(dm.date,-offset);
+    } else {
+      nextDate=nextTemplateDate(type,(oldTask&&oldTask.ddl)||todayISO());
+    }
+    return { type:type, dmId:dmId, offsetDays:offset, nextDate:nextDate, sourceId:(oldTask&&oldTask.id)||Store.uid() };
+  }
+
+  function setTemplateEnabled(enabled){
+    document.getElementById('task-template-fields').style.display=enabled?'':'none';
+    if(!enabled) document.getElementById('task-template-type').value='';
+    updateTemplateDmRow();
+  }
+
+  function updateTemplateDmRow(){
+    var type=document.getElementById('task-template-type').value;
+    document.getElementById('task-template-dm-row').style.display=type==='dm'?'grid':'none';
+  }
+
+  function renderTemplateDMOptions(selected){
+    var sel=document.getElementById('task-template-dm');
+    if(!sel) return;
+    var items=Store.getDM();
+    var h='<option value="">选择重要日子</option>';
+    items.forEach(function(item){ h+='<option value="'+esc(item.id)+'"'+(item.id===selected?' selected':'')+'>'+esc(item.name)+' · '+esc(item.date)+'</option>'; });
+    sel.innerHTML=h;
+  }
+
+  function runTemplateTriggers(){
+    var tasks=Store.getTasks();
+    var today=todayISO();
+    var changed=false;
+    tasks.forEach(function(t){
+      if(!t.template||!t.template.type) return;
+      var due=t.template.nextDate;
+      if(t.template.type==='dm'){
+        var dm=Store.getDM().find(function(i){ return i.id===t.template.dmId; });
+        if(!dm) return;
+        due=addDaysISO(dm.date,-(parseInt(t.template.offsetDays,10)||0));
+        if(t.template.nextDate!==due){ t.template.nextDate=due; changed=true; }
+      }
+      if(!due||compareISO(due,today)>0) return;
+      var source='tpl:'+t.id+':'+due;
+      if(!hasTaskSource(tasks,source)){
+        tasks.unshift(createTaskObject({
+          name:t.name,
+          desc:t.desc||'',
+          ddl:due,
+          quadrant:t.quadrant||'q2',
+          tags:(t.tags||[]).slice(),
+          sourceId:source
+        }));
+        changed=true;
+      }
+      if(t.template.type==='daily'||t.template.type==='weekly'||t.template.type==='monthly'){
+        t.template.nextDate=nextTemplateDate(t.template.type,due);
+        changed=true;
+      }
+    });
+    if(changed) Store.saveTasks(tasks);
+    return changed;
   }
 
   function render(){
@@ -1392,6 +1625,9 @@ var Tasks = (function(){
     document.getElementById('task-desc').value='';
     document.getElementById('task-ddl').value=prefillDate||'';
     document.getElementById('task-repeat').value='';
+    document.getElementById('task-template-group').style.display='none';
+    renderTemplateDMOptions('');
+    setTemplateEnabled(false);
     setStatus('todo');
     setQuadrant('q2');
     document.getElementById('task-delete-btn').style.display='none';
@@ -1411,6 +1647,13 @@ var Tasks = (function(){
     document.getElementById('task-desc').value=t.desc||'';
     document.getElementById('task-ddl').value=t.ddl||'';
     document.getElementById('task-repeat').value=(t.repeat&&t.repeat.type)||'';
+    document.getElementById('task-template-group').style.display='';
+    renderTemplateDMOptions(t.template&&t.template.dmId);
+    setTemplateEnabled(!!(t.template&&t.template.type));
+    document.getElementById('task-template-type').value=(t.template&&t.template.type)||'';
+    document.getElementById('task-template-offset').value=(t.template&&typeof t.template.offsetDays==='number')?t.template.offsetDays:0;
+    if(t.template&&t.template.dmId) document.getElementById('task-template-dm').value=t.template.dmId;
+    updateTemplateDmRow();
     setStatus(t.status||'todo');
     setQuadrant(t.quadrant||'q2');
     document.getElementById('task-delete-btn').style.display='';
@@ -1477,6 +1720,8 @@ var Tasks = (function(){
     var oldTask=currentId?tasks.find(function(t){ return t.id===currentId; }):null;
     var id=currentId||Store.uid();
     var status=getStatus();
+    var template=oldTask?buildTemplate(oldTask):null;
+    if(template===false) return;
     var task={
       id:id,
       name:name,
@@ -1488,6 +1733,8 @@ var Tasks = (function(){
       createdAt:Date.now(),
       order:oldTask&&(typeof oldTask.order==='number')?oldTask.order:Date.now(),
       repeat:buildRepeat(repeatType,ddl,oldTask,id),
+      template:template,
+      sourceId:oldTask&&oldTask.sourceId||null,
     };
     if(oldTask){
       task.createdAt=oldTask.createdAt||task.createdAt;
@@ -1507,6 +1754,7 @@ var Tasks = (function(){
       showToast('任务已完成，并生成下一次重复任务','success');
     }
     Store.saveTasks(tasks);
+    if(runTemplateTriggers()) tasks=Store.getTasks();
     Modal.close('modal-task');
     render();
     Cal.render();
@@ -1567,6 +1815,14 @@ var Tasks = (function(){
     document.getElementById('modal-task-cancel').addEventListener('click',function(){ Modal.close('modal-task'); });
     document.getElementById('modal-task-close').addEventListener('click',function(){ Modal.close('modal-task'); });
     document.getElementById('task-delete-btn').addEventListener('click',deleteTask);
+    document.getElementById('task-template-enable').addEventListener('click',function(){
+      var type=document.getElementById('task-template-type');
+      var enabled=!type.value;
+      setTemplateEnabled(enabled);
+      type.value=enabled?'weekly':'';
+      updateTemplateDmRow();
+    });
+    document.getElementById('task-template-type').addEventListener('change',updateTemplateDmRow);
     var tagInput=document.getElementById('tag-new');
     var tagAddBtn=document.getElementById('tag-add-btn');
     function addTag(){
@@ -1585,10 +1841,10 @@ var Tasks = (function(){
 
   function init(){
     document.getElementById('btn-new-task').addEventListener('click',function(){ openNew(); });
-    initFilter(); initSearch(); initForm(); render();
+    initFilter(); initSearch(); initForm(); runTemplateTriggers(); render();
   }
 
-  return { init:init, render:render, openNew:openNew, openEdit:openEdit, toggleDone:toggleDone };
+  return { init:init, render:render, openNew:openNew, openEdit:openEdit, toggleDone:toggleDone, createQuickTask:createQuickTask, runTemplateTriggers:runTemplateTriggers };
 })();
 
 /* ============================================================
@@ -1677,6 +1933,7 @@ var DM = (function(){
 
   function renderCard(item){
     var dl=diffLabel(item.date);
+    var reminder=(item.reminders||[])[0];
     var h='<div class="dm-card'+(dl.past?' dm-past':'')+'" data-id="'+item.id+'">';
     h+='<button class="dm-card__del btn btn-ghost btn-icon" data-id="'+item.id+'" aria-label="删除"><i data-lucide="x"></i></button>';
     h+='<div class="dm-card__emoji">'+item.emoji+'</div>';
@@ -1684,6 +1941,7 @@ var DM = (function(){
     h+='<div class="dm-card__date">'+item.date+'</div>';
     h+='<div class="dm-card__days">'+dl.n+'</div>';
     if(item.note) h+='<div class="dm-card__note">'+esc(item.note)+'</div>';
+    if(reminder&&reminder.taskName) h+='<div class="dm-card__note">提前 '+esc(reminder.daysBefore)+' 天：'+esc(reminder.taskName)+'</div>';
     h+='</div>';
     return h;
   }
@@ -1735,6 +1993,10 @@ var DM = (function(){
     document.getElementById('dm-name').value='';
     document.getElementById('dm-date').value='';
     document.getElementById('dm-note').value='';
+    document.getElementById('dm-reminder-title').value='';
+    document.getElementById('dm-reminder-days').value='7';
+    document.getElementById('dm-reminder-q').value='q2';
+    document.getElementById('dm-reminder-tag').value='';
     setEmoji('⭐');
     document.getElementById('dm-delete-btn').style.display='none';
     Modal.open('modal-dm');
@@ -1749,6 +2011,11 @@ var DM = (function(){
     document.getElementById('dm-name').value=item.name||'';
     document.getElementById('dm-date').value=item.date||'';
     document.getElementById('dm-note').value=item.note||'';
+    var reminder=(item.reminders||[])[0]||{};
+    document.getElementById('dm-reminder-title').value=reminder.taskName||'';
+    document.getElementById('dm-reminder-days').value=(typeof reminder.daysBefore==='number')?reminder.daysBefore:7;
+    document.getElementById('dm-reminder-q').value=reminder.quadrant||'q2';
+    document.getElementById('dm-reminder-tag').value=reminder.tag||'';
     setEmoji(item.emoji||'⭐');
     document.getElementById('dm-delete-btn').style.display='';
     Modal.open('modal-dm');
@@ -1766,12 +2033,27 @@ var DM = (function(){
     var date=document.getElementById('dm-date').value;
     if(!name||!date){ showToast('请填写名称和日期','error'); return; }
     var items=Store.getDM();
-    var item={ id:currentId||Store.uid(), name:name, date:date, note:document.getElementById('dm-note').value.trim(), emoji:document.getElementById('dm-emoji').value||'⭐' };
+    var old=currentId?items.find(function(x){ return x.id===currentId; }):null;
+    var reminderTitle=document.getElementById('dm-reminder-title').value.trim();
+    var reminders=[];
+    if(reminderTitle){
+      reminders.push({
+        id:(old&&old.reminders&&old.reminders[0]&&old.reminders[0].id)||Store.uid(),
+        daysBefore:Math.max(0,parseInt(document.getElementById('dm-reminder-days').value||'0',10)||0),
+        taskName:reminderTitle,
+        quadrant:document.getElementById('dm-reminder-q').value||'q2',
+        tag:document.getElementById('dm-reminder-tag').value.trim(),
+        generatedTaskId:old&&old.reminders&&old.reminders[0]&&old.reminders[0].generatedTaskId||null
+      });
+    }
+    var item={ id:currentId||Store.uid(), name:name, date:date, note:document.getElementById('dm-note').value.trim(), emoji:document.getElementById('dm-emoji').value||'⭐', reminders:reminders };
     if(currentId){ var idx=items.findIndex(function(x){ return x.id===currentId; }); if(idx>=0) items[idx]=item; else items.push(item); }
     else items.push(item);
     Store.saveDM(items);
+    runReminders();
+    if(Tasks.runTemplateTriggers) Tasks.runTemplateTriggers();
     Modal.close('modal-dm');
-    render();
+    render(); Tasks.render(); Cal.render();
     showToast(currentId?'已更新 ✓':'已添加 ✓','success');
   }
 
@@ -1779,6 +2061,41 @@ var DM = (function(){
     var items=Store.getDM().filter(function(x){ return x.id!==id; });
     Store.saveDM(items);
     Modal.close('modal-dm'); render(); showToast('已删除');
+  }
+
+  function runReminders(){
+    var items=Store.getDM();
+    var tasks=Store.getTasks();
+    var today=todayISO();
+    var changed=false;
+    items.forEach(function(item){
+      (item.reminders||[]).forEach(function(reminder){
+        if(!reminder.taskName) return;
+        var due=addDaysISO(item.date,-(parseInt(reminder.daysBefore,10)||0));
+        if(compareISO(due,today)>0) return;
+        var source='dm:'+item.id+':'+reminder.id+':'+item.date;
+        if(hasTaskSource(tasks,source)) return;
+        var task={
+          id:Store.uid(),
+          name:reminder.taskName,
+          desc:'来自重要日子「'+item.name+'」的提前提醒',
+          ddl:due,
+          status:'todo',
+          quadrant:reminder.quadrant||'q2',
+          tags:reminder.tag?[reminder.tag]:['重要日子'],
+          createdAt:Date.now(),
+          order:Date.now(),
+          repeat:null,
+          template:null,
+          sourceId:source
+        };
+        tasks.unshift(task);
+        reminder.generatedTaskId=task.id;
+        changed=true;
+      });
+    });
+    if(changed){ Store.saveTasks(tasks); Store.saveDM(items); }
+    return changed;
   }
 
   function init(){
@@ -1790,10 +2107,11 @@ var DM = (function(){
     document.querySelectorAll('.emoji-opt').forEach(function(el){
       el.addEventListener('click',function(){ setEmoji(el.dataset.emoji); });
     });
+    if(runReminders()){ Tasks.render(); Cal.render(); }
     render();
   }
 
-  return { init:init, render:render };
+  return { init:init, render:render, runReminders:runReminders };
 })();
 
 /* ============================================================
@@ -1922,7 +2240,7 @@ document.addEventListener('keydown',function(e){
   function mkPt(){ return { x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35, r:Math.random()*2+1, a:Math.random() }; }
   for(var i=0;i<55;i++) pts.push(mkPt());
 
-  var raf;
+  var raf=null;
   function drawPts(){
     ctx.clearRect(0,0,W,H);
     pts.forEach(function(p){
@@ -1945,7 +2263,19 @@ document.addEventListener('keydown',function(e){
     }
     raf=requestAnimationFrame(drawPts);
   }
-  drawPts();
+  function startParticles(){
+    if(raf) return;
+    resize();
+    drawPts();
+  }
+  function stopParticles(){
+    if(!raf) return;
+    cancelAnimationFrame(raf);
+    raf=null;
+  }
+  window.startLandingParticles=startParticles;
+  window.stopLandingParticles=stopParticles;
+  startParticles();
 
   // Shimmer loop on button
   var shine=document.getElementById('landing-shine');
@@ -1974,7 +2304,7 @@ document.addEventListener('keydown',function(e){
   btn.addEventListener('mouseup',function(){ btn.style.transform='translateY(-2px) scale(1.03)'; });
 
   function enterApp(){
-    cancelAnimationFrame(raf);
+    stopParticles();
     lp.style.transition='opacity .5s ease, transform .5s ease';
     lp.style.opacity='0'; lp.style.transform='scale(1.04)';
     setTimeout(function(){ lp.style.display='none'; }, 500);
@@ -2017,6 +2347,7 @@ document.addEventListener('DOMContentLoaded', function(){
       var lp=document.getElementById('landing-page'); if(!lp) return;
       lp.style.transition='opacity .4s ease,transform .4s ease';
       lp.style.display='flex'; lp.style.opacity='0'; lp.style.transform='scale(0.97)';
+      if(window.startLandingParticles) window.startLandingParticles();
       fab.style.opacity='0'; setTimeout(function(){ fab.style.display='none'; },420);
       setTimeout(function(){ lp.style.opacity='1'; lp.style.transform='scale(1)'; },20);
     });

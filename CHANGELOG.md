@@ -12,6 +12,9 @@ Format based on Keep a Changelog.
 - Add daily, weekly, and monthly repeating tasks that generate the next occurrence when completed.
 - Add a statistics tab with weekly/monthly completions, current overdue count, repeating task count, quadrant distribution, and tag distribution.
 - Show up to two task titles directly in month calendar cells, with overflow counts for busy dates.
+- Add solar-term task suggestion cards that can create a task on demand without automatic writes.
+- Add DaysMatter reminder rules that create linked tasks ahead of important dates with source-based duplicate protection.
+- Add task inheritance templates for generating follow-up tasks by date cycle or relative to a DaysMatter entry.
 
 ### Security
 - Encrypt portable backups with Web Crypto AES-GCM and PBKDF2-SHA256 so task data is not stored as plaintext inside exported HTML files.
@@ -20,6 +23,8 @@ Format based on Keep a Changelog.
 
 ### Changed
 - Make task edit actions visible without hover so mobile and touch users can edit tasks reliably.
+- Prevent long task content from breaking the two-column quadrant board layout.
+- Restart the landing particle animation when returning to the home screen from the app.
 
 ## [0.1.1] - 2026-05-22
 ### Changed
