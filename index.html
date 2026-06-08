@@ -188,6 +188,41 @@ img{display:block;max-width:100%}
 .q-panel.q4 .q-badge{background:var(--color-q4)}.q-panel.q4{border-color:var(--color-q4-soft)}
 .q-tasks{display:flex;flex-direction:column;gap:var(--space-2);min-height:60px;min-width:0}
 
+
+/* Scoped board/timeline quadrant colors.
+   Calendar keeps the global purple --color-q* tokens.
+   q1=紧急重要 red, q3=紧急不重要 green, q2=重要不紧急 yellow, q4=不重要不紧急 white. */
+#panel-tasks,#panel-timeline{
+  --board-q1:#b66a6a;--board-q1-bg:#f7e9e9;--board-q1-soft:rgba(182,106,106,.26);
+  --board-q3:#6f9878;--board-q3-bg:#edf5ef;--board-q3-soft:rgba(111,152,120,.26);
+  --board-q2:#b69a55;--board-q2-bg:#fbf3df;--board-q2-soft:rgba(182,154,85,.26);
+  --board-q4:#e7e2d9;--board-q4-bg:#fbfaf6;--board-q4-soft:rgba(216,211,202,.42);
+  --timeline-q1:var(--board-q1);
+  --timeline-q3:var(--board-q3);
+  --timeline-q2:var(--board-q2);
+  --timeline-q4:var(--board-q4);
+  --timeline-text-q1:#fff;
+  --timeline-text-q3:#fff;
+  --timeline-text-q2:#fff;
+  --timeline-text-q4:#4f4942;
+}
+[data-theme="dark"] #panel-tasks,[data-theme="dark"] #panel-timeline{
+  --board-q1:#d08b8b;--board-q1-bg:#3a282d;--board-q1-soft:rgba(208,139,139,.28);
+  --board-q3:#91b397;--board-q3-bg:#23352b;--board-q3-soft:rgba(145,179,151,.28);
+  --board-q2:#d1b66c;--board-q2-bg:#3a3321;--board-q2-soft:rgba(209,182,108,.28);
+  --board-q4:#ece7df;--board-q4-bg:#302e2b;--board-q4-soft:rgba(236,231,223,.26);
+  --timeline-text-q4:#2a2723;
+}
+#panel-tasks .q-panel.q1 .q-badge{background:var(--board-q1)}#panel-tasks .q-panel.q1{border-color:var(--board-q1-soft)}
+#panel-tasks .q-panel.q3 .q-badge{background:var(--board-q3)}#panel-tasks .q-panel.q3{border-color:var(--board-q3-soft)}
+#panel-tasks .q-panel.q2 .q-badge{background:var(--board-q2)}#panel-tasks .q-panel.q2{border-color:var(--board-q2-soft)}
+#panel-tasks .q-panel.q4 .q-badge{background:var(--board-q4)}#panel-tasks .q-panel.q4{border-color:var(--board-q4-soft)}
+#panel-tasks .task-card.q1{--task-color:var(--board-q1);--task-bg:var(--board-q1-bg)}
+#panel-tasks .task-card.q3{--task-color:var(--board-q3);--task-bg:var(--board-q3-bg)}
+#panel-tasks .task-card.q2{--task-color:var(--board-q2);--task-bg:var(--board-q2-bg)}
+#panel-tasks .task-card.q4{--task-color:var(--board-q4);--task-bg:var(--board-q4-bg)}
+
+
 /* Task card */
 .task-card{display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-3);background:color-mix(in srgb,var(--color-surface-2) 82%,transparent);backdrop-filter:blur(10px) saturate(1.06);border-radius:var(--radius-md);border:1.5px solid color-mix(in srgb,var(--color-border) 82%,rgba(255,255,255,.28));box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:background .25s var(--ease-out),border-color .25s var(--ease-out),box-shadow .25s var(--ease-out),transform .25s var(--ease-out);cursor:pointer;min-width:0}
 .task-card:hover{background:color-mix(in srgb,var(--color-surface-offset) 84%,transparent);border-color:color-mix(in srgb,var(--task-color,var(--color-primary)) 42%,var(--color-border));box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 26px color-mix(in srgb,var(--task-color,var(--color-primary)) 12%,transparent);transform:translateY(-1px)}
@@ -2354,7 +2389,7 @@ var AdvancedViews = (function(){
       arranged.forEach(function(a,idx){
         var t=a.task;
         var meta=[t.ddl,Q_LABELS[t.quadrant]||'未分类',{todo:'待办',doing:'进行中',done:'已完成'}[t.status]||t.status].join(' · ');
-        h+='<div class="timeline-bar" tabindex="0" data-id="'+esc(t.id)+'" style="left:'+a.left+'%;top:'+(6+a.layer*30)+'px;z-index:'+(10+a.layer)+';--bar-color:var(--color-'+(t.quadrant||'primary')+');background:var(--color-'+(t.quadrant||'primary')+')"><div class="timeline-bar__title">'+esc(taskName(t))+'</div><div class="timeline-bar__meta">'+esc(meta)+'</div></div>';
+        h+='<div class="timeline-bar" tabindex="0" data-id="'+esc(t.id)+'" style="left:'+a.left+'%;top:'+(6+a.layer*30)+'px;z-index:'+(10+a.layer)+';--bar-color:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));background:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));color:var(--timeline-text-'+(t.quadrant||'q2')+', #fff)"><div class="timeline-bar__title">'+esc(taskName(t))+'</div><div class="timeline-bar__meta">'+esc(meta)+'</div></div>';
       });
       h+='</div></div>';
     });
