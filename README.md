@@ -116,3 +116,27 @@ todolist_for_ME/
 - [ ] 气泡拖拽改象限
 - [ ] 时间线拖拽改 DDL
 - [ ] DaysMatter 年度回顾卡
+
+
+## 🌐 在线体验与产品入口
+
+如果已经开启 GitHub Pages，可以通过以下地址访问：
+
+    https://MLliu6.github.io/todolist_for_ME/
+
+TodoList for ME 当前定位为一个本地优先的个人任务管理工具。它强调个人数据默认留在浏览器本地，并通过加密数据保险箱实现跨设备迁移和备份。
+
+发布前建议执行：
+
+    bash scripts/check_pages_ready.sh
+
+本地预览建议使用：
+
+    python3 -m http.server 5173
+
+然后打开：
+
+    http://localhost:5173/
+
+不要直接双击 `index.html`，避免浏览器在 `file://` 环境下出现行为差异。
+
