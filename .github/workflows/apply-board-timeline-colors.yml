@@ -62,7 +62,7 @@ jobs:
           new = "style=\"left:'+a.left+'%;top:'+(6+a.layer*30)+'px;z-index:'+(10+a.layer)+';--bar-color:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));background:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));color:var(--timeline-text-'+(t.quadrant||'q2')+', #fff)\""
           if old in s:
               s = s.replace(old, new, 1)
-          elif 'var(--timeline-'+"'"+'+(t.quadrant||' in s:
+          elif '--bar-color:var(--timeline-' in s:
               pass
           else:
               raise SystemExit('Timeline inline style marker not found')
