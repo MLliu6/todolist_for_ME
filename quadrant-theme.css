@@ -1,0 +1,62 @@
+/*
+  Quadrant semantic colors.
+
+  Scope:
+  - Only task board and timeline.
+  - Calendar keeps the original global purple --color-q* palette.
+
+  Mapping:
+  q1 = 紧急重要       = red
+  q3 = 紧急不重要     = green
+  q2 = 重要不紧急     = yellow
+  q4 = 不重要不紧急   = white / warm gray
+*/
+
+#panel-tasks,
+#panel-timeline {
+  --color-q1: #b66a6a;
+  --color-q1-bg: #f7e9e9;
+  --color-q1-soft: rgba(182, 106, 106, .26);
+
+  --color-q3: #6f9878;
+  --color-q3-bg: #edf5ef;
+  --color-q3-soft: rgba(111, 152, 120, .26);
+
+  --color-q2: #b69a55;
+  --color-q2-bg: #fbf3df;
+  --color-q2-soft: rgba(182, 154, 85, .26);
+
+  --color-q4: #e7e2d9;
+  --color-q4-bg: #fbfaf6;
+  --color-q4-soft: rgba(216, 211, 202, .42);
+}
+
+[data-theme="dark"] #panel-tasks,
+[data-theme="dark"] #panel-timeline {
+  --color-q1: #d08b8b;
+  --color-q1-bg: #3a282d;
+  --color-q1-soft: rgba(208, 139, 139, .28);
+
+  --color-q3: #91b397;
+  --color-q3-bg: #23352b;
+  --color-q3-soft: rgba(145, 179, 151, .28);
+
+  --color-q2: #d1b66c;
+  --color-q2-bg: #3a3321;
+  --color-q2-soft: rgba(209, 182, 108, .28);
+
+  --color-q4: #ece7df;
+  --color-q4-bg: #302e2b;
+  --color-q4-soft: rgba(236, 231, 223, .26);
+}
+
+/* q4 is intentionally light, so keep text readable in the timeline bar. */
+#panel-timeline .timeline-bar[style*="--color-q4"],
+#panel-timeline .timeline-bar[style*="color-q4"] {
+  color: #4f4942 !important;
+}
+
+[data-theme="dark"] #panel-timeline .timeline-bar[style*="--color-q4"],
+[data-theme="dark"] #panel-timeline .timeline-bar[style*="color-q4"] {
+  color: #2a2723 !important;
+}
