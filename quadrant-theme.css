@@ -420,3 +420,136 @@
 }
 
 /* END timeline week window */
+
+/* BEGIN lucide icon fallback */
+
+/*
+  Lucide fallback icons.
+
+  The app normally uses Lucide SVG icons from CDN.
+  If Lucide fails to load or a re-render leaves <i data-lucide="..."> unconverted,
+  these CSS fallback glyphs keep key UI affordances visible:
+  - vault shield
+  - light/dark toggle
+  - task status: todo / doing / done
+  - common action icons
+*/
+
+i[data-lucide] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05em;
+  height: 1.05em;
+  min-width: 1.05em;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: -0.12em;
+}
+
+i[data-lucide]::before {
+  display: inline-block;
+  font-size: 1em;
+  line-height: 1;
+  opacity: .92;
+}
+
+/* top-right actions */
+i[data-lucide="shield"]::before,
+i[data-lucide="shield-check"]::before {
+  content: "◇";
+  font-size: 1.08em;
+  transform: rotate(45deg);
+}
+
+i[data-lucide="moon"]::before {
+  content: "☾";
+  font-size: 1.12em;
+}
+
+i[data-lucide="sun"]::before {
+  content: "☀";
+  font-size: 1.02em;
+}
+
+/* task status */
+i[data-lucide="circle"]::before {
+  content: "○";
+  font-size: 1.16em;
+}
+
+i[data-lucide="loader-circle"]::before {
+  content: "◌";
+  font-size: 1.16em;
+}
+
+i[data-lucide="circle-check"]::before,
+i[data-lucide="check-circle"]::before,
+i[data-lucide="check"]::before {
+  content: "✓";
+  font-weight: 900;
+  font-size: 1.02em;
+}
+
+/* common action icons */
+i[data-lucide="plus"]::before {
+  content: "+";
+  font-weight: 900;
+}
+
+i[data-lucide="x"]::before {
+  content: "×";
+  font-weight: 900;
+}
+
+i[data-lucide="pencil"]::before {
+  content: "✎";
+}
+
+i[data-lucide="calendar-clock"]::before,
+i[data-lucide="calendar"]::before {
+  content: "□";
+  font-size: 1em;
+}
+
+i[data-lucide="lock-keyhole"]::before,
+i[data-lucide="lock"]::before {
+  content: "⌑";
+  font-size: 1em;
+}
+
+i[data-lucide="repeat-2"]::before {
+  content: "↻";
+}
+
+i[data-lucide="wand-sparkles"]::before {
+  content: "✦";
+}
+
+i[data-lucide="list-checks"]::before {
+  content: "☑";
+}
+
+/* make fallback icons align well inside icon buttons */
+.btn-icon i[data-lucide],
+.theme-btn i[data-lucide],
+.task-check i[data-lucide] {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.task-check.done i[data-lucide]::before {
+  color: #fff;
+}
+
+.task-check:not(.done) i[data-lucide]::before {
+  color: currentColor;
+}
+
+/*
+  If Lucide works, it replaces <i> with <svg>.
+  These rules do not affect generated SVG icons.
+*/
+
+/* END lucide icon fallback */
