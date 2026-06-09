@@ -60,3 +60,211 @@
 [data-theme="dark"] #panel-timeline .timeline-bar[style*="color-q4"] {
   color: #2a2723 !important;
 }
+
+/* BEGIN timeline visual stabilization */
+
+/*
+  Timeline visual stabilization, CSS-only.
+
+  This step does not change JavaScript logic.
+  It only:
+  - contains horizontal overflow,
+  - makes timeline cards show title only by default,
+  - reveals details on hover,
+  - upgrades red/yellow/green/white semantic colors to softer gradient-like tones.
+*/
+
+/* More polished semantic palette for task board and timeline */
+#panel-tasks,
+#panel-timeline {
+  --color-q1: #c8747d;
+  --color-q1-bg: #f7e8ea;
+  --color-q1-soft: rgba(200, 116, 125, .24);
+
+  --color-q3: #769f84;
+  --color-q3-bg: #edf5ef;
+  --color-q3-soft: rgba(118, 159, 132, .24);
+
+  --color-q2: #c2a45b;
+  --color-q2-bg: #fbf3df;
+  --color-q2-soft: rgba(194, 164, 91, .24);
+
+  --color-q4: #e8e1d6;
+  --color-q4-bg: #fbfaf6;
+  --color-q4-soft: rgba(220, 211, 198, .38);
+}
+
+[data-theme="dark"] #panel-tasks,
+[data-theme="dark"] #panel-timeline {
+  --color-q1: #d58c94;
+  --color-q1-bg: #3a272d;
+  --color-q1-soft: rgba(213, 140, 148, .26);
+
+  --color-q3: #94b69e;
+  --color-q3-bg: #23352b;
+  --color-q3-soft: rgba(148, 182, 158, .26);
+
+  --color-q2: #d4bc78;
+  --color-q2-bg: #3a3321;
+  --color-q2-soft: rgba(212, 188, 120, .26);
+
+  --color-q4: #eee8de;
+  --color-q4-bg: #302e2b;
+  --color-q4-soft: rgba(238, 232, 222, .24);
+}
+
+/* Keep the whole timeline inside the page instead of spilling out. */
+#panel-timeline,
+#panel-timeline * {
+  min-width: 0;
+}
+
+#panel-timeline .timeline-shell {
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+}
+
+#panel-timeline .timeline-track {
+  grid-template-columns: minmax(88px, 128px) minmax(0, 1fr);
+  gap: var(--space-2);
+  max-width: 100%;
+}
+
+#panel-timeline .timeline-label {
+  min-width: 0;
+  max-width: 128px;
+  padding-right: 4px;
+  font-size: var(--text-xs);
+}
+
+#panel-timeline .timeline-lane {
+  max-width: 100%;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.20), transparent 42%),
+    color-mix(in srgb, var(--color-surface-offset) 88%, transparent);
+}
+
+/* Timeline card: title-only preview by default. */
+#panel-timeline .timeline-bar {
+  width: clamp(74px, 12vw, 128px);
+  max-width: calc(100% - 12px);
+  min-width: 58px;
+  height: 26px;
+  padding: 5px 8px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--bar-color, var(--color-primary)) 58%, rgba(255,255,255,.38));
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--bar-color, var(--color-primary)) 78%, #ffffff 10%),
+      color-mix(in srgb, var(--bar-color, var(--color-primary)) 82%, #111827 18%)
+    ) !important;
+  box-shadow:
+    0 7px 18px color-mix(in srgb, var(--bar-color, var(--color-primary)) 20%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.24);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.14);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* q4 is light; make text readable. */
+#panel-timeline .timeline-bar[style*="color-q4"] {
+  color: #4f4942 !important;
+  text-shadow: none;
+}
+
+[data-theme="dark"] #panel-timeline .timeline-bar[style*="color-q4"] {
+  color: #2a2723 !important;
+}
+
+/* Only show task name by default. */
+#panel-timeline .timeline-bar__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+/* Hide details until hover/focus. */
+#panel-timeline .timeline-bar__meta {
+  display: none;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255,255,255,.28);
+  font-size: 10px;
+  line-height: 1.45;
+  opacity: .96;
+}
+
+#panel-timeline .timeline-bar:hover,
+#panel-timeline .timeline-bar:focus {
+  z-index: 50 !important;
+  height: auto;
+  min-height: 50px;
+  width: min(220px, calc(100% - 12px));
+  max-width: min(220px, calc(100% - 12px));
+  white-space: normal;
+  overflow: hidden;
+  transform: translateY(-3px);
+  filter: saturate(1.08) brightness(1.03);
+  box-shadow:
+    0 15px 34px color-mix(in srgb, var(--bar-color, var(--color-primary)) 30%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.32);
+}
+
+#panel-timeline .timeline-bar:hover .timeline-bar__title,
+#panel-timeline .timeline-bar:focus .timeline-bar__title {
+  white-space: normal;
+  display: block;
+}
+
+#panel-timeline .timeline-bar:hover .timeline-bar__meta,
+#panel-timeline .timeline-bar:focus .timeline-bar__meta {
+  display: block;
+}
+
+/* Task board hover: subtle premium gradients instead of flat dirty colors. */
+#panel-tasks .task-card.q1:hover {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #c8747d 14%, var(--color-surface-2)), var(--color-surface-2)) !important;
+}
+
+#panel-tasks .task-card.q3:hover {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #769f84 14%, var(--color-surface-2)), var(--color-surface-2)) !important;
+}
+
+#panel-tasks .task-card.q2:hover {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #c2a45b 14%, var(--color-surface-2)), var(--color-surface-2)) !important;
+}
+
+#panel-tasks .task-card.q4:hover {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #e8e1d6 28%, var(--color-surface-2)), var(--color-surface-2)) !important;
+}
+
+/* Mobile and narrow screens: allow inner scroll only inside the timeline shell. */
+@media (max-width: 860px) {
+  #panel-timeline .timeline-shell {
+    overflow-x: auto;
+  }
+
+  #panel-timeline .timeline-track {
+    min-width: 760px;
+  }
+
+  #panel-timeline .timeline-label {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-divider);
+  }
+}
+
+/* END timeline visual stabilization */
