@@ -2454,8 +2454,44 @@ var AdvancedViews = (function(){
       tags.forEach(function(tag){ (tracks[tag]||(tracks[tag]=[])).push(t); });
     });
 
-    Object.keys(tracks).sort().forEach(function(tag){
-      h+='<div class="timeline-track"><div class="timeline-label">'+esc(tag)+'</div><div class="timeline-lane timeline-week-lane">';
+    var trackNames=Object.keys(tracks).sort();
+
+    var savedTrackOrder=[];
+    try{
+      savedTrackOrder=JSON.parse(localStorage.getItem('tdm_timeline_track_order')||'[]');
+    }catch(e){
+      savedTrackOrder=[];
+    }
+    if(!Array.isArray(savedTrackOrder)) savedTrackOrder=[];
+
+    var knownTracks=savedTrackOrder.filter(function(tag){ return trackNames.indexOf(tag)>=0; });
+    var freshTracks=trackNames.filter(function(tag){ return knownTracks.indexOf(tag)<0; });
+    trackNames=knownTracks.concat(freshTracks);
+
+    function saveTrackOrder(order){
+      localStorage.setItem('tdm_timeline_track_order',JSON.stringify(order));
+    }
+
+    function moveTrack(source,target){
+      if(!source||!target||source===target) return;
+
+      var current=[].slice.call(board.querySelectorAll('.timeline-track[data-timeline-track]'))
+        .map(function(row){ return row.getAttribute('data-timeline-track'); })
+        .filter(Boolean);
+
+      var from=current.indexOf(source);
+      var to=current.indexOf(target);
+      if(from<0||to<0) return;
+
+      current.splice(from,1);
+      current.splice(to,0,source);
+
+      saveTrackOrder(current);
+      renderTimeline();
+    }
+
+    trackNames.forEach(function(tag){
+      h+='<div class="timeline-track" data-timeline-track="'+esc(tag)+'"><div class="timeline-label" draggable="true" data-timeline-track="'+esc(tag)+'"><span class="timeline-label-grip">⋮⋮</span><span class="timeline-label-name">'+esc(tag)+'</span></div><div class="timeline-lane timeline-week-lane">';
       days.forEach(function(ds){
         h+='<div class="timeline-day-slot'+(ds===today?' today':'')+'" data-date="'+esc(ds)+'">';
         orderTasks(tracks[tag]).filter(function(t){
@@ -2482,6 +2518,48 @@ var AdvancedViews = (function(){
     board.querySelectorAll('.timeline-bar').forEach(function(el){
       el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); });
     });
+
+    var draggingTrack=null;
+
+    board.querySelectorAll('.timeline-label[draggable="true"]').forEach(function(label){
+      label.addEventListener('dragstart',function(e){
+        draggingTrack=label.getAttribute('data-timeline-track');
+        label.classList.add('dragging');
+        if(e.dataTransfer){
+          e.dataTransfer.effectAllowed='move';
+          e.dataTransfer.setData('text/plain','timeline-track:'+draggingTrack);
+        }
+      });
+
+      label.addEventListener('dragend',function(){
+        label.classList.remove('dragging');
+        board.querySelectorAll('.timeline-track.drag-over').forEach(function(row){
+          row.classList.remove('drag-over');
+        });
+        draggingTrack=null;
+      });
+    });
+
+    board.querySelectorAll('.timeline-track[data-timeline-track]').forEach(function(row){
+      row.addEventListener('dragover',function(e){
+        if(!draggingTrack) return;
+        e.preventDefault();
+        row.classList.add('drag-over');
+      });
+
+      row.addEventListener('dragleave',function(){
+        row.classList.remove('drag-over');
+      });
+
+      row.addEventListener('drop',function(e){
+        if(!draggingTrack) return;
+        e.preventDefault();
+        row.classList.remove('drag-over');
+        var target=row.getAttribute('data-timeline-track');
+        moveTrack(draggingTrack,target);
+      });
+    });
+
     reinitIcons(board);
   }
 

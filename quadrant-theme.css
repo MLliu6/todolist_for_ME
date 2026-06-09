@@ -553,3 +553,62 @@ i[data-lucide="list-checks"]::before {
 */
 
 /* END lucide icon fallback */
+
+/* BEGIN timeline track order drag */
+
+/*
+  Timeline track order drag.
+
+  This only lets the user reorder left-side tag tracks vertically.
+  It persists the track order in localStorage: tdm_timeline_track_order.
+  It does not move task cards and does not change DDL.
+*/
+
+#panel-timeline .timeline-label[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+#panel-timeline .timeline-label[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+#panel-timeline .timeline-label-grip {
+  opacity: .56;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: var(--color-text-faint);
+  flex: 0 0 auto;
+}
+
+#panel-timeline .timeline-label-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#panel-timeline .timeline-label.dragging {
+  opacity: .58;
+  color: var(--color-primary);
+}
+
+#panel-timeline .timeline-track.drag-over {
+  position: relative;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-primary-light) 52%, transparent), transparent 44%),
+    color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow:
+    inset 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, transparent),
+    0 8px 18px rgba(0,0,0,.04);
+}
+
+#panel-timeline .timeline-track.drag-over .timeline-label {
+  color: var(--color-primary);
+}
+
+/* END timeline track order drag */
