@@ -24,7 +24,7 @@
 - 🧭 **平行时间线** — 按标签展示任务在时间上的分布，同轨道任务自动分层，hover 后展开详情
 - 🫧 **任务能量场** — 独立气泡视图呈现所有未完成任务的紧急/重要和精力压力分布
 - 🔋 **能量匹配推荐** — 按当前精力推荐适合推进的任务
-- 🟣 **低饱和紫色主题** — 四象限从粉紫到深紫递进，Q1 使用最深紫；完成按钮、标签和气泡颜色保持一致
+- 🎨 **紫色系统主题 + 四象限语义色** — 系统主题保留低饱和紫色；任务看板和时间线使用红、绿、黄、白区分四象限语义，日历保持紫色体系
 - ✨ **轻量玻璃质感** — 任务卡、统计卡和高级视图容器使用细边缘高光、柔和阴影和局部 hover 光泽
 - 💾 **加密数据保险箱** — 数据默认存储在浏览器 `localStorage`，也可导出为带 AES-GCM 密文的 HTML/JSON，在其他浏览器输入口令恢复
 
@@ -50,11 +50,15 @@
 git clone https://github.com/MLliu6/todolist_for_ME.git
 cd todolist_for_ME
 
-# 直接用浏览器打开即可（无需任何构建）
-open index.html
-# Windows 用：
-start index.html
+# 推荐使用本地 HTTP 服务预览
+python3 -m http.server 5173
 ```
+
+浏览器打开：
+
+    http://localhost:5173/
+
+不建议直接双击 `index.html`，因为 `file://` 环境下部分浏览器行为可能与真实网页环境不同。
 
 > **数据说明**：所有个人数据默认保存在当前浏览器 `localStorage` 中，不会上传至 GitHub。换浏览器或换设备时，点击右上角盾牌按钮打开“数据保险箱”，输入至少 8 位口令后导出加密 HTML；在另一个浏览器打开该 HTML 并输入同一口令即可恢复。导出的 HTML 只包含密文，不包含明文任务内容。
 
@@ -63,27 +67,23 @@ start index.html
 ## 🗂️ 项目结构
 ```
 todolist_for_ME/
-├── index.html # 主入口（含内联主题变量）
-├── assets/
-│ ├── css/
-│ │ ├── base.css # 设计 token & 基础样式
-│ │ ├── calendar.css # 日历模块
-│ │ ├── task.css # 任务卡片/表单
-│ │ ├── quadrant.css # 四象限交互
-│ │ └── daysmatter.css # 重要日子模块
-│ ├── js/
-│ │ ├── app.js # 主逻辑、Tab 路由
-│ │ ├── calendar.js # 日历渲染、节假日/节气
-│ │ ├── tasks.js # 任务 CRUD
-│ │ ├── quadrant.js # 四象限 GSAP 交互
-│ │ ├── daysmatter.js # 重要日子
-│ │ └── data.js # 数据读写（localStorage）
-│ └── data/ # 本地数据（gitignored）
-│ └── .gitkeep
-├── .gitignore
+├── index.html                 # 主入口，包含核心 HTML/CSS/JS
+├── quadrant-theme.css          # 任务看板与时间线的四象限语义色
+├── mytodo-logo.ico             # 应用图标
+├── mytodo-logo.svg             # 应用图标
+├── mytodo-logo.png             # Apple touch icon
+├── docs/
+│   ├── PRODUCT.md              # 产品说明
+│   ├── USER_GUIDE.md           # 用户使用指南
+│   ├── PRIVACY.md              # 隐私与数据说明
+│   ├── DEPLOYMENT.md           # GitHub Pages 部署说明
+│   └── RELEASE_CHECKLIST.md    # 发布前检查清单
+├── scripts/
+│   └── check_pages_ready.sh    # 发布前自动检查脚本
 ├── README.md
 ├── CHANGELOG.md
-└── DEV_RULES.md
+├── DEV_RULES.md
+└── LICENSE
 ```
 
 ## 🛠️ 技术栈
@@ -92,6 +92,15 @@ todolist_for_ME/
 - GSAP — 动效引擎
 - Lucide Icons — 图标库
 - Day.js — 日期处理
+
+
+## 📚 文档入口
+
+- [产品说明](docs/PRODUCT.md)
+- [用户使用指南](docs/USER_GUIDE.md)
+- [隐私与数据说明](docs/PRIVACY.md)
+- [GitHub Pages 部署说明](docs/DEPLOYMENT.md)
+- [发布检查清单](docs/RELEASE_CHECKLIST.md)
 
 ## 📋 Roadmap
 
