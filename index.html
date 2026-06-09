@@ -2372,39 +2372,117 @@ var AdvancedViews = (function(){
   function renderTimeline(){
     var board=document.getElementById('timeline-board');
     if(!board) return;
-    var tasks=visibleTasks(Store.getTasks()).filter(function(t){ return t.ddl; });
-    if(!tasks.length){ board.innerHTML='<div class="timeline-shell">'+renderEmpty('gantt-chart','还没有可排期任务','给任务设置 DDL 后会出现在时间线上')+'</div>'; reinitIcons(board); return; }
-    var dates=tasks.map(function(t){ return t.ddl; }).sort();
-    var min=new Date(dates[0]+'T00:00:00').getTime();
-    var max=new Date(dates[dates.length-1]+'T00:00:00').getTime();
-    if(min===max) max=min+86400000;
+
+    var center=localStorage.getItem('tdm_timeline_center_date')||todayISO();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(center)) center=todayISO();
+
+    function shiftCenter(delta){
+      var d=new Date(center+'T00:00:00');
+      d.setDate(d.getDate()+delta);
+      center=fmtDate(d);
+      localStorage.setItem('tdm_timeline_center_date',center);
+      renderTimeline();
+    }
+
+    function resetToday(){
+      center=todayISO();
+      localStorage.setItem('tdm_timeline_center_date',center);
+      renderTimeline();
+    }
+
+    function centerDays(){
+      var base=new Date(center+'T00:00:00');
+      var arr=[];
+      for(var i=-3;i<=3;i++){
+        var d=new Date(base);
+        d.setDate(base.getDate()+i);
+        arr.push(fmtDate(d));
+      }
+      return arr;
+    }
+
+    var days=centerDays();
+    var today=todayISO();
+    var allTasks=visibleTasks(Store.getTasks()).filter(function(t){ return !!t.ddl; });
+    var tasks=allTasks.filter(function(t){
+      return days.indexOf(String(t.ddl).slice(0,10))>=0;
+    });
+
+    var h='<div class="timeline-shell timeline-week-shell">';
+    h+='<div class="timeline-week-toolbar">';
+    h+='<div class="timeline-week-title"><strong>平行时间线</strong><span>当前显示中心日期前后各三天：'+esc(days[0])+' ~ '+esc(days[6])+'</span></div>';
+    h+='<div class="timeline-week-actions">';
+    h+='<button class="btn btn-secondary btn-sm" data-tl-shift="-7">上一周</button>';
+    h+='<span class="timeline-week-today">'+esc(center===today?'今天':'中心：'+center)+'</span>';
+    h+='<button class="btn btn-primary btn-sm" data-tl-today="1">回到今天</button>';
+    h+='<button class="btn btn-secondary btn-sm" data-tl-shift="7">下一周</button>';
+    h+='</div></div>';
+
+    h+='<div class="timeline-week-head"><div class="timeline-week-corner">标签 / 日期</div>';
+    days.forEach(function(ds){
+      var d=new Date(ds+'T00:00:00');
+      var week=['日','一','二','三','四','五','六'][d.getDay()];
+      h+='<div class="timeline-day-label'+(ds===today?' today':'')+'"><strong>'+esc(ds.slice(5))+'</strong><span>周'+week+'</span></div>';
+    });
+    h+='</div>';
+
+    if(!allTasks.length){
+      h+='<div class="timeline-empty-week">'+renderEmpty('gantt-chart','还没有可排期任务','给任务设置 DDL 后会出现在时间线上')+'</div>';
+      h+='</div>';
+      board.innerHTML=h;
+      reinitIcons(board);
+      return;
+    }
+
+    if(!tasks.length){
+      h+='<div class="timeline-empty-week">这一周没有 DDL 任务。可以切换上一周/下一周，或回到今天。</div>';
+      h+='</div>';
+      board.innerHTML=h;
+      board.querySelectorAll('[data-tl-shift]').forEach(function(btn){
+        btn.addEventListener('click',function(){ shiftCenter(parseInt(btn.dataset.tlShift,10)||0); });
+      });
+      board.querySelectorAll('[data-tl-today]').forEach(function(btn){
+        btn.addEventListener('click',resetToday);
+      });
+      reinitIcons(board);
+      return;
+    }
+
     var tracks={};
     tasks.forEach(function(t){
       var tags=(t.tags&&t.tags.length)?t.tags:['未标签'];
       tags.forEach(function(tag){ (tracks[tag]||(tracks[tag]=[])).push(t); });
     });
-    var h='<div class="timeline-shell">';
+
     Object.keys(tracks).sort().forEach(function(tag){
-      var arranged=[];
-      orderTasks(tracks[tag]).slice().sort(function(a,b){ return compareISO(a.ddl,b.ddl); }).forEach(function(t){
-        var pos=(new Date(t.ddl+'T00:00:00').getTime()-min)/(max-min);
-        var left=Math.max(0,Math.min(92,Math.round(pos*92)));
-        var layer=0;
-        while(arranged.some(function(a){ return a.layer===layer&&Math.abs(a.left-left)<9; })) layer++;
-        arranged.push({task:t,left:left,layer:layer});
-      });
-      var laneH=Math.max(34,12+(Math.max.apply(null,arranged.map(function(a){ return a.layer; }))+1)*30);
-      h+='<div class="timeline-track"><div class="timeline-label">'+esc(tag)+'</div><div class="timeline-lane" style="min-height:'+laneH+'px">';
-      arranged.forEach(function(a,idx){
-        var t=a.task;
-        var meta=[t.ddl,Q_LABELS[t.quadrant]||'未分类',{todo:'待办',doing:'进行中',done:'已完成'}[t.status]||t.status].join(' · ');
-        h+='<div class="timeline-bar" tabindex="0" data-id="'+esc(t.id)+'" style="left:'+a.left+'%;top:'+(6+a.layer*30)+'px;z-index:'+(10+a.layer)+';--bar-color:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));background:var(--timeline-'+(t.quadrant||'q2')+', var(--color-'+(t.quadrant||'q2')+'));color:var(--timeline-text-'+(t.quadrant||'q2')+', #fff)"><div class="timeline-bar__title">'+esc(taskName(t))+'</div><div class="timeline-bar__meta">'+esc(meta)+'</div></div>';
+      h+='<div class="timeline-track"><div class="timeline-label">'+esc(tag)+'</div><div class="timeline-lane timeline-week-lane">';
+      days.forEach(function(ds){
+        h+='<div class="timeline-day-slot'+(ds===today?' today':'')+'" data-date="'+esc(ds)+'">';
+        orderTasks(tracks[tag]).filter(function(t){
+          return String(t.ddl).slice(0,10)===ds;
+        }).forEach(function(t){
+          var q=t.quadrant||'q2';
+          var meta=[t.ddl,Q_LABELS[t.quadrant]||'未分类',{todo:'待办',doing:'进行中',done:'已完成'}[t.status]||t.status].join(' · ');
+          h+='<div class="timeline-bar '+esc(q)+'" tabindex="0" data-id="'+esc(t.id)+'" style="--bar-color:var(--timeline-'+esc(q)+', var(--color-'+esc(q)+'));background:var(--timeline-'+esc(q)+', var(--color-'+esc(q)+'));color:var(--timeline-text-'+esc(q)+', #fff)" title="'+esc(taskName(t))+'"><div class="timeline-bar__title">'+esc(taskName(t))+'</div><div class="timeline-bar__meta">'+esc(meta)+'</div></div>';
+        });
+        h+='</div>';
       });
       h+='</div></div>';
     });
+
     h+='</div>';
     board.innerHTML=h;
-    board.querySelectorAll('.timeline-bar').forEach(function(el){ el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); }); });
+
+    board.querySelectorAll('[data-tl-shift]').forEach(function(btn){
+      btn.addEventListener('click',function(){ shiftCenter(parseInt(btn.dataset.tlShift,10)||0); });
+    });
+    board.querySelectorAll('[data-tl-today]').forEach(function(btn){
+      btn.addEventListener('click',resetToday);
+    });
+    board.querySelectorAll('.timeline-bar').forEach(function(el){
+      el.addEventListener('click',function(){ Tasks.openEdit(el.dataset.id); });
+    });
+    reinitIcons(board);
   }
 
   function renderField(){
