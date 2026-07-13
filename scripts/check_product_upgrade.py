@@ -60,8 +60,13 @@ assert "Tasks.createQuickTask" in source, "quick capture is not wired"
 assert "plannedDate:$('#quick-capture-date')" in source, "quick capture still invents a hard deadline"
 assert "data-task-action=\"restore\"" in source, "archive restore is not wired"
 assert "tdm:storage-error" in source, "storage failure state is not surfaced"
-assert "prefers-reduced-motion" in (ROOT / "assets/css/atelier.css").read_text(encoding="utf-8")
-assert "appAmbientDrift" in (ROOT / "assets/css/atelier.css").read_text(encoding="utf-8"), "dark gradient ambience is missing"
+atelier = (ROOT / "assets/css/atelier.css").read_text(encoding="utf-8")
+assert "prefers-reduced-motion" in atelier
+assert "appAmbientDrift" in atelier, "dark gradient ambience is missing"
+dark_tokens = re.search(r'\[data-theme="dark"\]\{(.*?)\n\}', atelier, re.S)
+assert dark_tokens and "--color-primary:#a78bfa" in dark_tokens.group(1), "dark primary is not violet"
+assert "#171916" not in dark_tokens.group(1) and "#ff7653" not in dark_tokens.group(1), "legacy olive/orange dark palette returned"
+assert "--board-q1:#c4b5fd" in atelier and "--board-q4:#f0abfc" in atelier, "dark charts are not violet"
 assert "window.syncAppParticles=sync" in html, "dark app particles are not wired"
 
 assert "if(isLockedTask(t))" in html, "locked tasks can still enter edit flow"
