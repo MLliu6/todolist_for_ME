@@ -57,7 +57,7 @@ Format based on Keep a Changelog.
 - Surface localStorage write failures instead of silently claiming a successful save.
 - Prevent locked time-capsule tasks from exposing their title and description through the edit modal.
 - Generate due task-template instances after iteration instead of mutating the array being traversed.
-- Persist theme and active-view preferences for returning users, and skip the landing screen once local data exists.
+- Persist theme and active-view preferences for returning users while keeping the welcome screen available on every visit.
 - Fix timeline task overlap making titles hard to read.
 - Fix task field bubbles appearing too similar in size.
 - Fix ambiguous task field scope by making it an all-unfinished-task overview rather than a current-week-only view.
