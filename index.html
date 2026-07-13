@@ -540,6 +540,8 @@ img{display:block;max-width:100%}
 @keyframes lpOrb2{from{transform:translate(0,0) scale(1)}to{transform:translate(-30px,20px) scale(1.08)}}
 </style>
 
+<canvas id="app-particles" aria-hidden="true"></canvas>
+
 <!-- NAV -->
 <nav class="top-nav">
   <div class="nav-logo">
@@ -3240,12 +3242,101 @@ document.addEventListener('keydown',function(e){
     stopParticles();
     lp.style.transition='opacity .5s ease, transform .5s ease';
     lp.style.opacity='0'; lp.style.transform='scale(1.04)';
-    setTimeout(function(){ lp.style.display='none'; }, 500);
+    setTimeout(function(){
+      lp.style.display='none';
+      if(window.syncAppParticles) window.syncAppParticles();
+    }, 500);
   }
   btn.addEventListener('click',enterApp);
   document.addEventListener('keydown',function onKey(e){
     if(e.key==='Enter'){ enterApp(); document.removeEventListener('keydown',onKey); }
   });
+})();
+
+/* ============================================================
+   DARK APP AMBIENCE
+============================================================ */
+(function(){
+  var canvas=document.getElementById('app-particles');
+  if(!canvas || !canvas.getContext) return;
+  var ctx=canvas.getContext('2d');
+  if(!ctx) return;
+
+  var root=document.documentElement;
+  var landing=document.getElementById('landing-page');
+  var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var W=0,H=0,points=[],raf=0,lastFrame=0;
+
+  function makePoint(){
+    return {
+      x:Math.random()*W,
+      y:Math.random()*H,
+      vx:(Math.random()-.5)*.24,
+      vy:(Math.random()-.5)*.24,
+      r:Math.random()*1.6+.7,
+      alpha:Math.random()*.38+.24,
+      color:Math.random()>.72?'56,189,248':'167,139,250'
+    };
+  }
+  function resetPoints(){
+    var count=Math.max(28,Math.min(56,Math.round(W*H/30000)));
+    points=[];
+    for(var i=0;i<count;i++) points.push(makePoint());
+  }
+  function resize(){
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    resetPoints();
+  }
+  function draw(now){
+    var step=lastFrame?Math.min(2,(now-lastFrame)/16.67):1;
+    lastFrame=now;
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<points.length;i++){
+      var p=points[i];
+      p.x+=p.vx*step; p.y+=p.vy*step;
+      if(p.x<-8) p.x=W+8; if(p.x>W+8) p.x=-8;
+      if(p.y<-8) p.y=H+8; if(p.y>H+8) p.y=-8;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba('+p.color+','+p.alpha+')'; ctx.fill();
+    }
+    for(var a=0;a<points.length;a++) for(var b=a+1;b<points.length;b++){
+      var dx=points[a].x-points[b].x,dy=points[a].y-points[b].y;
+      var distance=Math.sqrt(dx*dx+dy*dy);
+      if(distance<132){
+        ctx.beginPath(); ctx.moveTo(points[a].x,points[a].y); ctx.lineTo(points[b].x,points[b].y);
+        ctx.strokeStyle='rgba(124,92,255,'+((1-distance/132)*.16)+')';
+        ctx.lineWidth=.8; ctx.stroke();
+      }
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  function shouldAnimate(){
+    var isDark=root.getAttribute('data-theme')==='dark';
+    var landingVisible=landing&&getComputedStyle(landing).display!=='none';
+    return isDark&&!landingVisible&&!(reduceMotion&&reduceMotion.matches);
+  }
+  function stop(){
+    if(raf) cancelAnimationFrame(raf);
+    raf=0; lastFrame=0; ctx.clearRect(0,0,W,H);
+  }
+  function sync(){
+    if(!shouldAnimate()){ stop(); return; }
+    if(raf) return;
+    resize(); raf=requestAnimationFrame(draw);
+  }
+
+  window.syncAppParticles=sync;
+  new MutationObserver(sync).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  window.addEventListener('resize',function(){ if(raf) resize(); });
+  if(reduceMotion){
+    if(reduceMotion.addEventListener) reduceMotion.addEventListener('change',sync);
+    else if(reduceMotion.addListener) reduceMotion.addListener(sync);
+  }
+  sync();
 })();
 
 /* ============================================================
@@ -3282,6 +3373,7 @@ document.addEventListener('DOMContentLoaded', function(){
       lp.style.transition='opacity .4s ease,transform .4s ease';
       lp.style.display='flex'; lp.style.opacity='0'; lp.style.transform='scale(0.97)';
       if(window.startLandingParticles) window.startLandingParticles();
+      if(window.syncAppParticles) window.syncAppParticles();
       fab.style.opacity='0'; setTimeout(function(){ fab.style.display='none'; },420);
       setTimeout(function(){ lp.style.opacity='1'; lp.style.transform='scale(1)'; },20);
     });

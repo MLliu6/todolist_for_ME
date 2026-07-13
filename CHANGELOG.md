@@ -5,6 +5,7 @@ Format based on Keep a Changelog.
 
 ## [Unreleased]
 ### Added
+- Add a landing-inspired animated gradient and connected particle field behind the dark-mode workspace, with reduced-motion support.
 - Add a Today-first decision dashboard with quick capture, a single next-move recommendation, daily workload signals, week completion feedback, and direct routes into planning views.
 - Add a keyboard command center (`Ctrl/Cmd + K`) plus `/` quick-capture focus.
 - Add optional 15–120 minute task estimates and surface estimated daily effort without automatic rescheduling.

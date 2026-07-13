@@ -45,6 +45,7 @@ required_ids = {
     "home-today-list",
     "home-archive-list",
     "task-estimate",
+    "app-particles",
 }
 missing_ids = required_ids.difference(parser.ids)
 assert not missing_ids, f"missing product UI: {sorted(missing_ids)}"
@@ -60,6 +61,8 @@ assert "plannedDate:$('#quick-capture-date')" in source, "quick capture still in
 assert "data-task-action=\"restore\"" in source, "archive restore is not wired"
 assert "tdm:storage-error" in source, "storage failure state is not surfaced"
 assert "prefers-reduced-motion" in (ROOT / "assets/css/atelier.css").read_text(encoding="utf-8")
+assert "appAmbientDrift" in (ROOT / "assets/css/atelier.css").read_text(encoding="utf-8"), "dark gradient ambience is missing"
+assert "window.syncAppParticles=sync" in html, "dark app particles are not wired"
 
 assert "if(isLockedTask(t))" in html, "locked tasks can still enter edit flow"
 assert "var generated=[]" in html and "tasks.slice().forEach" in html, "template generation still mutates its active iteration"
