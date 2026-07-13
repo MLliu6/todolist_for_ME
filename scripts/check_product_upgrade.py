@@ -66,6 +66,7 @@ assert "appAmbientDrift" in atelier, "dark gradient ambience is missing"
 dark_tokens = re.search(r'\[data-theme="dark"\]\{(.*?)\n\}', atelier, re.S)
 assert dark_tokens and "--color-primary:#a78bfa" in dark_tokens.group(1), "dark primary is not violet"
 assert "#171916" not in dark_tokens.group(1) and "#ff7653" not in dark_tokens.group(1), "legacy olive/orange dark palette returned"
+assert "#171916" not in atelier and "#ff7653" not in atelier, "legacy dark palette remains in the interface layer"
 assert "--board-q1:#c4b5fd" in atelier and "--board-q4:#f0abfc" in atelier, "dark charts are not violet"
 assert "window.syncAppParticles=sync" in html, "dark app particles are not wired"
 
