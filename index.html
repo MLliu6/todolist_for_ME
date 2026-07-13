@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@1.24.0/dist/umd/lucide.min.js"></script>
 <style>
 /* ── TOKENS ── */
 :root,[data-theme="light"]{
@@ -501,6 +501,7 @@ img{display:block;max-width:100%}
 }
 </style>
 <link rel="stylesheet" href="quadrant-theme.css"/>
+<link rel="stylesheet" href="assets/css/atelier.css"/>
 </head>
 <body>
 
@@ -547,29 +548,32 @@ img{display:block;max-width:100%}
       <rect x="2" y="2" width="22" height="22" rx="6" stroke="var(--color-primary)" stroke-width="1.5"/>
       <path d="M8 13l3 3 7-7" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <span>我的待办</span>
+    <span>My Todo</span>
   </div>
   <div class="nav-tabs" role="tablist">
-    <button class="tab-btn active" data-tab="calendar" role="tab" aria-selected="true">
-      <i data-lucide="calendar-days"></i><span>日历</span>
+    <button class="tab-btn active" data-tab="home" role="tab" aria-selected="true">
+      <i data-lucide="sun-medium"></i><span>今天</span>
+    </button>
+    <button class="tab-btn" data-tab="calendar" role="tab" aria-selected="false">
+      <i data-lucide="calendar-days"></i><span>计划</span>
     </button>
     <button class="tab-btn" data-tab="tasks" role="tab" aria-selected="false">
-      <i data-lucide="layout-grid"></i><span>任务</span>
+      <i data-lucide="layout-grid"></i><span>优先级</span>
     </button>
     <button class="tab-btn" data-tab="daysmatter" role="tab" aria-selected="false">
-      <i data-lucide="star"></i><span>重要日子</span>
+      <i data-lucide="star"></i><span>里程碑</span>
     </button>
     <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false">
-      <i data-lucide="bar-chart-3"></i><span>统计</span>
+      <i data-lucide="bar-chart-3"></i><span>回顾</span>
     </button>
     <button class="tab-btn" data-tab="timeline" role="tab" aria-selected="false">
       <i data-lucide="gantt-chart"></i><span>时间线</span>
     </button>
     <button class="tab-btn" data-tab="field" role="tab" aria-selected="false">
-      <i data-lucide="orbit"></i><span>能量场</span>
+      <i data-lucide="orbit"></i><span>压力图</span>
     </button>
     <button class="tab-btn" data-tab="energy" role="tab" aria-selected="false">
-      <i data-lucide="battery-charging"></i><span>推荐</span>
+      <i data-lucide="battery-charging"></i><span>专注建议</span>
     </button>
   </div>
   <div class="nav-actions">
@@ -588,8 +592,72 @@ img{display:block;max-width:100%}
 <!-- MAIN -->
 <div class="main">
 
+  <!-- TODAY PANEL -->
+  <div class="tab-panel active" id="panel-home">
+    <section class="today-hero" aria-labelledby="today-heading">
+      <div class="today-hero__copy">
+        <p class="today-eyebrow" id="home-date">TODAY</p>
+        <p class="today-greeting" id="home-greeting">早上好</p>
+        <h1 id="today-heading">把注意力留给真正重要的事。</h1>
+        <p class="today-subtitle">先捕获，再选择；一次只推进一件事。</p>
+      </div>
+      <button class="local-trust" id="home-trust" type="button" data-go-tab="vault" aria-label="打开数据保险箱">
+        <span class="local-trust__pulse"></span>
+        <span><strong>仅存本机</strong><small>数据已自动保存</small></span>
+        <i data-lucide="shield-check"></i>
+      </button>
+      <form class="quick-capture" id="quick-capture">
+        <i data-lucide="plus"></i>
+        <label class="sr-only" for="quick-capture-input">快速添加任务</label>
+        <input id="quick-capture-input" autocomplete="off" placeholder="现在想记下什么？按 Enter 快速添加"/>
+        <input id="quick-capture-date" type="date" aria-label="任务日期"/>
+        <button class="quick-date active" type="button" data-offset="0">今天</button>
+        <button class="quick-date" type="button" data-offset="1">明天</button>
+        <button class="quick-submit" type="submit" aria-label="添加任务"><i data-lucide="arrow-up"></i></button>
+      </form>
+      <p class="quick-hint"><kbd>/</kbd> 捕获任务 <span>·</span> <kbd>⌘/Ctrl K</kbd> 打开命令中心</p>
+    </section>
+
+    <section class="today-metrics" aria-label="今日概览">
+      <article><span>今日任务</span><strong id="metric-today">0</strong><small id="metric-today-note">轻装上阵</small></article>
+      <article><span>需要处理</span><strong id="metric-overdue">0</strong><small>逾期事项</small></article>
+      <article><span>本周节奏</span><strong id="metric-week">0%</strong><small>任务完成率</small></article>
+      <article><span>今日容量</span><strong id="metric-capacity">—</strong><small id="metric-capacity-note">可在详情中估时</small></article>
+    </section>
+
+    <div class="today-layout">
+      <section class="focus-panel panel-card">
+        <div class="section-heading">
+          <div><p class="section-kicker">NEXT MOVE</p><h2>现在，只做这一件</h2></div>
+          <button type="button" class="text-action" id="focus-next">换一个 <i data-lucide="refresh-cw"></i></button>
+        </div>
+        <div id="home-focus"></div>
+      </section>
+      <section class="today-list-panel panel-card">
+        <div class="section-heading">
+          <div><p class="section-kicker">TODAY</p><h2>今天的节奏</h2></div>
+          <button type="button" class="text-action" data-go-tab="calendar">打开计划 <i data-lucide="arrow-right"></i></button>
+        </div>
+        <div class="home-task-list" id="home-today-list"></div>
+      </section>
+    </div>
+
+    <section class="explore-strip" aria-label="深入视图">
+      <button type="button" data-go-tab="tasks"><i data-lucide="layout-grid"></i><span><strong>四象限</strong><small>重新确认优先级</small></span><i data-lucide="arrow-up-right"></i></button>
+      <button type="button" data-go-tab="timeline"><i data-lucide="gantt-chart"></i><span><strong>时间线</strong><small>看见长期目标</small></span><i data-lucide="arrow-up-right"></i></button>
+      <button type="button" data-go-tab="stats"><i data-lucide="chart-no-axes-combined"></i><span><strong>每周回顾</strong><small>用反馈代替焦虑</small></span><i data-lucide="arrow-up-right"></i></button>
+      <button type="button" data-go-tab="field"><i data-lucide="orbit"></i><span><strong>压力图</strong><small>看见任务负荷分布</small></span><i data-lucide="arrow-up-right"></i></button>
+      <button type="button" data-go-tab="daysmatter"><i data-lucide="sparkles"></i><span><strong>里程碑</strong><small>记住值得期待的日子</small></span><i data-lucide="arrow-up-right"></i></button>
+    </section>
+
+    <section class="archive-panel panel-card" id="home-archive-panel" hidden>
+      <div class="section-heading"><div><p class="section-kicker">RECOVERY</p><h2>归档箱</h2></div><span class="soft-label">随时可以找回</span></div>
+      <div class="archive-list" id="home-archive-list"></div>
+    </section>
+  </div>
+
   <!-- CALENDAR PANEL -->
-  <div class="tab-panel active" id="panel-calendar">
+  <div class="tab-panel" id="panel-calendar">
     <div class="cal-shell">
       <div class="cal-toolbar">
         <div class="cal-toolbar-l">
@@ -726,8 +794,14 @@ img{display:block;max-width:100%}
           <textarea class="form-textarea" id="task-desc" placeholder="补充细节、步骤或备注…" rows="3"></textarea>
         </div>
         <div class="form-group">
-          <label class="form-label" for="task-ddl">截止日期（DDL）</label>
+          <label class="form-label" for="task-planned-date">计划处理日</label>
+          <input class="form-input" id="task-planned-date" type="date"/>
+          <p class="form-hint">这一天会出现在“今天”和日历中，不会被当作硬截止日。</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="task-ddl">硬截止日（DDL）</label>
           <input class="form-input" id="task-ddl" type="date"/>
+          <p class="form-hint">只有确实会产生后果的最后期限，才需要填写。</p>
         </div>
         <div class="form-group">
           <label class="form-label" for="task-unlock-date">时间胶囊解锁日</label>
@@ -751,6 +825,18 @@ img{display:block;max-width:100%}
             <option value="low">低精力</option>
             <option value="high">高精力</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="task-estimate">预计投入</label>
+          <select class="form-input" id="task-estimate">
+            <option value="">暂不估时</option>
+            <option value="15">15 分钟 · 快速推进</option>
+            <option value="30">30 分钟 · 短时专注</option>
+            <option value="60">1 小时 · 深入处理</option>
+            <option value="90">1.5 小时 · 深度工作</option>
+            <option value="120">2 小时 · 大块时间</option>
+          </select>
+          <p class="form-hint">只用于今日容量提示，不会自动改动你的安排。</p>
         </div>
         <div class="form-group">
           <label class="form-label">子任务 checklist</label>
@@ -932,23 +1018,49 @@ img{display:block;max-width:100%}
 var Store = (function(){
   var KEYS = { tasks:'tdm_tasks', dm:'tdm_dm', tags:'tdm_tags', rituals:'tdm_solar_rituals', prefs:'tdm_ui_prefs' };
   var DEFAULT_TAGS = ['工作','学习','生活','健康','财务','社交','创作'];
-  function rd(k,fb){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):fb; }catch(e){ return fb; } }
-  function wr(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  var readFailure=null,writeFailure=null;
+  function signalStorageError(k,e){
+    readFailure=readFailure||{key:k,error:e};
+    window.dispatchEvent(new CustomEvent('tdm:storage-error',{detail:{key:k,error:e}}));
+  }
+  function rd(k,fb){
+    try{
+      var v=localStorage.getItem(k);
+      if(v===null) return fb;
+      try{ return JSON.parse(v); }catch(parseError){ signalStorageError(k,parseError); return fb; }
+    }catch(e){ signalStorageError(k,e); return fb; }
+  }
+  function wr(k,v,allowRecovery){
+    if(readFailure&&!allowRecovery){ signalStorageError(k,readFailure.error); return false; }
+    try{
+      localStorage.setItem(k,JSON.stringify(v));
+      window.dispatchEvent(new CustomEvent('tdm:data-change',{detail:{key:k}}));
+      return true;
+    }catch(e){
+      writeFailure={key:k,error:e};
+      window.dispatchEvent(new CustomEvent('tdm:storage-error',{detail:{key:k,error:e}}));
+      setTimeout(function(){
+        if(typeof showToast==='function') showToast('无法写入本地数据，请立即导出备份并检查浏览器存储空间。','error',6000);
+      },0);
+      return false;
+    }
+  }
   function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
   return {
     uid: uid,
     getTasks:   function(){ return rd(KEYS.tasks,[]); },
-    saveTasks:  function(a){ wr(KEYS.tasks,a); },
+    saveTasks:  function(a){ return wr(KEYS.tasks,a); },
     getTags:    function(){ return rd(KEYS.tags,DEFAULT_TAGS.slice()); },
-    saveTags:   function(a){ wr(KEYS.tags,a); },
+    saveTags:   function(a){ return wr(KEYS.tags,a); },
     getDM:      function(){ return rd(KEYS.dm,[]); },
-    saveDM:     function(a){ wr(KEYS.dm,a); },
+    saveDM:     function(a){ return wr(KEYS.dm,a); },
     getRituals: function(){ return rd(KEYS.rituals,{}); },
-    saveRituals:function(o){ wr(KEYS.rituals,o||{}); },
+    saveRituals:function(o){ return wr(KEYS.rituals,o||{}); },
     getPrefs:   function(){ return rd(KEYS.prefs,{}); },
-    savePrefs:  function(o){ wr(KEYS.prefs,o||{}); },
+    savePrefs:  function(o){ return wr(KEYS.prefs,o||{}); },
     exportSnapshot:function(){
-      return {
+      if(readFailure) throw new Error('检测到本地数据读取异常，已阻止导出不完整备份');
+      var snapshot={
         schema: 1,
         exportedAt: new Date().toISOString(),
         tasks: rd(KEYS.tasks,[]),
@@ -957,17 +1069,44 @@ var Store = (function(){
         rituals: rd(KEYS.rituals,{}),
         prefs: rd(KEYS.prefs,{})
       };
+      if(readFailure) throw new Error('检测到本地数据读取异常，已阻止导出不完整备份');
+      return snapshot;
     },
     importSnapshot:function(data){
       if(!data || typeof data!=='object') throw new Error('Invalid data');
-      wr(KEYS.tasks, Array.isArray(data.tasks)?data.tasks:[]);
-      wr(KEYS.dm, Array.isArray(data.dm)?data.dm:[]);
-      wr(KEYS.tags, Array.isArray(data.tags)?data.tags:DEFAULT_TAGS.slice());
-      wr(KEYS.rituals, data.rituals && typeof data.rituals==='object' ? data.rituals : {});
-      wr(KEYS.prefs, data.prefs && typeof data.prefs==='object' ? data.prefs : {});
+      var previousRaw={};
+      try{ Object.keys(KEYS).forEach(function(name){ previousRaw[name]=localStorage.getItem(KEYS[name]); }); }
+      catch(readError){ throw new Error('无法读取当前本地数据，已取消恢复'); }
+      var next={
+        tasks:Array.isArray(data.tasks)?data.tasks:[],
+        dm:Array.isArray(data.dm)?data.dm:[],
+        tags:Array.isArray(data.tags)?data.tags:DEFAULT_TAGS.slice(),
+        rituals:data.rituals && typeof data.rituals==='object' ? data.rituals : {},
+        prefs:data.prefs && typeof data.prefs==='object' ? data.prefs : {}
+      };
+      function writeSnapshot(snapshot){
+        return wr(KEYS.tasks,snapshot.tasks,true)&&wr(KEYS.dm,snapshot.dm,true)&&wr(KEYS.tags,snapshot.tags,true)
+          &&wr(KEYS.rituals,snapshot.rituals,true)&&wr(KEYS.prefs,snapshot.prefs,true);
+      }
+      function restoreRawSnapshot(){
+        try{
+          Object.keys(KEYS).forEach(function(name){
+            if(previousRaw[name]===null) localStorage.removeItem(KEYS[name]);
+            else localStorage.setItem(KEYS[name],previousRaw[name]);
+          });
+          return true;
+        }catch(restoreError){ return false; }
+      }
+      if(!writeSnapshot(next)){
+        var rolledBack=restoreRawSnapshot();
+        throw new Error(rolledBack?'浏览器存储写入失败，恢复已安全取消':'浏览器存储不可写，请勿关闭页面并立即导出当前数据');
+      }
+      readFailure=null; writeFailure=null;
     },
+    hasStorageError:function(){ return !!(readFailure||writeFailure); },
     isEmpty:function(){
-      return !rd(KEYS.tasks,[]).length && !rd(KEYS.dm,[]).length;
+      var tasks=rd(KEYS.tasks,[]),dm=rd(KEYS.dm,[]);
+      return readFailure?false:(!tasks.length&&!dm.length);
     },
   };
 })();
@@ -983,6 +1122,7 @@ function daysOverdue(ddl,status){ if(!isOverdue(ddl,status)) return 0; return Ma
 function isLockedTask(t){ return !!(t&&t.unlockDate&&compareISO(t.unlockDate,todayISO())>0); }
 function taskName(t){ return isLockedTask(t)?'一个等待解锁的任务':(t.name||''); }
 function taskDesc(t){ return isLockedTask(t)?'这是一枚时间胶囊，到 '+t.unlockDate+' 后会显示完整内容。':(t.desc||''); }
+function taskPlanDate(t){ return t&&(t.plannedDate||t.ddl)||null; }
 function visibleTasks(tasks){ return (tasks||[]).filter(function(t){ return !t.archived; }); }
 function diffDays(isoDate){
   var today=new Date(); today.setHours(0,0,0,0);
@@ -1022,6 +1162,16 @@ function showToast(msg,type,dur){
   var el=document.createElement('div'); el.className='toast'+(type?' '+type:''); el.textContent=msg;
   c.appendChild(el);
   setTimeout(function(){ el.style.animation='toastOut .28s forwards'; el.addEventListener('animationend',function(){ el.remove(); }); },dur||2400);
+}
+function showUndoToast(msg,undo){
+  var c=document.getElementById('toast-container');
+  var el=document.createElement('div'); el.className='toast toast-with-action';
+  var label=document.createElement('span'); label.textContent=msg;
+  var button=document.createElement('button'); button.type='button'; button.textContent='撤销';
+  el.appendChild(label); el.appendChild(button); c.appendChild(el);
+  var timer=setTimeout(remove,6000);
+  function remove(){ if(!el.isConnected) return; el.style.animation='toastOut .28s forwards'; el.addEventListener('animationend',function(){ el.remove(); }); }
+  button.addEventListener('click',function(){ clearTimeout(timer); undo(); el.remove(); });
 }
 function reinitIcons(node){
   if(window.lucide) lucide.createIcons({nodes:node?[node]:[document.body]});
@@ -1348,7 +1498,7 @@ function getSolarRitual(term){
 function saveSolarRitual(term,text){
   var overrides=Store.getRituals();
   overrides[term]=text||SOLAR_TERM_TASKS[term]||'';
-  Store.saveRituals(overrides);
+  return Store.saveRituals(overrides);
 }
 
 /* ============================================================
@@ -1398,7 +1548,7 @@ var Cal = (function(){
         if(window.Tasks&&Tasks.createQuickTask) Tasks.createQuickTask({
           name:btn.dataset.term+'：'+ritual,
           desc:'节气感知任务建议',
-          ddl:btn.dataset.date,
+          plannedDate:btn.dataset.date,
           quadrant:'q2',
           tags:['节气'],
           sourceId:'term:'+btn.dataset.term+':'+btn.dataset.date
@@ -1415,7 +1565,7 @@ var Cal = (function(){
       var input=wrap.querySelector('.term-edit-input');
       input.focus(); input.select();
       function save(){
-        saveSolarRitual(term,input.value.trim());
+        if(!saveSolarRitual(term,input.value.trim())) return;
         showToast('节气仪式已保存','success');
         render();
       }
@@ -1452,7 +1602,7 @@ var Cal = (function(){
       var isToday=ds===today, isSel=ds===state.sel;
       var isWE=d.getDay()===0||d.getDay()===6;
       var lbl=getDayLabel(ds);
-      var dayTasks=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
+      var dayTasks=orderTasks(tasks.filter(function(t){ return taskPlanDate(t)===ds; }));
       var cls='cal-cell'+(inM?'':' out')+(isToday?' today':'')+(isSel&&!isToday?' selected':'')+(isWE?' weekend':'');
       h+='<div class="'+cls+'" data-date="'+ds+'" role="button" tabindex="0" aria-label="'+ds+'">';
       h+='<div class="cal-num">'+d.getDate()+'</div>';
@@ -1494,7 +1644,7 @@ var Cal = (function(){
     h+='</div>';
     h+='<div class="cal-allday"><div class="cal-allday-label">全天</div>';
     days.forEach(function(ds){
-      var dt=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
+      var dt=orderTasks(tasks.filter(function(t){ return taskPlanDate(t)===ds; }));
       h+='<div class="cal-allday-col">';
       dt.forEach(function(t){ h+='<div class="cal-week-chip '+(t.quadrant||'q2')+'" data-id="'+t.id+'" title="'+esc(taskName(t))+'">'+esc(taskName(t))+'</div>'; });
       h+='</div>';
@@ -1509,7 +1659,7 @@ var Cal = (function(){
   function renderDay(body){
     var tasks=visibleTasks(Store.getTasks()); var ds=state.sel;
     var d=new Date(ds+'T00:00:00'); var lbl=getDayLabel(ds);
-    var dayTasks=orderTasks(tasks.filter(function(t){ return t.ddl===ds; }));
+    var dayTasks=orderTasks(tasks.filter(function(t){ return taskPlanDate(t)===ds; }));
     var h=renderTermSuggestion(ds)+'<div class="cal-day-view"><div style="padding:var(--space-4) var(--space-6) var(--space-2)">';
     h+='<div style="display:flex;align-items:center;gap:var(--space-3)">';
     h+='<span class="cal-day-hero">'+(d.getMonth()+1)+'月'+d.getDate()+'日</span>';
@@ -1581,6 +1731,7 @@ function renderTaskCard(t){
   var locked=isLockedTask(t);
   var statusIcon={todo:'circle',doing:'loader-circle',done:'circle-check'}[t.status]||'circle';
   var tagsH=(t.tags||[]).map(function(tg){ return '<span class="tag">'+esc(tg)+'</span>'; }).join('');
+  var planH=t.plannedDate?('<span class="task-plan"><i data-lucide="calendar-check"></i>'+esc(t.plannedDate.slice(5))+' 计划</span>'):'';
   var ddlH=t.ddl?('<span class="task-ddl'+(isOverdue(t.ddl,t.status)?' overdue':'')+'"><i data-lucide="calendar-clock"></i>'+esc(t.ddl.slice(5))+'</span>'):'';
   var unlockH=locked?('<span class="task-ddl"><i data-lucide="lock-keyhole"></i>'+esc(t.unlockDate.slice(5))+' 解锁</span>'):'';
   var repeatH=t.repeat&&t.repeat.type?('<span class="task-repeat"><i data-lucide="repeat-2"></i>'+repeatLabel(t.repeat)+'</span>'):'';
@@ -1588,13 +1739,14 @@ function renderTaskCard(t){
   var subtasks=t.subtasks||[];
   var subDone=subtasks.filter(function(s){ return s.done; }).length;
   var subH=subtasks.length?('<span class="task-subtasks"><i data-lucide="list-checks"></i>'+subDone+'/'+subtasks.length+'</span>'):'';
+  var estimateH=t.estimateMin?('<span class="task-estimate"><i data-lucide="timer"></i>'+esc(t.estimateMin)+' 分钟</span>'):'';
   var qH=t.quadrant&&Q_LABELS[t.quadrant]?('<span class="tag" style="border-color:var(--color-'+t.quadrant+');color:var(--color-'+t.quadrant+')">'+Q_LABELS[t.quadrant]+'</span>'):'';
   return '<div class="task-card '+(t.quadrant||'')+(isDone?' done':'')+(locked?' locked':'')+'" data-id="'+t.id+'" tabindex="0" draggable="true">'
     +'<button class="task-check'+(isDone?' done':'')+'" data-id="'+t.id+'" aria-label="切换完成状态"><i data-lucide="'+statusIcon+'"></i></button>'
     +'<div class="task-body">'
     +'<p class="task-name'+(isDone?' done':'')+'">'+(locked?'<i data-lucide="lock-keyhole"></i> ':'')+esc(taskName(t))+'</p>'
     +(taskDesc(t)?'<p class="task-desc">'+esc(taskDesc(t))+'</p>':'')
-    +'<div class="task-meta">'+qH+tagsH+ddlH+unlockH+repeatH+templateH+subH+'</div>'
+    +'<div class="task-meta">'+qH+tagsH+planH+ddlH+estimateH+unlockH+repeatH+templateH+subH+'</div>'
     +'</div>'
     +'<div class="task-actions">'
     +'<button class="btn btn-ghost btn-icon task-edit-btn" data-id="'+t.id+'" aria-label="编辑"><i data-lucide="pencil"></i></button>'
@@ -1656,11 +1808,11 @@ var Tasks = (function(){
   function matchQuery(t,q){
     if(!q) return true;
     if(isLockedTask(t)){
-      var lockedHay=['时间胶囊','等待解锁',t.unlockDate,t.ddl,t.status,Q_LABELS[t.quadrant]||t.quadrant,(t.tags||[]).join(' ')].join(' ').toLowerCase();
+      var lockedHay=['时间胶囊','等待解锁',t.unlockDate,t.plannedDate,t.ddl,t.status,Q_LABELS[t.quadrant]||t.quadrant,(t.tags||[]).join(' ')].join(' ').toLowerCase();
       return lockedHay.indexOf(q)>=0;
     }
     var hay=[
-      t.name,t.desc,t.ddl,t.unlockDate,t.status,Q_LABELS[t.quadrant]||t.quadrant,
+      t.name,t.desc,t.plannedDate,t.ddl,t.unlockDate,t.status,Q_LABELS[t.quadrant]||t.quadrant,
       repeatLabel(t.repeat),
       t.sourceId,
       t.template&&t.template.type?'模板':'',
@@ -1677,6 +1829,7 @@ var Tasks = (function(){
       id:data.id||Store.uid(),
       name:data.name,
       desc:data.desc||'',
+      plannedDate:data.plannedDate||null,
       ddl:data.ddl||null,
       status:data.status||'todo',
       quadrant:data.quadrant||'q2',
@@ -1686,6 +1839,7 @@ var Tasks = (function(){
       repeat:data.repeat||null,
       template:data.template||null,
       energy:data.energy||'medium',
+      estimateMin:Math.max(0,parseInt(data.estimateMin,10)||0),
       subtasks:Array.isArray(data.subtasks)?data.subtasks:[],
       unlockDate:data.unlockDate||null,
       archived:!!data.archived,
@@ -1695,10 +1849,11 @@ var Tasks = (function(){
   }
 
   function saveAndRefresh(tasks,msg){
-    Store.saveTasks(tasks);
+    var saved=Store.saveTasks(tasks);
     render(); Cal.render(); Stats.render();
     if(Drawer.isOpen()) Drawer.refresh(Drawer.getDate());
-    if(msg) showToast(msg,'success');
+    if(msg&&saved) showToast(msg,'success');
+    return saved;
   }
 
   function createQuickTask(data){
@@ -1710,8 +1865,7 @@ var Tasks = (function(){
     }
     var task=createTaskObject(data);
     tasks.unshift(task);
-    saveAndRefresh(tasks,'任务已创建 ✓');
-    return task;
+    return saveAndRefresh(tasks,'任务已创建 ✓')?task:null;
   }
 
   function completeRepeatTask(tasks,t){
@@ -1729,11 +1883,13 @@ var Tasks = (function(){
       id:Store.uid(),
       name:t.name,
       desc:t.desc||'',
+      plannedDate:t.plannedDate?nextRepeatDate(t.repeat.type,t.plannedDate):null,
       ddl:next,
       status:'todo',
       quadrant:t.quadrant||'q2',
       tags:(t.tags||[]).slice(),
       energy:t.energy||'medium',
+      estimateMin:t.estimateMin||0,
       subtasks:(t.subtasks||[]).map(function(s){ return { id:Store.uid(), title:s.title, done:false }; }),
       createdAt:Date.now(),
       order:Date.now(),
@@ -1759,7 +1915,7 @@ var Tasks = (function(){
       var dm=Store.getDM().find(function(i){ return i.id===dmId; });
       if(dm) nextDate=addDaysISO(dm.date,-offset);
     } else {
-      nextDate=nextTemplateDate(type,(oldTask&&oldTask.ddl)||todayISO());
+      nextDate=nextTemplateDate(type,(oldTask&&taskPlanDate(oldTask))||todayISO());
     }
     return { type:type, dmId:dmId, offsetDays:offset, nextDate:nextDate, sourceId:(oldTask&&oldTask.id)||Store.uid() };
   }
@@ -1788,7 +1944,8 @@ var Tasks = (function(){
     var tasks=Store.getTasks();
     var today=todayISO();
     var changed=false;
-    tasks.forEach(function(t){
+    var generated=[];
+    tasks.slice().forEach(function(t){
       if(!t.template||!t.template.type) return;
       var due=t.template.nextDate;
       if(t.template.type==='dm'){
@@ -1799,14 +1956,16 @@ var Tasks = (function(){
       }
       if(!due||compareISO(due,today)>0) return;
       var source='tpl:'+t.id+':'+due;
-      if(!hasTaskSource(tasks,source)){
-        tasks.unshift(createTaskObject({
+      if(!hasTaskSource(tasks,source)&&!hasTaskSource(generated,source)){
+        generated.push(createTaskObject({
           name:t.name,
           desc:t.desc||'',
-          ddl:due,
+          plannedDate:t.plannedDate?due:null,
+          ddl:t.ddl?(t.plannedDate?addDaysISO(due,Math.max(0,Math.round((new Date(t.ddl+'T00:00:00')-new Date(t.plannedDate+'T00:00:00'))/86400000))):due):null,
           quadrant:t.quadrant||'q2',
           tags:(t.tags||[]).slice(),
           energy:t.energy||'medium',
+          estimateMin:t.estimateMin||0,
           subtasks:(t.subtasks||[]).map(function(s){ return { id:Store.uid(), title:s.title, done:false }; }),
           sourceId:source
         }));
@@ -1817,8 +1976,8 @@ var Tasks = (function(){
         changed=true;
       }
     });
-    if(changed) Store.saveTasks(tasks);
-    return changed;
+    if(generated.length) tasks=generated.concat(tasks);
+    return changed?Store.saveTasks(tasks):false;
   }
 
   function render(){
@@ -1882,10 +2041,12 @@ var Tasks = (function(){
     document.getElementById('task-id').value='';
     document.getElementById('task-name').value='';
     document.getElementById('task-desc').value='';
-    document.getElementById('task-ddl').value=prefillDate||'';
+    document.getElementById('task-planned-date').value=prefillDate||'';
+    document.getElementById('task-ddl').value='';
     document.getElementById('task-unlock-date').value='';
     document.getElementById('task-repeat').value='';
     document.getElementById('task-energy').value='medium';
+    document.getElementById('task-estimate').value='';
     renderSubtasks([]);
     document.getElementById('task-template-group').style.display='none';
     renderTemplateDMOptions('');
@@ -1902,15 +2063,21 @@ var Tasks = (function(){
     var tasks=Store.getTasks();
     var t=tasks.find(function(x){ return x.id===id; });
     if(!t) return;
+    if(isLockedTask(t)){
+      showToast('这枚时间胶囊将在 '+t.unlockDate+' 解锁，当前无法查看或编辑。','error',4200);
+      return;
+    }
     currentId=id;
     document.getElementById('modal-task-title').textContent='编辑任务';
     document.getElementById('task-id').value=t.id;
     document.getElementById('task-name').value=t.name||'';
     document.getElementById('task-desc').value=t.desc||'';
+    document.getElementById('task-planned-date').value=t.plannedDate||'';
     document.getElementById('task-ddl').value=t.ddl||'';
     document.getElementById('task-unlock-date').value=t.unlockDate||'';
     document.getElementById('task-repeat').value=(t.repeat&&t.repeat.type)||'';
     document.getElementById('task-energy').value=t.energy||'medium';
+    document.getElementById('task-estimate').value=t.estimateMin||'';
     renderSubtasks(t.subtasks||[]);
     document.getElementById('task-template-group').style.display='';
     renderTemplateDMOptions(t.template&&t.template.dmId);
@@ -1963,7 +2130,7 @@ var Tasks = (function(){
         var tag=btn.dataset.tag;
         if(!confirm('删除标签「'+tag+'」？（不会影响已有任务）')) return;
         var tags=Store.getTags().filter(function(t){ return t!==tag; });
-        Store.saveTags(tags);
+        if(!Store.saveTags(tags)) return;
         var currentActive=Array.from(sel.querySelectorAll('.tag-opt.active')).map(function(el){ return el.dataset.tag; }).filter(function(t){ return t!==tag; });
         renderTagSel(currentActive);
       });
@@ -2019,6 +2186,7 @@ var Tasks = (function(){
       id:id,
       name:name,
       desc:document.getElementById('task-desc').value.trim(),
+      plannedDate:document.getElementById('task-planned-date').value||null,
       ddl:ddl,
       status:status,
       quadrant:document.getElementById('task-quadrant').value||null,
@@ -2028,6 +2196,7 @@ var Tasks = (function(){
       repeat:buildRepeat(repeatType,ddl,oldTask,id),
       template:template,
       energy:document.getElementById('task-energy').value||'medium',
+      estimateMin:Math.max(0,parseInt(document.getElementById('task-estimate').value,10)||0),
       subtasks:getSubtasks(),
       unlockDate:document.getElementById('task-unlock-date').value||null,
       archived:oldTask?!!oldTask.archived:false,
@@ -2048,43 +2217,51 @@ var Tasks = (function(){
       tasks.unshift(task);
     }
     var madeNext=status==='done'&&(!oldTask||oldTask.status!=='done')&&completeRepeatTask(tasks,task);
-    if(madeNext){
-      showToast('任务已完成，并生成下一次重复任务','success');
-    }
-    Store.saveTasks(tasks);
+    if(!Store.saveTasks(tasks)) return;
+    if(madeNext) showToast('任务已完成，并生成下一次重复任务','success');
     if(runTemplateTriggers()) tasks=Store.getTasks();
     Modal.close('modal-task');
     render();
     Cal.render();
-    if(Drawer.isOpen()&&Drawer.getDate()===task.ddl) Drawer.refresh(task.ddl);
+    if(Drawer.isOpen()&&Drawer.getDate()===taskPlanDate(task)) Drawer.refresh(taskPlanDate(task));
     if(!madeNext) showToast(currentId?'任务已更新 ✓':'任务已创建 ✓','success');
   }
 
   function deleteTask(){
     if(!currentId) return;
-    var tasks=Store.getTasks().filter(function(t){ return t.id!==currentId; });
-    Store.saveTasks(tasks);
+    var tasks=Store.getTasks();
+    var deleted=tasks.find(function(t){ return t.id===currentId; });
+    var deletedIndex=tasks.indexOf(deleted);
+    var remaining=tasks.filter(function(t){ return t.id!==currentId; });
+    if(!Store.saveTasks(remaining)) return;
     Modal.close('modal-task');
     render(); Cal.render();
-    showToast('任务已删除');
+    showUndoToast('任务已删除',function(){
+      var current=Store.getTasks();
+      if(!deleted||current.some(function(t){ return t.id===deleted.id; })) return;
+      current.splice(Math.min(Math.max(deletedIndex,0),current.length),0,deleted);
+      if(Store.saveTasks(current)){ render(); Cal.render(); showToast('已恢复任务','success'); }
+    });
   }
 
-  function toggleDone(id){
+  function toggleDone(id,forceDone){
     var tasks=Store.getTasks();
     var t=tasks.find(function(x){ return x.id===id; });
     if(!t) return;
     var cycle={todo:'doing',doing:'done',done:'todo'};
     var oldStatus=t.status||'todo';
-    t.status=cycle[oldStatus]||'todo';
+    var madeNext=false;
+    t.status=forceDone?'done':(cycle[oldStatus]||'todo');
     if(t.status==='done'){
       t.doneAt=t.doneAt||Date.now();
-      if(oldStatus!=='done'&&completeRepeatTask(tasks,t)) showToast('已生成下一次重复任务','success');
+      madeNext=oldStatus!=='done'&&completeRepeatTask(tasks,t);
     } else {
       delete t.doneAt;
     }
-    Store.saveTasks(tasks);
+    if(!Store.saveTasks(tasks)) return;
+    if(madeNext) showToast('已生成下一次重复任务','success');
     render(); Cal.render();
-    if(Drawer.isOpen()&&Drawer.getDate()===t.ddl) Drawer.refresh(t.ddl);
+    if(Drawer.isOpen()&&Drawer.getDate()===taskPlanDate(t)) Drawer.refresh(taskPlanDate(t));
   }
 
   function initFilter(){
@@ -2137,7 +2314,7 @@ var Tasks = (function(){
     function addTag(){
       var v=tagInput.value.trim(); if(!v) return;
       var tags=Store.getTags();
-      if(tags.indexOf(v)<0){ tags.push(v); Store.saveTags(tags); }
+      if(tags.indexOf(v)<0){ tags.push(v); if(!Store.saveTags(tags)) return; }
       var sel=document.querySelectorAll('#tag-sel .tag-opt.active');
       var active=Array.from(sel).map(function(el){ return el.dataset.tag; });
       if(active.indexOf(v)<0) active.push(v);
@@ -2205,7 +2382,7 @@ var Tasks = (function(){
         if(t){ t.quadrant=zone.dataset.q; t.order=stamp+cards.length-idx; }
       });
     });
-    Store.saveTasks(tasks);
+    if(!Store.saveTasks(tasks)) return;
     render(); Cal.render(); Stats.render(); AdvancedViews.renderAll();
   }
 
@@ -2278,7 +2455,7 @@ var Stats = (function(){
       }
     });
     if(changed){
-      Store.saveTasks(tasks);
+      if(!Store.saveTasks(tasks)) return;
       Tasks.render(); Cal.render(); AdvancedViews.renderAll(); render();
       showToast('已归档 '+count+' 个长期逾期任务','success');
     }
@@ -2798,7 +2975,7 @@ var DM = (function(){
     var item={ id:currentId||Store.uid(), name:name, date:date, note:document.getElementById('dm-note').value.trim(), emoji:document.getElementById('dm-emoji').value||'⭐', reminders:reminders };
     if(currentId){ var idx=items.findIndex(function(x){ return x.id===currentId; }); if(idx>=0) items[idx]=item; else items.push(item); }
     else items.push(item);
-    Store.saveDM(items);
+    if(!Store.saveDM(items)) return;
     runReminders();
     if(Tasks.runTemplateTriggers) Tasks.runTemplateTriggers();
     Modal.close('modal-dm');
@@ -2808,7 +2985,7 @@ var DM = (function(){
 
   function deleteItem(id){
     var items=Store.getDM().filter(function(x){ return x.id!==id; });
-    Store.saveDM(items);
+    if(!Store.saveDM(items)) return;
     Modal.close('modal-dm'); render(); showToast('已删除');
   }
 
@@ -2828,7 +3005,8 @@ var DM = (function(){
           id:Store.uid(),
           name:reminder.taskName,
           desc:'来自重要日子「'+item.name+'」的提前提醒',
-          ddl:due,
+          plannedDate:due,
+          ddl:item.date,
           status:'todo',
           quadrant:reminder.quadrant||'q2',
           tags:reminder.tag?[reminder.tag]:['重要日子'],
@@ -2885,7 +3063,7 @@ var Drawer = (function(){
     document.getElementById('backdrop').classList.remove('show');
   }
   function refresh(ds){
-    var tasks=orderTasks(visibleTasks(Store.getTasks()).filter(function(t){ return t.ddl===ds; }));
+    var tasks=orderTasks(visibleTasks(Store.getTasks()).filter(function(t){ return taskPlanDate(t)===ds; }));
     var body=document.getElementById('drawer-body');
     if(!tasks.length){ body.innerHTML=renderEmpty('calendar-x','这天没有任务','点击右上角 + 新建'); reinitIcons(body); return; }
     var h='<div style="display:flex;flex-direction:column;gap:var(--space-2)">';
@@ -2957,9 +3135,12 @@ function initTabs(){
 function initTheme(){
   var btn=document.getElementById('theme-toggle');
   var root=document.documentElement;
-  var current=root.getAttribute('data-theme')||'light';
+  var prefs=Store.getPrefs();
+  var systemDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var current=prefs.theme||(systemDark?'dark':(root.getAttribute('data-theme')||'light'));
   function apply(t){
     current=t; root.setAttribute('data-theme',t);
+    prefs=Store.getPrefs(); prefs.theme=t; Store.savePrefs(prefs);
     btn.innerHTML=t==='dark'?'<i data-lucide="sun"></i>':'<i data-lucide="moon"></i>';
     reinitIcons(btn);
   }
@@ -3107,5 +3288,6 @@ document.addEventListener('DOMContentLoaded', function(){
   })();
 });
 </script>
+<script src="assets/js/home.js"></script>
 </body>
 </html>

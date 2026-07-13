@@ -21,6 +21,7 @@ grep -q 'property="og:description"' index.html
 echo "== check: inline JavaScript syntax =="
 rm -rf .tmp_inline_scripts
 mkdir -p .tmp_inline_scripts
+trap 'rm -rf .tmp_inline_scripts' EXIT
 
 python3 <<'PY'
 from pathlib import Path
@@ -38,6 +39,9 @@ PY
 for f in .tmp_inline_scripts/*.js; do
   node --check "$f"
 done
+
+node --check assets/js/home.js
+python3 scripts/check_product_upgrade.py
 
 rm -rf .tmp_inline_scripts
 

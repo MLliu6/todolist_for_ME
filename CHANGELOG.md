@@ -5,6 +5,13 @@ Format based on Keep a Changelog.
 
 ## [Unreleased]
 ### Added
+- Add a Today-first decision dashboard with quick capture, a single next-move recommendation, daily workload signals, week completion feedback, and direct routes into planning views.
+- Add a keyboard command center (`Ctrl/Cmd + K`) plus `/` quick-capture focus.
+- Add optional 15–120 minute task estimates and surface estimated daily effort without automatic rescheduling.
+- Separate optional `plannedDate` from the hard `ddl`; quick capture schedules work without inventing a deadline.
+- Add a recoverable archive panel so Burnout-archived tasks can be restored.
+- Add the responsive Atelier design system with a desktop workspace rail, mobile bottom navigation, warm neutral surfaces, restrained semantic motion, and reduced-motion support.
+- Add structural release checks for the Today dashboard, local assets, tab/panel relationships, data reliability guards, and duplicate DOM ids.
 - Add encrypted Data Vault for exporting current tasks, tags, and DaysMatter data into a password-protected HTML copy or JSON vault.
 - Support restoring encrypted data from another exported HTML/JSON file, including auto-detecting an embedded vault when the current browser has no local data.
 - Add application icon assets (`mytodo-logo.ico`, `mytodo-logo.png`, `mytodo-logo.svg`) for browser/app branding.
@@ -47,6 +54,10 @@ Format based on Keep a Changelog.
 - Limit DaysMatter related-task display to real relationships instead of showing every nearby task by date.
 
 ### Fixed
+- Surface localStorage write failures instead of silently claiming a successful save.
+- Prevent locked time-capsule tasks from exposing their title and description through the edit modal.
+- Generate due task-template instances after iteration instead of mutating the array being traversed.
+- Persist theme and active-view preferences for returning users, and skip the landing screen once local data exists.
 - Fix timeline task overlap making titles hard to read.
 - Fix task field bubbles appearing too similar in size.
 - Fix ambiguous task field scope by making it an all-unfinished-task overview rather than a current-week-only view.
