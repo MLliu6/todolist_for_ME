@@ -40,6 +40,7 @@ Format based on Keep a Changelog.
 - Include solar rituals and UI preferences in encrypted export/import snapshots without requiring a destructive migration.
 
 ### Changed
+- Restore distinct rose, amber, green, and neutral-lavender semantic colors for dark-mode quadrants and charts while keeping the surrounding interface violet.
 - Unify dark mode around a violet night palette across navigation, surfaces, primary actions, task quadrants, charts, and focus states while preserving semantic warning and error colors.
 - Make task edit actions visible without hover so mobile and touch users can edit tasks reliably.
 - Prevent long task content from breaking the two-column quadrant board layout.

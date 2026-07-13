@@ -67,7 +67,10 @@ dark_tokens = re.search(r'\[data-theme="dark"\]\{(.*?)\n\}', atelier, re.S)
 assert dark_tokens and "--color-primary:#a78bfa" in dark_tokens.group(1), "dark primary is not violet"
 assert "#171916" not in dark_tokens.group(1) and "#ff7653" not in dark_tokens.group(1), "legacy olive/orange dark palette returned"
 assert "#171916" not in atelier and "#ff7653" not in atelier, "legacy dark palette remains in the interface layer"
-assert "--board-q1:#c4b5fd" in atelier and "--board-q4:#f0abfc" in atelier, "dark charts are not violet"
+assert "--board-q1:#fb7185" in atelier, "urgent-important quadrant is not rose"
+assert "--board-q2:#fbbf24" in atelier, "important quadrant is not amber"
+assert "--board-q3:#34d399" in atelier, "urgent quadrant is not green"
+assert "--board-q4:#b8b0cc" in atelier, "low-priority quadrant is not neutral lavender"
 assert "window.syncAppParticles=sync" in html, "dark app particles are not wired"
 
 assert "if(isLockedTask(t))" in html, "locked tasks can still enter edit flow"
